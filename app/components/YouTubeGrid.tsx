@@ -4,6 +4,7 @@ import { Fragment, useEffect, useRef } from "react";
 import Image from "next/image";
 import styles from "./YouTubeGrid.module.css";
 import { useLanguage } from "../context/LanguageContext";
+import { trackEvent } from "../lib/analytics";
 
 const channels = [
   {
@@ -114,6 +115,7 @@ export default function YouTubeGrid() {
               target="_blank"
               rel="noopener noreferrer"
               className={styles.channel}
+              onClick={() => trackEvent("project_click", { project: channel.name, category: "editor", platform: "youtube", lang })}
               ref={(element) => {
                 channelRefs.current[index] = element;
               }}

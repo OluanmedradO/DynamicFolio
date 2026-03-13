@@ -1,9 +1,12 @@
 ﻿"use client";
 
 import { useEffect } from "react";
+import { trackEvent } from "../lib/analytics";
 
 export default function ScrollObserver() {
     useEffect(() => {
+        let hasTrackedPageEnd = false;
+
         const selectors = [
             ".contact-big-title",
             ".featured-card",
@@ -66,11 +69,30 @@ export default function ScrollObserver() {
             mo.observe(vlEl, { childList: true, subtree: true });
         }
 
+        const onScroll = () => {
+            if (hasTrackedPageEnd) {
+                return;
+            }
+
+            const doc = document.documentElement;
+            const viewportBottom = window.scrollY + window.innerHeight;
+            const reachedEnd = viewportBottom >= doc.scrollHeight - 20;
+
+            if (reachedEnd) {
+                hasTrackedPageEnd = true;
+                trackEvent("page_scroll_end", { page: window.location.pathname });
+            }
+        };
+
+        window.addEventListener("scroll", onScroll, { passive: true });
+        onScroll();
+
         return () => {
             io.disconnect();
             skillIo.disconnect();
             multiIo.disconnect();
             mo.disconnect();
+            window.removeEventListener("scroll", onScroll);
         };
     }, []);
 

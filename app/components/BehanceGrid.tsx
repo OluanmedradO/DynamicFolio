@@ -3,6 +3,7 @@
 import Image from "next/image";
 import styles from "./BehanceGrid.module.css";
 import { useLanguage } from "../context/LanguageContext";
+import { trackEvent } from "../lib/analytics";
 
 const behanceProjects = [
   {
@@ -75,6 +76,7 @@ export default function BehanceGrid() {
           target="_blank"
           rel="noopener noreferrer"
           className={styles.ctaLink}
+          onClick={() => trackEvent("project_click", { project: "Behance Profile", category: "editor", platform: "behance", lang })}
         >
           <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
             <path d="M22 7h-7V5h7v2zm1.726 10c-.442 1.297-2.029 3-5.101 3-3.074 0-5.564-1.729-5.564-5.675 0-3.91 2.325-5.92 5.466-5.92 3.082 0 4.964 1.782 5.375 4.426.078.506.109 1.188.095 2.14H15.97c.13 1.2.836 1.971 2.11 1.971.55 0 1.045-.167 1.246-.63h2.4zm-5.183-7c-1.06 0-1.954.69-2.078 1.98h4.004c-.035-1.176-.738-1.98-1.926-1.98zM3 3h5.348c2.562 0 4.879.876 4.879 3.445 0 1.252-.578 2.31-1.697 3.002C13.1 10.04 13.9 11.34 13.9 13c0 3.01-2.483 4-5.13 4H3V3zm3 5.5h2.16c1.083 0 1.79-.545 1.79-1.41 0-.905-.682-1.39-1.808-1.39H6V8.5zm0 5h2.303c1.27 0 2.099-.604 2.099-1.66 0-1.11-.972-1.59-2.175-1.59H6V13.5z" />
@@ -93,6 +95,7 @@ export default function BehanceGrid() {
             target="_blank"
             rel="noopener noreferrer"
             aria-label={`${copy.openLabel} ${project.title} no Behance`}
+            onClick={() => trackEvent("project_click", { project: project.title, category: "editor", platform: "behance", lang })}
           >
             <div className={styles.thumb} aria-hidden="true">
               <Image

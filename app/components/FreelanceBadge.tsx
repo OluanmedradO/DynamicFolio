@@ -14,7 +14,7 @@ export default function FreelanceBadge() {
                 : "Available for Projects"
             : mode === "editor"
                 ? "Disponível para Projetos"
-                : "Disponível para Projects";
+                : "Disponível para Projetos";
 
     return (
         <a

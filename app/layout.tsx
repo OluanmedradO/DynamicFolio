@@ -1,8 +1,8 @@
 ﻿import type { Metadata } from "next";
 import { Bebas_Neue, DM_Mono, DM_Sans, Syne } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 import Cursor from "./components/Cursor";
 import FreelanceBadge from "./components/FreelanceBadge";
-import LanguageSwitch from "./components/LanguageSwitch";
 import ModeSwitch from "./components/ModeSwitch";
 import { LanguageProvider } from "./context/LanguageContext";
 import { ModeProvider } from "./context/ModeContext";
@@ -51,7 +51,6 @@ export default function RootLayout({
           <ModeProvider>
             <Cursor />
             <div className="mode-flash" id="modeFlash"></div>
-            <LanguageSwitch />
             <ModeSwitch />
             <FreelanceBadge />
             <div style={{ overflowX: "hidden" }}>
@@ -59,6 +58,7 @@ export default function RootLayout({
             </div>
           </ModeProvider>
         </LanguageProvider>
+        <Analytics />
       </body>
     </html>
   );

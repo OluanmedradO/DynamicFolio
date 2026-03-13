@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { useLanguage } from "../context/LanguageContext";
 import YouTubeGrid from "./YouTubeGrid";
 import { useMode } from "../context/ModeContext";
+import { trackEvent } from "../lib/analytics";
 import riff1 from "@/public/riff-1.jpg";
 import riff2 from "@/public/riff-2.jpg";
 import riff3 from "@/public/riff-3.jpg";
@@ -83,7 +84,7 @@ interface DevCopy {
     notifyDesc: string;
 }
 
-function DevProjects({ copy }: { copy: DevCopy }) {
+function DevProjects({ copy, lang }: { copy: DevCopy; lang: "pt" | "en" }) {
     return (
         <div id="devProjects">
             <div className="section-header">
@@ -140,7 +141,14 @@ function DevProjects({ copy }: { copy: DevCopy }) {
                             <h3 className="multi-card-title">Portal do Revendedor Multilaser</h3>
                             <p className="multi-card-desc">{copy.portalDesc}</p>
                             <div className="multi-card-footer">
-                                <Link href="https://revendedor.grupomultilaser.com.br/" target="_blank" className="multi-card-link">{copy.viewDetails} <span>↗</span></Link>
+                                <Link
+                                    href="https://revendedor.grupomultilaser.com.br/"
+                                    target="_blank"
+                                    className="multi-card-link"
+                                    onClick={() => trackEvent("project_click", { project: "Portal do Revendedor Multilaser", category: "dev", lang })}
+                                >
+                                    {copy.viewDetails} <span>↗</span>
+                                </Link>
                             </div>
                         </div>
                     </div>
@@ -212,7 +220,7 @@ export default function Projects() {
 
     return (
         <section className="projects" id="projetos">
-            {mode === "dev" ? <DevProjects copy={devCopy} /> : <EditorProjects />}
+            {mode === "dev" ? <DevProjects copy={devCopy} lang={lang} /> : <EditorProjects />}
         </section>
     );
 }

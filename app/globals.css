@@ -1842,10 +1842,8 @@ nav#topnav .nav-logo {
 .nav-left, .nav-right { display: flex !important; }
 
 .lang-btn {
-  position: fixed;
-  top: 18px;
-  right: 24px;
-  z-index: 500;
+  position: relative;
+  z-index: 2;
   display: flex;
   align-items: center;
   gap: 8px;
@@ -1899,12 +1897,19 @@ nav#topnav .nav-logo {
 
 @media (max-width: 767px) {
   nav#topnav { padding: 18px 24px; }
-  .nav-left, .nav-right { display: none !important; }
-  .lang-btn {
-    top: 14px;
-    right: 16px;
-    padding-right: 12px;
+  .nav-left { display: none !important; }
+  .nav-right {
+    display: flex !important;
+    margin-left: auto;
   }
+  .lang-btn {
+    padding: 5px 8px 5px 6px;
+    gap: 5px;
+    border-radius: 12px;
+    font-size: 0.58rem;
+  }
+  .lang-flag-wrap { width: 20px; height: 20px; }
+  .lang-label { font-size: 0.62rem; letter-spacing: 0.08em; }
 }
 
 /* mode switch collapse behavior */
@@ -2275,8 +2280,25 @@ nav#topnav .nav-logo {
   align-items: start;
 }
 @media (max-width: 860px) {
-  .vl-compare { grid-template-columns: 1fr; }
-  .vl-vs { flex-direction: row; }
+  .vl-compare {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  .vl-vs {
+    flex-direction: row;
+    padding-top: 0;
+    margin: 2px 0;
+    gap: 6px;
+  }
+  .vl-vs-line {
+    display: none;
+  }
+  .vl-vs-circle {
+    width: 34px;
+    height: 34px;
+    font-size: 0.58rem;
+    letter-spacing: 0.06em;
+  }
 }
 
 /* VS divider */

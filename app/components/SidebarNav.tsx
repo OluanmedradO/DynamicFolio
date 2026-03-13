@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useLanguage } from "../context/LanguageContext";
+import { trackEvent } from "../lib/analytics";
 
 type Section = "hero" | "sobre" | "projetos" | "contato";
 
@@ -75,7 +76,15 @@ export default function SidebarNav() {
                         onClick={(e) => {
                             e.preventDefault();
                             const target = document.getElementById(item.id);
-                            if (target) target.scrollIntoView({ behavior: "smooth" });
+                            if (target) {
+                                trackEvent("navigation_click", {
+                                    eventCategory: "navigation",
+                                    navigation: "sidebar",
+                                    section: item.id,
+                                    lang,
+                                });
+                                target.scrollIntoView({ behavior: "smooth" });
+                            }
                         }}
                     >
                         <span className="snav-label">{item.label}</span>

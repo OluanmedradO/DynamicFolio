@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import LanguageSwitch from "./LanguageSwitch";
 import { useLanguage } from "../context/LanguageContext";
 
 export default function Navbar() {
@@ -47,6 +48,10 @@ export default function Navbar() {
             <Link href="#hero" className="nav-logo" onClick={handleSectionClick("hero")}>
                 oluanmedrado<span>.</span>
             </Link>
+
+            <div className="nav-right">
+                <LanguageSwitch />
+            </div>
            
         </nav>
     );

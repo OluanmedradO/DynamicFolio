@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { useMode } from "../context/ModeContext";
+import { trackEvent } from "../lib/analytics";
 
 function DevIcon() {
     return (
@@ -25,6 +26,20 @@ function EditorIcon() {
 export default function ModeSwitch() {
     const { mode, setMode } = useMode();
     const switchRef = useRef<HTMLDivElement | null>(null);
+
+    const handleModeChange = (nextMode: "dev" | "editor") => {
+        if (mode === nextMode) {
+            return;
+        }
+
+        trackEvent("preference_change", {
+            eventCategory: "preferences",
+            preference: "mode",
+            from: mode,
+            to: nextMode,
+        });
+        setMode(nextMode);
+    };
 
     useEffect(() => {
         const updateSwitchState = () => {
@@ -67,7 +82,7 @@ export default function ModeSwitch() {
                 id="btnDev"
                 type="button"
                 aria-pressed={mode === "dev"}
-                onClick={() => setMode("dev")}
+                onClick={() => handleModeChange("dev")}
             >
                 <span className="switch-icon-wrap">
                     <span className="switch-icon"><DevIcon /></span>
@@ -82,7 +97,7 @@ export default function ModeSwitch() {
                 id="btnEditor"
                 type="button"
                 aria-pressed={mode === "editor"}
-                onClick={() => setMode("editor")}
+                onClick={() => handleModeChange("editor")}
             >
                 <span className="switch-icon-wrap">
                     <span className="switch-icon"><EditorIcon /></span>

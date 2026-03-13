@@ -1,6 +1,7 @@
 "use client";
 
 import { useLanguage } from "../context/LanguageContext";
+import { trackEvent } from "../lib/analytics";
 
 function BrazilFlag() {
     return (
@@ -54,11 +55,22 @@ export default function LanguageSwitch() {
     const { lang, toggleLang } = useLanguage();
     const isEnglish = lang === "en";
 
+    const handleLanguageToggle = () => {
+        const nextLang = isEnglish ? "pt" : "en";
+        trackEvent("preference_change", {
+            eventCategory: "preferences",
+            preference: "language",
+            from: lang,
+            to: nextLang,
+        });
+        toggleLang();
+    };
+
     return (
         <button
             className="lang-btn"
             id="langBtn"
-            onClick={toggleLang}
+            onClick={handleLanguageToggle}
             type="button"
             aria-label={isEnglish ? "Trocar idioma" : "Switch language"}
         >
