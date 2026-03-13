@@ -2,12 +2,55 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import { useLanguage } from "../context/LanguageContext";
 import { useMode } from "../context/ModeContext";
 import vidaLarAntes from "@/public/vidalar-prints/antes.png";
 import vidaLarDepois from "@/public/vidalar-prints/depois.png";
 
 export default function VidaLar() {
     const { mode } = useMode();
+    const { lang } = useLanguage();
+
+    const copy =
+        lang === "en"
+            ? {
+                inProgress: "In progress",
+                redesignCase: "Redesign Case",
+                beforeAfter: "Before & After",
+                subtitle: "Complete redesign of the digital identity for a home care company.",
+                subtitle2: "The project is actively in development.",
+                before: "Before",
+                after: "After",
+                afterWip: "In development",
+                tag1Bad: "Outdated design",
+                tag2Bad: "Confusing hierarchy",
+                tag3Bad: "Low conversion",
+                tag1Good: "Modern identity",
+                tag2Good: "Clear UX",
+                tag3Good: "Conversion focused",
+                cta: "Want something like this? Let us talk ->",
+                altBefore: "Vida Lar - before redesign",
+                altAfter: "Vida Lar - redesign in progress",
+            }
+            : {
+                inProgress: "Em progresso",
+                redesignCase: "Case de Redesign",
+                beforeAfter: "Antes & Depois",
+                subtitle: "Redesign completo da identidade digital de uma empresa de cuidados domiciliares.",
+                subtitle2: "O projeto está ativamente em desenvolvimento.",
+                before: "Antes",
+                after: "Depois",
+                afterWip: "Em desenvolvimento",
+                tag1Bad: "Design datado",
+                tag2Bad: "Hierarquia confusa",
+                tag3Bad: "Baixa conversão",
+                tag1Good: "Identidade moderna",
+                tag2Good: "UX clara",
+                tag3Good: "Foco em conversão",
+                cta: "Quer algo assim? Me chama ->",
+                altBefore: "Vida Lar - antes do redesign",
+                altAfter: "Vida Lar - redesign em progresso",
+            };
 
     if (mode !== "dev") {
         return null;
@@ -21,17 +64,17 @@ export default function VidaLar() {
                 <div className="vl-header">
                     <div className="vl-wip-badge">
                         <span className="ping-dot" style={{ "--pc": "#f59e0b" } as React.CSSProperties}></span>
-                        Em progresso
+                        {copy.inProgress}
                     </div>
-                    <p className="section-label">Case de Redesign</p>
+                    <p className="section-label">{copy.redesignCase}</p>
                     <h2 className="section-title">
                         Vida Lar Saúde<br />
-                        <em style={{ color: "var(--accent)", fontStyle: "normal" }}>Antes &amp; Depois</em>
+                        <em style={{ color: "var(--accent)", fontStyle: "normal" }}>{copy.beforeAfter}</em>
                     </h2>
                     <p className="vl-subtitle">
-                        Redesign completo da identidade digital de uma empresa de cuidados domiciliares.
+                        {copy.subtitle}
                         <br />
-                        O projeto está ativamente em desenvolvimento.
+                        {copy.subtitle2}
                     </p>
                 </div>
 
@@ -45,15 +88,15 @@ export default function VidaLar() {
                                 <path d="M9 14l-4-4 4-4" />
                                 <path d="M5 10h11a4 4 0 0 1 0 8h-1" />
                             </svg>
-                            Antes
+                            {copy.before}
                         </div>
                         <div className="vl-screen">
-                            <Image src={vidaLarAntes} alt="Vida Lar — antes do redesign" className="vl-img" sizes="(max-width: 900px) 100vw, 50vw" />
+                            <Image src={vidaLarAntes} alt={copy.altBefore} className="vl-img" sizes="(max-width: 900px) 100vw, 50vw" />
                          </div>
                         <div className="vl-card-footer">
-                            <span className="vl-tag-bad">Design datado</span>
-                            <span className="vl-tag-bad">Hierarquia confusa</span>
-                            <span className="vl-tag-bad">Baixa conversão</span>
+                            <span className="vl-tag-bad">{copy.tag1Bad}</span>
+                            <span className="vl-tag-bad">{copy.tag2Bad}</span>
+                            <span className="vl-tag-bad">{copy.tag3Bad}</span>
                         </div>
                     </div>
 
@@ -71,11 +114,11 @@ export default function VidaLar() {
                                 <path d="M5 12h14" />
                                 <path d="m12 5 7 7-7 7" />
                             </svg>
-                            Depois
+                            {copy.after}
                         </div>
                         <div className="vl-screen">
                            
-                            <Image src={vidaLarDepois} alt="Vida Lar — redesign em progresso" className="vl-img" sizes="(max-width: 900px) 100vw, 50vw" />
+                            <Image src={vidaLarDepois} alt={copy.altAfter} className="vl-img" sizes="(max-width: 900px) 100vw, 50vw" />
                             {/* WIP overlay */}
                             <div className="vl-wip-overlay">
                                 <div className="vl-wip-content">
@@ -83,14 +126,14 @@ export default function VidaLar() {
                                         <circle cx="12" cy="12" r="10" />
                                         <path d="M12 6v6l4 2" />
                                     </svg>
-                                    <span>Em desenvolvimento</span>
+                                    <span>{copy.afterWip}</span>
                                 </div>
                             </div>
                         </div>
                         <div className="vl-card-footer">
-                            <span className="vl-tag-good">Identidade moderna</span>
-                            <span className="vl-tag-good">UX clara</span>
-                            <span className="vl-tag-good">Foco em conversão</span>
+                            <span className="vl-tag-good">{copy.tag1Good}</span>
+                            <span className="vl-tag-good">{copy.tag2Good}</span>
+                            <span className="vl-tag-good">{copy.tag3Good}</span>
                         </div>
                     </div>
 
@@ -105,7 +148,7 @@ export default function VidaLar() {
                         <span className="tag">Figma</span>
                         <span className="tag">UI/UX</span>
                     </div>
-                    <Link href="#contato" className="vl-cta">Quer algo assim? Me chama →</Link>
+                    <Link href="#contato" className="vl-cta">{copy.cta}</Link>
                 </div>
 
             </div>

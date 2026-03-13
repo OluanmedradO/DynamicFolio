@@ -1,23 +1,42 @@
 "use client";
 
 import Link from "next/link";
+import { useLanguage } from "../context/LanguageContext";
 import { useMode } from "../context/ModeContext";
 
-const modeContent = {
-    dev: {
-        role: "Desenvolvedor Front-End",
-        desc: <>Especializado em <strong>React</strong> e <strong>Next.js</strong>, criando interfaces rápidas, intuitivas e bem pensadas.</>,
+const content = {
+    pt: {
+        eyebrow: "Oi! Eu sou",
+        cta: "Entre em Contato",
+        scroll: "scroll",
+        dev: {
+            role: "Desenvolvedor Front-End",
+            desc: <>Especializado em <strong>React</strong> e <strong>Next.js</strong>, criando interfaces rápidas, intuitivas e bem pensadas.</>,
+        },
+        editor: {
+            role: "Editor de Vídeo",
+            desc: "Especializado em contar histórias através de muita criatividade, com foco em retenção, impacto, qualidade e ritmo.",
+        },
     },
-    editor: {
-        role: "Editor de Vídeo",
-        avail: "Aceitando novos projetos",
-        desc: "Especializado em contar histórias através de muita criatividade, com foco em retenção, impacto, qualidade e ritmo.",
+    en: {
+        eyebrow: "Hey! I'm",
+        cta: "Get in Touch",
+        scroll: "scroll",
+        dev: {
+            role: "Front-End Developer",
+            desc: <>Specialized in <strong>React</strong> and <strong>Next.js</strong>, building fast, intuitive and polished interfaces.</>,
+        },
+        editor: {
+            role: "Video Editor",
+            desc: "Specialized in visual storytelling with creativity, focused on retention, impact, quality and rhythm.",
+        },
     },
 };
 
 export default function Hero() {
     const { mode } = useMode();
-    const c = modeContent[mode];
+    const { lang } = useLanguage();
+    const c = content[lang][mode];
 
     return (
         <section className="hero" id="hero">
@@ -26,7 +45,7 @@ export default function Hero() {
             <div className="hero-ring"></div>
             <div className="hero-ring hero-ring-2"></div>
 
-            <p className="hero-eyebrow">Oi! Eu sou</p>
+            <p className="hero-eyebrow">{content[lang].eyebrow}</p>
 
             <h1 className="hero-name">
                 <span className="glitch" data-text="LUAN">LUAN</span>&nbsp;<span className="glitch" data-text="MEDRADO">MEDRADO</span>
@@ -44,7 +63,7 @@ export default function Hero() {
 
             <div className="hero-actions">
                 <Link href="#contato" className="btn-primary">
-                    Entre em Contato
+                    {content[lang].cta}
                     <span className="arrow">↗</span>
                 </Link>
                 <div className="social-icons">
@@ -63,7 +82,7 @@ export default function Hero() {
             </div>
 
             <div className="scroll-indicator">
-                <span>scroll</span>
+                <span>{content[lang].scroll}</span>
                 <div className="scroll-line"></div>
             </div>
         </section>

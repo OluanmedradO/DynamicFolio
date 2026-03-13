@@ -1,6 +1,7 @@
 ﻿"use client";
 
 import { useEffect, useState } from "react";
+import { useLanguage } from "../context/LanguageContext";
 
 type Section = "hero" | "sobre" | "projetos" | "contato";
 
@@ -9,6 +10,12 @@ const sectionIds: Section[] = ["hero", "sobre", "projetos", "contato"];
 export default function SidebarNav() {
     const [active, setActive] = useState<Section>("hero");
     const [visible, setVisible] = useState(false);
+    const { lang } = useLanguage();
+
+    const labels =
+        lang === "en"
+            ? { nav: "Section navigation", home: "Home", about: "About", projects: "Projects", contact: "Contact" }
+            : { nav: "Navegação de seções", home: "Início", about: "Sobre", projects: "Projetos", contact: "Contato" };
 
     useEffect(() => {
         const updateSidebar = () => {
@@ -51,12 +58,12 @@ export default function SidebarNav() {
     }, []);
 
     return (
-        <nav className={`sidebar-nav${visible ? " visible" : ""}`} id="sidebarNav" aria-label="Navegação de seções">
+        <nav className={`sidebar-nav${visible ? " visible" : ""}`} id="sidebarNav" aria-label={labels.nav}>
             {[
-                { id: "hero", label: "Início" },
-                { id: "sobre", label: "Sobre" },
-                { id: "projetos", label: "Projetos" },
-                { id: "contato", label: "Contato" },
+                { id: "hero", label: labels.home },
+                { id: "sobre", label: labels.about },
+                { id: "projetos", label: labels.projects },
+                { id: "contato", label: labels.contact },
             ].map((item) => {
                 const isActive = active === item.id;
                 return (

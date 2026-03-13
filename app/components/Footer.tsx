@@ -1,12 +1,21 @@
-﻿import Link from "next/link";
+﻿"use client";
+
+import Link from "next/link";
+import { useLanguage } from "../context/LanguageContext";
 
 export default function Footer() {
+    const { lang } = useLanguage();
+
     return (
         <footer>
             <div className="footer-logo">
-                Luan<span>.</span>
+                oluanmedrado<span>.</span>
             </div>
-            <p className="footer-copy">© 2026 Luan Medrado - Todos os direitos reservados</p>
+            <p className="footer-copy">
+                {lang === "en"
+                    ? "© 2026 Luan Medrado - All rights reserved"
+                    : "© 2026 Luan Medrado - Todos os direitos reservados"}
+            </p>
             <div className="footer-socials">
                 <Link href="https://www.linkedin.com/in/oluanmedrado/" target="_blank" title="LinkedIn">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">

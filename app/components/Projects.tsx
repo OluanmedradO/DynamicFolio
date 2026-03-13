@@ -4,6 +4,7 @@ import BehanceGrid from "./BehanceGrid";
 import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import { useLanguage } from "../context/LanguageContext";
 import YouTubeGrid from "./YouTubeGrid";
 import { useMode } from "../context/ModeContext";
 import riff1 from "@/public/riff-1.jpg";
@@ -12,13 +13,14 @@ import riff3 from "@/public/riff-3.jpg";
 import revendedorPrint from "@/public/revendedor-prints/revendedor.png";
 import notifyPrint from "@/public/notify-prints/dashboard.png";
 
+const carouselImages = [riff1, riff2, riff3];
+
 function PhoneCarousel() {
-    const imageArr = [riff1, riff2, riff3];
     const [activeIdx, setActiveIdx] = useState(0);
 
     useEffect(() => {
         // Preload once so slide changes reuse in-memory assets.
-        imageArr.forEach((img) => {
+        carouselImages.forEach((img) => {
             const preloadImg = new window.Image();
             preloadImg.src = img.src;
         });
@@ -26,18 +28,18 @@ function PhoneCarousel() {
 
     useEffect(() => {
         const timer = setInterval(() => {
-            setActiveIdx((prev) => (prev + 1) % imageArr.length);
+            setActiveIdx((prev) => (prev + 1) % carouselImages.length);
         }, 4000);
 
         return () => clearInterval(timer);
-    }, [imageArr.length]);
+    }, []);
 
-    const nextSlide = () => setActiveIdx((prev) => (prev + 1) % imageArr.length);
-    const prevSlide = () => setActiveIdx((prev) => (prev - 1 + imageArr.length) % imageArr.length);
+    const nextSlide = () => setActiveIdx((prev) => (prev + 1) % carouselImages.length);
+    const prevSlide = () => setActiveIdx((prev) => (prev - 1 + carouselImages.length) % carouselImages.length);
     const goToSlide = (i: number) => setActiveIdx(i);
 
-    const leftIdx = (activeIdx - 1 + imageArr.length) % imageArr.length;
-    const rightIdx = (activeIdx + 1) % imageArr.length;
+    const leftIdx = (activeIdx - 1 + carouselImages.length) % carouselImages.length;
+    const rightIdx = (activeIdx + 1) % carouselImages.length;
 
     return (
         <div className="phone-stage">
@@ -49,19 +51,19 @@ function PhoneCarousel() {
             <div className="phones-wrapper">
                 <div className="phone phone-left">
                     <div className="phone-dim"></div>
-                    <Image key={`left-${leftIdx}`} src={imageArr[leftIdx]} alt="Riff Maker" width={360} height={780} sizes="140px" className="phone-image" />
+                    <Image key={`left-${leftIdx}`} src={carouselImages[leftIdx]} alt="Riff Maker" width={360} height={780} sizes="140px" className="phone-image" />
                 </div>
                 <div className="phone phone-center" onClick={nextSlide}>
                     <div className="phone-notch"></div>
-                    <Image key={`center-${activeIdx}`} src={imageArr[activeIdx]} alt="Riff Maker" width={360} height={780} sizes="180px" priority={activeIdx === 0} className="phone-image" />
+                    <Image key={`center-${activeIdx}`} src={carouselImages[activeIdx]} alt="Riff Maker" width={360} height={780} sizes="180px" priority={activeIdx === 0} className="phone-image" />
                 </div>
                 <div className="phone phone-right">
                     <div className="phone-dim"></div>
-                    <Image key={`right-${rightIdx}`} src={imageArr[rightIdx]} alt="Riff Maker" width={360} height={780} sizes="140px" className="phone-image" />
+                    <Image key={`right-${rightIdx}`} src={carouselImages[rightIdx]} alt="Riff Maker" width={360} height={780} sizes="140px" className="phone-image" />
                 </div>
             </div>
             <div className="carousel-dots">
-                {imageArr.map((_, i) => (
+                {carouselImages.map((_, i) => (
                     <div key={i} className={`dot ${i === activeIdx ? "active" : ""}`} onClick={() => goToSlide(i)}></div>
                 ))}
             </div>
@@ -69,13 +71,25 @@ function PhoneCarousel() {
     );
 }
 
-function DevProjects() {
+interface DevCopy {
+    sectionLabel: string;
+    sectionTitle: string;
+    featuredBadge: string;
+    featuredDesc: string;
+    corpExperience: string;
+    internalProject: string;
+    viewDetails: string;
+    portalDesc: string;
+    notifyDesc: string;
+}
+
+function DevProjects({ copy }: { copy: DevCopy }) {
     return (
         <div id="devProjects">
             <div className="section-header">
                 <div>
-                    <p className="section-label">Trabalhos Selecionados</p>
-                    <h2 className="section-title">Projetos em Destaque</h2>
+                    <p className="section-label">{copy.sectionLabel}</p>
+                    <h2 className="section-title">{copy.sectionTitle}</h2>
                     <div style={{ height: "4px", width: "56px", background: "var(--accent)", borderRadius: "100px", marginTop: "12px" }}></div>
                 </div>
             </div>
@@ -84,10 +98,10 @@ function DevProjects() {
                 <div className="featured-content">
                     <div className="featured-badge">
                         <span className="ping-dot"></span>
-                        Em produção em breve
+                        {copy.featuredBadge}
                     </div>
                     <h3 className="featured-title">Riff Maker</h3>
-                    <p className="featured-desc">RiffMaker é um app mobile para músicos capturarem riffs e ideias musicais no momento em que elas surgem. <br/> Com gravação rápida e organização inteligente, ele transforma inspirações espontâneas em material criativo estruturado.</p>
+                    <p className="featured-desc">{copy.featuredDesc}</p>
                     <div className="tag-list">
                         <span className="tag">React Native</span>
                         <span className="tag">Expo</span>
@@ -109,7 +123,7 @@ function DevProjects() {
                         height={36}
                         style={{ height: "36px", width: "auto", marginBottom: "8px", filter: "brightness(0) invert(1)", opacity: 0.9 }}
                     />
-                    <div className="multilaser-sub">Experiência Corporativa</div>
+                    <div className="multilaser-sub">{copy.corpExperience}</div>
                 </div>
                 <div className="multi-grid">
                     <div className="multi-card">
@@ -124,9 +138,9 @@ function DevProjects() {
                                 <span className="tag blue">UI/UX</span>
                             </div>
                             <h3 className="multi-card-title">Portal do Revendedor Multilaser</h3>
-                            <p className="multi-card-desc">Hub de acesso para boletos, devoluções e rastreio de pedidos.</p>
+                            <p className="multi-card-desc">{copy.portalDesc}</p>
                             <div className="multi-card-footer">
-                                <Link href="https://revendedor.grupomultilaser.com.br/" target="_blank" className="multi-card-link">Ver Detalhes <span>↗</span></Link>
+                                <Link href="https://revendedor.grupomultilaser.com.br/" target="_blank" className="multi-card-link">{copy.viewDetails} <span>↗</span></Link>
                             </div>
                         </div>
                     </div>
@@ -142,9 +156,9 @@ function DevProjects() {
                                 <span className="tag blue">Tailwind CSS</span>
                             </div>
                             <h3 className="multi-card-title">Multi Notify</h3>
-                            <p className="multi-card-desc">Refatoração completa do frontend B2B focado em gestão e disparo de notificações.</p>
+                            <p className="multi-card-desc">{copy.notifyDesc}</p>
                             <div className="multi-card-footer">
-                                <span style={{ fontSize: "0.82rem", color: "var(--grey)" }}>Projeto interno</span>
+                                <span style={{ fontSize: "0.82rem", color: "var(--grey)" }}>{copy.internalProject}</span>
                             </div>
                         </div>
                     </div>
@@ -169,10 +183,36 @@ function EditorProjects() {
 
 export default function Projects() {
     const { mode } = useMode();
+    const { lang } = useLanguage();
+
+    const devCopy: DevCopy =
+        lang === "en"
+            ? {
+                sectionLabel: "Selected Works",
+                sectionTitle: "Featured Projects",
+                featuredBadge: "In production soon",
+                featuredDesc: "RiffMaker is a mobile app for musicians to capture riffs and musical ideas the moment they appear. With quick recording and smart organization, it turns spontaneous inspiration into structured creative material.",
+                corpExperience: "Corporate Experience",
+                internalProject: "Internal project",
+                viewDetails: "View Details",
+                portalDesc: "Access hub for invoices, returns and order tracking.",
+                notifyDesc: "Complete B2B frontend refactor focused on notification management and dispatch.",
+            }
+            : {
+                sectionLabel: "Trabalhos Selecionados",
+                sectionTitle: "Projetos em Destaque",
+                featuredBadge: "Em produção em breve",
+                featuredDesc: "RiffMaker é um app mobile para músicos capturarem riffs e ideias musicais no momento em que elas surgem. Com gravação rápida e organização inteligente, ele transforma inspirações espontâneas em material criativo estruturado.",
+                corpExperience: "Experiência Corporativa",
+                internalProject: "Projeto interno",
+                viewDetails: "Ver Detalhes",
+                portalDesc: "Hub de acesso para boletos, devoluções e rastreio de pedidos.",
+                notifyDesc: "Refatoração completa do frontend B2B focado em gestão e disparo de notificações.",
+            };
 
     return (
         <section className="projects" id="projetos">
-            {mode === "dev" ? <DevProjects /> : <EditorProjects />}
+            {mode === "dev" ? <DevProjects copy={devCopy} /> : <EditorProjects />}
         </section>
     );
 }

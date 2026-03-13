@@ -3,6 +3,7 @@
 import { Fragment, useEffect, useRef } from "react";
 import Image from "next/image";
 import styles from "./YouTubeGrid.module.css";
+import { useLanguage } from "../context/LanguageContext";
 
 const channels = [
   {
@@ -50,7 +51,19 @@ const channels = [
 ] as const;
 
 export default function YouTubeGrid() {
+  const { lang } = useLanguage();
   const channelRefs = useRef<Array<HTMLAnchorElement | null>>([]);
+
+  const copy =
+    lang === "en"
+      ? {
+        totalViews: "total views",
+        partners: "partner channels",
+      }
+      : {
+        totalViews: "views totais",
+        partners: "canais parceiros",
+      };
 
   useEffect(() => {
     const items = channelRefs.current.filter((item): item is HTMLAnchorElement => item !== null);
@@ -90,7 +103,7 @@ export default function YouTubeGrid() {
   return (
     <div className={styles.wrapper}>
       <h2 className={styles.title}>
-        Criadores do <span>YouTube</span>
+        {lang === "en" ? <><span>YouTube</span> Creators</> : <>Criadores do <span>YouTube</span></>}
       </h2>
 
       <div className={styles.channels}>
@@ -127,7 +140,7 @@ export default function YouTubeGrid() {
       <div className={styles.totals}>
         <div className={styles.totalItem}>
           <span className={styles.totalNumber}>27.9M+</span>
-          <span className={styles.totalLabel}>views totais</span>
+          <span className={styles.totalLabel}>{copy.totalViews}</span>
         </div>
         <div className={styles.totalSep} aria-hidden="true"></div>
 
@@ -139,7 +152,7 @@ export default function YouTubeGrid() {
 
         <div className={styles.totalItem}>
           <span className={styles.totalNumber}>6</span>
-          <span className={styles.totalLabel}>canais parceiros</span>
+          <span className={styles.totalLabel}>{copy.partners}</span>
         </div>
       </div>
     </div>

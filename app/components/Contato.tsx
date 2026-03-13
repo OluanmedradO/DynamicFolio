@@ -1,26 +1,47 @@
 ﻿"use client";
 
+import { useLanguage } from "../context/LanguageContext";
 import { useMode } from "../context/ModeContext";
 
 const modeContent = {
-    dev: {
-        titleLine: "Vamos criar algo",
-        titleEm: "incrível juntos?",
-        sub: "Seja para um novo projeto, uma oportunidade profissional ou só para trocar uma ideia sobre tecnologia.",
+    pt: {
+        email: "Me mande um email",
+        dev: {
+            titleLine: "Vamos criar algo",
+            titleEm: "incrível juntos?",
+            sub: "Seja para um novo projeto, uma oportunidade profissional ou só para trocar uma ideia sobre tecnologia.",
+        },
+        editor: {
+            titleLine: "Vamos contar uma",
+            titleEm: "história juntos?",
+            sub: "Seja para um projeto de marca, vídeo social, documentário ou reel criativo, estou pronto pra dar vida à sua ideia.",
+        },
     },
-    editor: {
-        titleLine: "Vamos contar uma",
-        titleEm: "história juntos?",
-        sub: "Seja para um projeto de marca, vídeo social, documentário ou reel criativo, estou pronto pra dar vida à sua ideia.",
+    en: {
+        email: "Send me an email",
+        dev: {
+            titleLine: "Let's build something",
+            titleEm: "amazing together?",
+            sub: "Whether for a new project, a professional opportunity or just to talk about technology.",
+        },
+        editor: {
+            titleLine: "Let's tell a",
+            titleEm: "story together?",
+            sub: "Whether for a brand project, social video, documentary or creative reel, I am ready to bring your idea to life.",
+        },
     },
 };
 
 const WHATSAPP_NUMBER = "5511945764672";
-const WHATSAPP_MSG = encodeURIComponent("Oi Luan! Vi seu portfólio e quero conversar sobre um projeto.");
 
 export default function Contato() {
     const { mode } = useMode();
-    const c = modeContent[mode];
+    const { lang } = useLanguage();
+    const c = modeContent[lang][mode];
+    const whatsappMsg =
+        lang === "en"
+            ? encodeURIComponent("Hi Luan! I saw your portfolio and I want to discuss a project.")
+            : encodeURIComponent("Oi Luan! Vi seu portfólio e quero conversar sobre um projeto.");
 
     return (
         <section className="contact" id="contato">
@@ -40,12 +61,12 @@ export default function Contato() {
                             <rect x="2" y="4" width="20" height="16" rx="2" />
                             <path d="m22 7-8.97 5.7a1.94 1.94 0 01-2.06 0L2 7" />
                         </svg>
-                        <span>Me mande um email</span>
+                        <span>{modeContent[lang].email}</span>
                         <span className="contact-arrow">→</span>
                     </a>
 
                     <a
-                        href={`https://wa.me/${WHATSAPP_NUMBER}?text=${WHATSAPP_MSG}`}
+                        href={`https://wa.me/${WHATSAPP_NUMBER}?text=${whatsappMsg}`}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="contact-whatsapp-btn"

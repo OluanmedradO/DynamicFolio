@@ -1,9 +1,11 @@
 ﻿"use client";
 
+import { useLanguage } from "../context/LanguageContext";
 import { useMode } from "../context/ModeContext";
 
 export default function TechStrip() {
     const { mode } = useMode();
+    const { lang } = useLanguage();
 
     const devTechs = [
         "React",
@@ -28,7 +30,7 @@ export default function TechStrip() {
         "Color Grading",
         "Sound Design",
         "Storytelling Visual",
-        "Ritmo de Edição",
+        "Editing Rhythm",
     ];
 
     const techs = mode === "editor" ? editorTechs : devTechs;
@@ -36,7 +38,7 @@ export default function TechStrip() {
     const track = [...techs, ...techs];
 
     return (
-        <div className="tech-strip" aria-label="Tecnologias">
+        <div className="tech-strip" aria-label={lang === "en" ? "Technologies" : "Tecnologias"}>
             <div className="tech-track">
                 {track.map((tech, index) => (
                     <span key={`${tech}-${index}`} className="tech-item">

@@ -1,6 +1,21 @@
 ﻿"use client";
 
+import { useLanguage } from "../context/LanguageContext";
+import { useMode } from "../context/ModeContext";
+
 export default function FreelanceBadge() {
+    const { lang } = useLanguage();
+    const { mode } = useMode();
+
+    const text =
+        lang === "en"
+            ? mode === "editor"
+                ? "Available for Projects"
+                : "Available for Projects"
+            : mode === "editor"
+                ? "Disponível para Projetos"
+                : "Disponível para Projects";
+
     return (
         <a
             href="#contato"
@@ -15,9 +30,7 @@ export default function FreelanceBadge() {
             }}
         >
             <span className="freelance-dot"></span>
-            <span className="freelance-text">
-                Disponível para Projetos
-            </span>
+            <span className="freelance-text">{text}</span>
             <span className="freelance-arrow">↗</span>
         </a>
     );

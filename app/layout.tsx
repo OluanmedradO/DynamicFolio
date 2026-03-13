@@ -2,7 +2,9 @@
 import { Bebas_Neue, DM_Mono, DM_Sans, Syne } from "next/font/google";
 import Cursor from "./components/Cursor";
 import FreelanceBadge from "./components/FreelanceBadge";
+import LanguageSwitch from "./components/LanguageSwitch";
 import ModeSwitch from "./components/ModeSwitch";
+import { LanguageProvider } from "./context/LanguageContext";
 import { ModeProvider } from "./context/ModeContext";
 import "./globals.css";
 
@@ -45,15 +47,18 @@ export default function RootLayout({
       <body
         className={`${bebas.variable} ${syne.variable} ${dmMono.variable} ${dmSans.variable} antialiased`}
       >
-        <ModeProvider>
-          <Cursor />
-          <div className="mode-flash" id="modeFlash"></div>
-          <ModeSwitch />
-          <FreelanceBadge />
-          <div style={{ overflowX: "hidden" }}>
-            {children}
-          </div>
-        </ModeProvider>
+        <LanguageProvider>
+          <ModeProvider>
+            <Cursor />
+            <div className="mode-flash" id="modeFlash"></div>
+            <LanguageSwitch />
+            <ModeSwitch />
+            <FreelanceBadge />
+            <div style={{ overflowX: "hidden" }}>
+              {children}
+            </div>
+          </ModeProvider>
+        </LanguageProvider>
       </body>
     </html>
   );

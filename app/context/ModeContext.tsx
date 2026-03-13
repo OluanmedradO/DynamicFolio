@@ -1,7 +1,7 @@
 ﻿"use client";
 
 import { usePathname, useRouter } from "next/navigation";
-import { createContext, ReactNode, useContext, useEffect, useState } from "react";
+import { createContext, ReactNode, useContext, useEffect } from "react";
 
 export type Mode = "dev" | "editor";
 
@@ -36,19 +36,15 @@ export function ModeProvider({ children }: { children: ReactNode }) {
     const pathname = usePathname();
     const router = useRouter();
 
-    const initialMode = pathnameToMode(pathname);
-    const [mode, setModeState] = useState<Mode>(initialMode);
+    const mode = pathnameToMode(pathname);
 
     useEffect(() => {
-        const syncedMode = pathnameToMode(pathname);
-        setModeState(syncedMode);
-        document.body.classList.toggle("editor-mode", syncedMode === "editor");
-    }, [pathname]);
+        document.body.classList.toggle("editor-mode", mode === "editor");
+    }, [mode]);
 
     const setMode = (newMode: Mode) => {
         if (newMode === mode) return;
 
-        setModeState(newMode);
         document.body.classList.toggle("editor-mode", newMode === "editor");
         triggerModeFlash(newMode);
 

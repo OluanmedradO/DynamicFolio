@@ -2,9 +2,16 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { useLanguage } from "../context/LanguageContext";
 
 export default function Navbar() {
     const [scrolled, setScrolled] = useState(false);
+    const { lang } = useLanguage();
+
+    const labels =
+        lang === "en"
+            ? { about: "About", projects: "Projects" }
+            : { about: "Sobre", projects: "Projetos" };
 
     const handleSectionClick = (sectionId: string) => (e: React.MouseEvent<HTMLAnchorElement>) => {
         e.preventDefault();
@@ -30,10 +37,10 @@ export default function Navbar() {
         <nav id="topnav" className={scrolled ? "scrolled" : ""}>
             <ul className="nav-links nav-left">
                 <li>
-                    <Link href="#sobre" onClick={handleSectionClick("sobre")}>Sobre</Link>
+                    <Link href="#sobre" onClick={handleSectionClick("sobre")}>{labels.about}</Link>
                 </li>
                 <li>
-                    <Link href="#projetos" onClick={handleSectionClick("projetos")}>Projetos</Link>
+                    <Link href="#projetos" onClick={handleSectionClick("projetos")}>{labels.projects}</Link>
                 </li>
             </ul>
 
