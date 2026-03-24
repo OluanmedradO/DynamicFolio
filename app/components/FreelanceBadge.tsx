@@ -2,10 +2,16 @@
 
 import { useLanguage } from "../context/LanguageContext";
 import { useMode } from "../context/ModeContext";
+import { usePathname } from "next/navigation";
 
 export default function FreelanceBadge() {
+    const pathname = usePathname();
     const { lang } = useLanguage();
     const { mode } = useMode();
+
+    if (pathname?.startsWith("/riffmaker")) {
+        return null;
+    }
 
     const text =
         lang === "en"

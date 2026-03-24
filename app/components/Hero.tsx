@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import type { ReactNode } from "react";
 import { useLanguage } from "../context/LanguageContext";
 import { useMode } from "../context/ModeContext";
 import { trackEvent } from "../lib/analytics";
@@ -34,10 +35,22 @@ const content = {
     },
 };
 
-export default function Hero() {
+interface HeroOverrides {
+    ptDesc?: ReactNode;
+    enDesc?: ReactNode;
+    scrollLabel?: string;
+}
+
+interface HeroProps {
+    overrides?: HeroOverrides;
+}
+
+export default function Hero({ overrides }: HeroProps) {
     const { mode } = useMode();
     const { lang } = useLanguage();
     const c = content[lang][mode];
+    const desc = lang === "pt" ? overrides?.ptDesc ?? c.desc : overrides?.enDesc ?? c.desc;
+    const scrollLabel = overrides?.scrollLabel ?? content[lang].scroll;
 
     return (
         <section className="hero" id="hero">
@@ -58,8 +71,8 @@ export default function Hero() {
                 <span className="line right"></span>
             </div>
 
-              <p className="hero-desc">
-                <span key={`desc-${mode}`} className="mode-fade hero-desc-text" id="heroDesc">{c.desc}</span>
+            <p className="hero-desc">
+                <span key={`desc-${mode}`} className="mode-fade hero-desc-text" id="heroDesc">{desc}</span>
             </p>
 
             <div className="hero-actions">
@@ -88,7 +101,7 @@ export default function Hero() {
                     </a>
                     */}
                     <Link
-                        href="https://github.com/oluanmedrado"
+                        href="https://github.com/oluanmemo"
                         target="_blank"
                         className="social-icon"
                         title="GitHub"
@@ -147,7 +160,7 @@ export default function Hero() {
             </div>
 
             <div className="scroll-indicator">
-                <span>{content[lang].scroll}</span>
+                <span>{scrollLabel}</span>
                 <div className="scroll-line"></div>
             </div>
         </section>

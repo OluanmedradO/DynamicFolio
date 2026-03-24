@@ -4,6 +4,7 @@ import BehanceGrid from "./BehanceGrid";
 import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import { useLanguage } from "../context/LanguageContext";
 import YouTubeGrid from "./YouTubeGrid";
 import { useMode } from "../context/ModeContext";
@@ -77,6 +78,7 @@ interface DevCopy {
     sectionTitle: string;
     featuredBadge: string;
     featuredDesc: string;
+    featuredCta: string;
     corpExperience: string;
     internalProject: string;
     viewDetails: string;
@@ -109,7 +111,15 @@ function DevProjects({ copy, lang }: { copy: DevCopy; lang: "pt" | "en" }) {
                         <span className="tag">SQLite</span>
                         <span className="tag">Reanimated</span>
                     </div>
-                  
+                    <div className="featured-actions">
+                        <Link
+                            href="/riffmaker"
+                            className="btn-red"
+                            onClick={() => trackEvent("project_click", { project: "Riff Maker", category: "dev", lang, destination: "/riffmaker" })}
+                        >
+                            {copy.featuredCta} <span>↗</span>
+                        </Link>
+                    </div>
                 </div>
                 <PhoneCarousel />
             </div>
@@ -192,6 +202,8 @@ function EditorProjects() {
 export default function Projects() {
     const { mode } = useMode();
     const { lang } = useLanguage();
+    const pathname = usePathname();
+    const isHomeRoute = pathname === "/";
 
     const devCopy: DevCopy =
         lang === "en"
@@ -200,6 +212,7 @@ export default function Projects() {
                 sectionTitle: "Featured Projects",
                 featuredBadge: "In production soon",
                 featuredDesc: "RiffMaker is a mobile app for musicians to capture riffs and musical ideas the moment they appear. With quick recording and smart organization, it turns spontaneous inspiration into structured creative material.",
+                featuredCta: "Open Riff Maker",
                 corpExperience: "Corporate Experience",
                 internalProject: "Internal project",
                 viewDetails: "View Details",
@@ -211,6 +224,7 @@ export default function Projects() {
                 sectionTitle: "Projetos em Destaque",
                 featuredBadge: "Em produção em breve",
                 featuredDesc: "RiffMaker é um app mobile para músicos capturarem riffs e ideias musicais no momento em que elas surgem. Com gravação rápida e organização inteligente, ele transforma inspirações espontâneas em material criativo estruturado.",
+                featuredCta: "Abrir Riff Maker",
                 corpExperience: "Experiência Corporativa",
                 internalProject: "Projeto interno",
                 viewDetails: "Ver Detalhes",
@@ -220,9 +234,24 @@ export default function Projects() {
 
     return (
         <section className="projects" id="projetos">
-            {mode === "dev" ? <DevProjects copy={devCopy} lang={lang} /> : <EditorProjects />}
+            {isHomeRoute ? (
+                <div className="home-mixed-projects">
+                    <div className="section-header">
+                        <div>
+                            <p className="section-label">{lang === "en" ? "Mixed Portfolio" : "Portfolio Misto"}</p>
+                            <h2 className="section-title">{lang === "en" ? "TI + Edit Highlights" : "Destaques TI + Edit"}</h2>
+                            <div style={{ height: "4px", width: "56px", background: "var(--accent)", borderRadius: "100px", marginTop: "12px" }}></div>
+                        </div>
+                    </div>
+                    <DevProjects copy={devCopy} lang={lang} />
+                    <EditorProjects />
+                </div>
+            ) : mode === "dev" ? (
+                <DevProjects copy={devCopy} lang={lang} />
+            ) : (
+                <EditorProjects />
+            )}
         </section>
     );
 }
-
 

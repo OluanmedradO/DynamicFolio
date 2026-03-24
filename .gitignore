@@ -39,3 +39,11 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# local workspace artifacts (debug/screenshots)
+/.codex-*.log
+/.codex-*.png
+/riffmaker-*.png
+/home-after-*.png
+/dev-nav-*.png
+/dev-navbar-*.png

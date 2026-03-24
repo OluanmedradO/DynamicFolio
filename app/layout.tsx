@@ -53,7 +53,7 @@ export default function RootLayout({
             <div className="mode-flash" id="modeFlash"></div>
             <ModeSwitch />
             <FreelanceBadge />
-            <div style={{ overflowX: "hidden" }}>
+            <div style={{ overflowX: "clip" }}>
               {children}
             </div>
           </ModeProvider>
