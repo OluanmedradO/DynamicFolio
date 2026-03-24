@@ -25,7 +25,7 @@ function triggerModeFlash(mode: Mode) {
     if (!flash) return;
 
     flash.style.background =
-        mode === "editor" ? "rgba(168,85,247,0.18)" : "rgba(232,41,58,0.18)";
+        mode === "editor" ? "rgba(168,85,247,0.18)" : "rgba(57,255,20,0.2)";
 
     flash.classList.remove("active");
     void flash.offsetWidth;
@@ -37,10 +37,14 @@ export function ModeProvider({ children }: { children: ReactNode }) {
     const router = useRouter();
 
     const mode = pathnameToMode(pathname);
+    const isDevRoute = pathname.startsWith("/dev");
+    const isTiRoute = pathname.startsWith("/ti");
 
     useEffect(() => {
         document.body.classList.toggle("editor-mode", mode === "editor");
-    }, [mode]);
+        document.body.classList.toggle("dev-mode", isDevRoute && mode === "dev");
+        document.body.classList.toggle("ti-mode", isTiRoute && mode === "dev");
+    }, [isDevRoute, isTiRoute, mode]);
 
     const setMode = (newMode: Mode) => {
         if (newMode === mode) return;
@@ -53,7 +57,7 @@ export function ModeProvider({ children }: { children: ReactNode }) {
             return;
         }
 
-        router.push("/ti");
+        router.push("/dev");
     };
 
     return (

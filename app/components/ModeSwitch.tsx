@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import { useMode } from "../context/ModeContext";
 import { trackEvent } from "../lib/analytics";
+import { usePathname } from "next/navigation";
 
 function DevIcon() {
     return (
@@ -24,8 +25,10 @@ function EditorIcon() {
 }
 
 export default function ModeSwitch() {
+    const pathname = usePathname();
     const { mode, setMode } = useMode();
     const switchRef = useRef<HTMLDivElement | null>(null);
+    const isRiffmakerRoute = pathname?.startsWith("/riffmaker") ?? false;
 
     const handleModeChange = (nextMode: "dev" | "editor") => {
         if (mode === nextMode) {
@@ -42,6 +45,10 @@ export default function ModeSwitch() {
     };
 
     useEffect(() => {
+        if (isRiffmakerRoute) {
+            return;
+        }
+
         const updateSwitchState = () => {
             const switchElement = switchRef.current;
             const aboutSection = document.getElementById("sobre");
@@ -69,7 +76,11 @@ export default function ModeSwitch() {
             window.removeEventListener("scroll", updateSwitchState);
             window.removeEventListener("resize", updateSwitchState);
         };
-    }, []);
+    }, [isRiffmakerRoute]);
+
+    if (isRiffmakerRoute) {
+        return null;
+    }
 
     return (
         <div className="mode-switch" id="modeSwitch" ref={switchRef}>
