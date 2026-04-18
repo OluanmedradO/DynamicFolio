@@ -53,15 +53,15 @@ function PhoneCarousel() {
             <div className="phones-wrapper">
                 <div className="phone phone-left">
                     <div className="phone-dim"></div>
-                    <Image key={`left-${leftIdx}`} src={carouselImages[leftIdx]} alt="Riff Maker" width={360} height={780} sizes="140px" className="phone-image" />
+                    <Image key={`left-${leftIdx}`} src={carouselImages[leftIdx]} alt="Riff Maker" width={360} height={780} sizes="140px" className="phone-image" placeholder="blur" />
                 </div>
                 <div className="phone phone-center" onClick={nextSlide}>
                     <div className="phone-notch"></div>
-                    <Image key={`center-${activeIdx}`} src={carouselImages[activeIdx]} alt="Riff Maker" width={360} height={780} sizes="180px" priority={activeIdx === 0} className="phone-image" />
+                    <Image key={`center-${activeIdx}`} src={carouselImages[activeIdx]} alt="Riff Maker" width={360} height={780} sizes="180px" priority={activeIdx === 0} className="phone-image" placeholder="blur" />
                 </div>
                 <div className="phone phone-right">
                     <div className="phone-dim"></div>
-                    <Image key={`right-${rightIdx}`} src={carouselImages[rightIdx]} alt="Riff Maker" width={360} height={780} sizes="140px" className="phone-image" />
+                    <Image key={`right-${rightIdx}`} src={carouselImages[rightIdx]} alt="Riff Maker" width={360} height={780} sizes="140px" className="phone-image" placeholder="blur" />
                 </div>
             </div>
             <div className="carousel-dots">
@@ -140,7 +140,7 @@ function DevProjects({ copy, lang }: { copy: DevCopy; lang: "pt" | "en" }) {
                     <div className="multi-card">
                         <div className="multi-card-glow"></div>
                         <div className="multi-card-img">
-                            <Image src={revendedorPrint} alt="Portal do Revendedor" fill sizes="(min-width: 700px) 50vw, 100vw" className="multi-card-photo" />
+                            <Image src={revendedorPrint} alt="Portal do Revendedor" fill sizes="(min-width: 700px) 50vw, 100vw" className="multi-card-photo" placeholder="blur" />
                         </div>
                         <div className="multi-card-body">
                             <div className="tag-list" style={{ marginBottom: "10px" }}>
@@ -150,14 +150,22 @@ function DevProjects({ copy, lang }: { copy: DevCopy; lang: "pt" | "en" }) {
                             </div>
                             <h3 className="multi-card-title">Portal do Revendedor Multilaser</h3>
                             <p className="multi-card-desc">{copy.portalDesc}</p>
-                            <div className="multi-card-footer">
+                            <div className="multi-card-footer" style={{ display: "flex", gap: "16px", flexWrap: "wrap" }}>
+                                <Link
+                                    href="/projects/revendedor-multilaser"
+                                    className="multi-card-link"
+                                    onClick={() => trackEvent("project_click", { project: "Portal do Revendedor Multilaser", category: "dev", lang, destination: "detail" })}
+                                >
+                                    {copy.viewDetails} <span>→</span>
+                                </Link>
                                 <Link
                                     href="https://revendedor.grupomultilaser.com.br/"
                                     target="_blank"
                                     className="multi-card-link"
-                                    onClick={() => trackEvent("project_click", { project: "Portal do Revendedor Multilaser", category: "dev", lang })}
+                                    style={{ opacity: 0.6 }}
+                                    onClick={() => trackEvent("project_click", { project: "Portal do Revendedor Multilaser", category: "dev", lang, destination: "live" })}
                                 >
-                                    {copy.viewDetails} <span>↗</span>
+                                    Live <span>↗</span>
                                 </Link>
                             </div>
                         </div>
@@ -165,7 +173,7 @@ function DevProjects({ copy, lang }: { copy: DevCopy; lang: "pt" | "en" }) {
                     <div className="multi-card">
                         <div className="multi-card-glow"></div>
                         <div className="multi-card-img">
-                            <Image src={notifyPrint} alt="Multi Notify" fill sizes="(min-width: 700px) 50vw, 100vw" className="multi-card-photo" />
+                            <Image src={notifyPrint} alt="Multi Notify" fill sizes="(min-width: 700px) 50vw, 100vw" className="multi-card-photo" placeholder="blur" />
                         </div>
                         <div className="multi-card-body">
                             <div className="tag-list" style={{ marginBottom: "10px" }}>
@@ -176,7 +184,13 @@ function DevProjects({ copy, lang }: { copy: DevCopy; lang: "pt" | "en" }) {
                             <h3 className="multi-card-title">Multi Notify</h3>
                             <p className="multi-card-desc">{copy.notifyDesc}</p>
                             <div className="multi-card-footer">
-                                <span style={{ fontSize: "0.82rem", color: "var(--grey)" }}>{copy.internalProject}</span>
+                                <Link
+                                    href="/projects/multi-notify"
+                                    className="multi-card-link"
+                                    onClick={() => trackEvent("project_click", { project: "Multi Notify", category: "dev", lang, destination: "detail" })}
+                                >
+                                    {copy.viewDetails} <span>→</span>
+                                </Link>
                             </div>
                         </div>
                     </div>

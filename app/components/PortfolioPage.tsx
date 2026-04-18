@@ -7,13 +7,14 @@ import ScrollObserver from "../components/ScrollObserver";
 import Sobre from "../components/Sobre";
 import TechStrip from "../components/TechStrip";
 import VidaLar from "../components/VidaLar";
+import styles from "./PortfolioPage.module.css";
 
 export default function PortfolioPage() {
     return (
-        <main className="flex min-h-screen flex-col items-center justify-between w-full">
+        <main className={styles.main}>
             <ScrollObserver />
             <Navbar />
-            <div className="w-full">
+            <div className={styles.content}>
                 <Hero />
                 <TechStrip />
                 <Sobre />

@@ -126,9 +126,9 @@ export default function HomePage() {
                     </Link>
                 </div>
 
-                <a href="#hero" className={styles.navLogo}>
+                <Link href="#hero" className={styles.navLogo} onClick={(e) => { e.preventDefault(); document.getElementById("hero")?.scrollIntoView({ behavior: "smooth" }); }}>
                     luanmedrado<span>.</span>
-                </a>
+                </Link>
 
                 <div className={styles.navRight}>
                     <LanguageSwitch />

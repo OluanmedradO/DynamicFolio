@@ -32,9 +32,55 @@ const dmSans = DM_Sans({
   weight: ["300", "400"],
 });
 
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? "https://luanmedrado.dev";
+
 export const metadata: Metadata = {
-  title: "Luan Medrado - Desenvolvedor Front-End",
-  description: "Desenvolvedor front-end focado em criar experiências digitais incríveis.",
+  metadataBase: new URL(BASE_URL),
+  title: {
+    default: "Luan Medrado — Desenvolvedor & Criativo Digital",
+    template: "%s | Luan Medrado",
+  },
+  description:
+    "Desenvolvedor front-end e editor de vídeo baseado no Brasil. Criando interfaces rápidas, acessíveis e bem pensadas — do conceito ao deploy.",
+  keywords: ["desenvolvedor front-end", "editor de vídeo", "React", "Next.js", "TypeScript", "portfólio", "UI/UX", "front-end developer"],
+  authors: [{ name: "Luan Medrado", url: BASE_URL }],
+  creator: "Luan Medrado",
+  openGraph: {
+    type: "website",
+    locale: "pt_BR",
+    alternateLocale: "en_US",
+    url: BASE_URL,
+    siteName: "Luan Medrado",
+    title: "Luan Medrado — Desenvolvedor & Criativo Digital",
+    description:
+      "Desenvolvedor front-end e editor de vídeo baseado no Brasil. Criando interfaces rápidas, acessíveis e bem pensadas — do conceito ao deploy.",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Luan Medrado — Desenvolvedor & Criativo Digital",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Luan Medrado — Desenvolvedor & Criativo Digital",
+    description:
+      "Desenvolvedor front-end e editor de vídeo baseado no Brasil. Criando interfaces rápidas, acessíveis e bem pensadas — do conceito ao deploy.",
+    images: ["/og-image.png"],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
 };
 
 export default function RootLayout({
@@ -43,9 +89,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="pt-BR" className="scroll-smooth">
+    <html lang="pt-BR">
       <body
-        className={`${bebas.variable} ${syne.variable} ${dmMono.variable} ${dmSans.variable} antialiased`}
+        className={`${bebas.variable} ${syne.variable} ${dmMono.variable} ${dmSans.variable}`}
       >
         <LanguageProvider>
           <ModeProvider>

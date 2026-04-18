@@ -6,6 +6,8 @@ import styles from "./YouTubeGrid.module.css";
 import { useLanguage } from "../context/LanguageContext";
 import { trackEvent } from "../lib/analytics";
 
+const BLUR_PLACEHOLDER = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxIiBoZWlnaHQ9IjEiPjxyZWN0IGZpbGw9IiMxYTFhMWEiLz48L3N2Zz4=";
+
 const channels = [
   {
     name: "Switch Game List",
@@ -121,7 +123,7 @@ export default function YouTubeGrid() {
               }}
             >
               <div className={styles.avatar}>
-                <Image src={channel.avatarSrc} alt={channel.name} fill sizes="72px" className={styles.avatarImage} />
+                <Image src={channel.avatarSrc} alt={channel.name} fill sizes="72px" className={styles.avatarImage} placeholder="blur" blurDataURL={BLUR_PLACEHOLDER} />
                 <div className={styles.avatarArrow} aria-hidden="true">
                   <svg viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M7 17L17 7M17 7H7M17 7v10" />

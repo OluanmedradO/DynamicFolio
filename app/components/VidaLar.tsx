@@ -14,11 +14,9 @@ export default function VidaLar() {
     const copy =
         lang === "en"
             ? {
-                inProgress: "In progress",
                 redesignCase: "Redesign Case",
                 beforeAfter: "Before & After",
                 subtitle: "Complete redesign of the digital identity for a home care company.",
-                subtitle2: "The project is actively in development.",
                 before: "Before",
                 after: "After",
                 afterWip: "In development",
@@ -33,11 +31,9 @@ export default function VidaLar() {
                 altAfter: "Vida Lar - redesign in progress",
             }
             : {
-                inProgress: "Em progresso",
                 redesignCase: "Case de Redesign",
                 beforeAfter: "Antes & Depois",
                 subtitle: "Redesign completo da identidade digital de uma empresa de cuidados domiciliares.",
-                subtitle2: "O projeto está ativamente em desenvolvimento.",
                 before: "Antes",
                 after: "Depois",
                 afterWip: "Em desenvolvimento",
@@ -62,20 +58,12 @@ export default function VidaLar() {
 
                 {/* Header */}
                 <div className="vl-header">
-                    <div className="vl-wip-badge">
-                        <span className="ping-dot" style={{ "--pc": "#f59e0b" } as React.CSSProperties}></span>
-                        {copy.inProgress}
-                    </div>
                     <p className="section-label">{copy.redesignCase}</p>
                     <h2 className="section-title">
                         Vida Lar Saúde<br />
                         <em style={{ color: "var(--accent)", fontStyle: "normal" }}>{copy.beforeAfter}</em>
                     </h2>
-                    <p className="vl-subtitle">
-                        {copy.subtitle}
-                        <br />
-                        {copy.subtitle2}
-                    </p>
+                    <p className="vl-subtitle">{copy.subtitle}</p>
                 </div>
 
                 {/* Comparison */}

@@ -12,10 +12,6 @@ export default function ScrollObserver() {
             ".featured-card",
             ".multilaser-section",
             ".multi-card",
-            ".other-card",
-            ".video-card",
-            ".video-featured",
-            ".stat-item",
             ".vl-card",
         ];
 

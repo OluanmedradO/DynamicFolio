@@ -49,6 +49,8 @@
   align-items: center;
   justify-content: space-between;
   padding: 28px 48px;
+  opacity: 0;
+  animation: fadeDown 0.5s 0.1s forwards;
 }
 
 .navLeft {
@@ -327,6 +329,7 @@
   content: "";
   position: absolute;
   inset: 0;
+  z-index: 1;
   background: radial-gradient(circle at 60% 40%, rgba(224, 48, 48, 0.08) 0%, transparent 70%);
   opacity: 0;
   transition: opacity 0.4s;
@@ -334,6 +337,37 @@
 
 .pathCard:hover::before {
   opacity: 1;
+}
+
+/* Preview visual ao hover — imagem de fundo sutil */
+.pathCard::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background-size: cover;
+  background-position: center top;
+  opacity: 0;
+  transition: opacity 0.6s ease;
+  filter: brightness(0.18) saturate(0.4);
+}
+
+.pathCard:hover::after {
+  opacity: 1;
+}
+
+.pathCard:first-child::after {
+  background-image: url("/revendedor-prints/revendedor.png");
+}
+
+.pathCard:last-child::after {
+  background-image: url("/guitarragospel.jpg");
+}
+
+/* Garante que o conteúdo dos cards fique acima dos pseudo-elementos */
+.pathCard > * {
+  position: relative;
+  z-index: 2;
 }
 
 .pathCard:hover {
@@ -507,6 +541,18 @@
   transition-delay: 0.12s;
 }
 
+@keyframes fadeDown {
+  from {
+    opacity: 0;
+    transform: translateY(-12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 @keyframes fadeUp {
   from {
     opacity: 0;
@@ -592,24 +638,46 @@
 
 @media (max-width: 768px) {
   .topbar {
-    padding: 20px 24px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    grid-template-areas:
+      ". logo right"
+      "left left left";
+    gap: 14px 16px;
+    padding: 18px 20px;
+    background: linear-gradient(180deg, rgba(10, 10, 10, 0.96) 0%, rgba(10, 10, 10, 0.88) 72%, rgba(10, 10, 10, 0) 100%);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
   }
 
   .navLeft {
+    grid-area: left;
+    width: 100%;
     gap: 10px;
+    justify-content: flex-start;
+    padding-top: 6px;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
   }
 
   .navLinks {
+    width: 100%;
+    justify-content: flex-start;
+    flex-wrap: wrap;
     gap: 18px;
   }
 
   .navLinks a {
-    font-size: 10px;
+    flex: 0 0 auto;
+    min-width: 0;
+    text-align: left;
+    font-size: 11px;
     letter-spacing: 0.08em;
   }
 
   .navLogo {
+    grid-area: logo;
     position: static;
+    justify-self: center;
     transform: none;
     font-size: 1rem;
     letter-spacing: -0.01em;
@@ -617,6 +685,12 @@
 
   .riffmakerCta {
     display: none;
+  }
+
+  .navRight {
+    grid-area: right;
+    justify-self: end;
+    margin-left: 0;
   }
 
   .statusBadge {
@@ -628,13 +702,34 @@
   }
 
   .hero {
-    min-height: 92vh;
-    padding: 112px 24px 72px;
+    min-height: 100svh;
+    justify-content: flex-start;
+    padding: 156px 24px 72px;
   }
 
   .heroEyebrow,
   .heroSubtitle {
+    width: 100%;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
     letter-spacing: 0.2em;
+  }
+
+  .heroEyebrow::before,
+  .heroEyebrow::after,
+  .heroSubtitle::before,
+  .heroSubtitle::after {
+    max-width: 36px;
+  }
+
+  .heroName {
+    font-size: clamp(60px, 16vw, 104px);
+  }
+
+  .heroBio {
+    max-width: 34ch;
+    font-size: 14px;
   }
 
   .cardTitle {
@@ -648,6 +743,60 @@
   .pathCard {
     min-height: 470px;
     padding: 52px 32px;
+  }
+}
+
+@media (max-width: 430px) {
+  .topbar {
+    gap: 12px;
+    padding: 16px 16px;
+  }
+
+  .navLinks {
+    gap: 16px;
+  }
+
+  .navLogo {
+    font-size: 0.95rem;
+  }
+
+  .hero {
+    padding: 168px 20px 64px;
+  }
+
+  .heroName {
+    font-size: clamp(56px, 18vw, 72px);
+  }
+
+  .heroEyebrow,
+  .heroSubtitle {
+    gap: 8px;
+    letter-spacing: 0.16em;
+  }
+
+  .heroEyebrow::before,
+  .heroEyebrow::after,
+  .heroSubtitle::before,
+  .heroSubtitle::after {
+    max-width: 24px;
+  }
+
+  .statusBadge {
+    right: 12px;
+    bottom: 12px;
+  }
+
+  .pathCard {
+    min-height: 420px;
+    padding: 40px 24px;
+  }
+
+  .cardTitle {
+    font-size: clamp(40px, 15vw, 60px);
+  }
+
+  .scrollHint {
+    display: none;
   }
 }
 

@@ -23,9 +23,14 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
 
     useEffect(() => {
         const savedLang = window.localStorage.getItem(STORAGE_KEY);
-        if (savedLang === "en") {
+        if (savedLang !== "en") return;
+
+        // Defer state sync to avoid synchronous setState inside effect body.
+        const timeoutId = window.setTimeout(() => {
             setLangState("en");
-        }
+        }, 0);
+
+        return () => window.clearTimeout(timeoutId);
     }, []);
 
     useEffect(() => {

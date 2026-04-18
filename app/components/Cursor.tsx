@@ -75,11 +75,11 @@ export default function Cursor() {
     return (
         <>
             <div
-                className="cursor hidden md:block"
+                className="cursor"
                 style={{ left: `${position.x}px`, top: `${position.y}px` }}
             ></div>
             <div
-                className="cursor-ring hidden md:block"
+                className="cursor-ring"
                 style={{ left: `${ringPosition.x}px`, top: `${ringPosition.y}px` }}
             ></div>
         </>

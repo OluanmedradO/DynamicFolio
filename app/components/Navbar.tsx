@@ -73,17 +73,18 @@ export default function Navbar() {
                 </Link>
             </div>
 
+            {showHomeButton ? (
+                <Link href="/" className="nav-home-btn-mobile" aria-label={labels.backHome}>
+                    <span aria-hidden>{"\u2190"}</span>
+                </Link>
+            ) : null}
+
             <Link href="#hero" className="nav-logo" onClick={handleSectionClick("hero")}>
                 oluanmedrado
                 <span>{logoSuffix ?? "."}</span>
             </Link>
 
             <div className="nav-right">
-                {showHomeButton ? (
-                    <Link href="/" className="nav-home-btn-mobile" aria-label={labels.backHome}>
-                        <span aria-hidden>{"\u2190"}</span>
-                    </Link>
-                ) : null}
                 <LanguageSwitch />
             </div>
         </nav>

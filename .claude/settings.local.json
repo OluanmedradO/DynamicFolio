@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm install:*)",
+      "Bash(npm ls:*)",
+      "Bash(npm run:*)",
+      "Bash(grep -E \"\\\\.\\(tsx|ts\\)$\")",
+      "Bash(grep -n \"^/\\\\*.*\\\\*/$\\\\|^@keyframes\\\\|^@media\" /c/Portfolio_Dev/portfolio/app/globals.css)",
+      "Bash(grep -n \"^/\\\\*.*—.*—.*\\\\*/$\" /c/Portfolio_Dev/portfolio/app/globals.css)",
+      "Bash(rm app/components/HomeDevCard.tsx app/components/SidebarNav.tsx app/components/StatsSection.tsx)",
+      "Bash(rm \"public/ChatGPT Image 23 de mar. de 2026, 20_28_57.png\" \"public/next.svg\" \"public/file.svg\" \"public/globe.svg\" \"public/window.svg\")",
+      "Bash(npm uninstall:*)",
+      "mcp__Claude_Preview__preview_start"
+    ]
+  }
+}

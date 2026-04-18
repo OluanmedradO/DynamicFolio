@@ -5,6 +5,9 @@ import styles from "./BehanceGrid.module.css";
 import { useLanguage } from "../context/LanguageContext";
 import { trackEvent } from "../lib/analytics";
 
+// Tiny dark placeholder para blur-up enquanto as imagens carregam
+const BLUR_PLACEHOLDER = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxIiBoZWlnaHQ9IjEiPjxyZWN0IGZpbGw9IiMxYTFhMWEiLz48L3N2Zz4=";
+
 const behanceProjects = [
   {
     title: "Guitarra Gospel",
@@ -104,6 +107,8 @@ export default function BehanceGrid() {
                 fill
                 sizes="(max-width: 440px) 100vw, 50vw"
                 className={styles.thumbImage}
+                placeholder="blur"
+                blurDataURL={BLUR_PLACEHOLDER}
               />
               <div className={styles.cardArrow} aria-hidden="true">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">

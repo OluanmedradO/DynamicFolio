@@ -1,8 +1,9 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { Space_Mono } from "next/font/google";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 const spaceMono = Space_Mono({
   variable: "--font-space-mono",
@@ -26,11 +27,7 @@ const waveformBars = [
 ];
 
 export default function RiffMakerPage() {
-  const [mounted, setMounted] = useState(false);
-
   useEffect(() => {
-    setMounted(true);
-
     const cur = document.getElementById("cur") as HTMLDivElement | null;
     const ring = document.getElementById("cur-ring") as HTMLDivElement | null;
     const canvas = document.getElementById("wc") as HTMLCanvasElement | null;
@@ -81,9 +78,9 @@ export default function RiffMakerPage() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       const bars = 90;
-      const totalWidth = canvas.width * 0.74;
+      const totalWidth = canvas.width;
       const barWidth = totalWidth / bars;
-      const startX = canvas.width / 2 - totalWidth / 2;
+      const startX = 0;
       const centerY = canvas.height / 2;
 
       for (let i = 0; i < bars; i += 1) {
@@ -92,7 +89,7 @@ export default function RiffMakerPage() {
           Math.sin(n * Math.PI * 4 + waveTime * 2.2) * 0.36 +
           Math.sin(n * Math.PI * 9 + waveTime * 3.4) * 0.2 +
           Math.sin(n * Math.PI * 2.2 + waveTime * 1.15) * 0.25;
-        const env = Math.sin(n * Math.PI) * 0.88 + 0.12;
+        const env = 0.55 + 0.45 * Math.sin(n * Math.PI);
         const h = Math.max(3, Math.abs(amp) * env * canvas.height * 0.45 + canvas.height * 0.018);
         const x = startX + i * barWidth;
 
@@ -264,6 +261,14 @@ export default function RiffMakerPage() {
         }
         flowSub?.classList.toggle("show", p4 > 0.56);
       }
+
+      const ctaEl = q<HTMLElement>("cta");
+      if (ctaEl) {
+        const pc = progress(ctaEl);
+        ctaEl.querySelector<HTMLElement>(".cta-h")?.classList.toggle("show", pc > 0.06);
+        ctaEl.querySelector<HTMLElement>(".cta-sub")?.classList.toggle("show", pc > 0.1);
+        ctaEl.querySelector<HTMLElement>(".dl-wrap")?.classList.toggle("show", pc > 0.14);
+      }
     };
 
     const onScroll = () => window.requestAnimationFrame(animateScenes);
@@ -292,8 +297,6 @@ export default function RiffMakerPage() {
     <div
       className={spaceMono.variable}
       style={{
-        opacity: mounted ? 1 : 0,
-        transition: "opacity .18s ease",
         minHeight: "100vh",
         background: "#080808",
       }}
@@ -324,9 +327,9 @@ export default function RiffMakerPage() {
         #intro { position: relative; height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; overflow: hidden; }
         #wc { position: absolute; inset: 0; width: 100%; height: 100%; }
         .i-content { position: relative; z-index: 2; text-align: center; }
-        .i-logo { height: 500px; margin-bottom: 28px; filter: brightness(0) invert(1); display: block; margin-left: auto; margin-right: auto; }
-        .i-tag { font-family: var(--font-space-mono), monospace; font-size: 11px; letter-spacing: .22em; text-transform: uppercase; color: var(--muted); }
-        .i-scroll { position: absolute; bottom: 36px; display: flex; flex-direction: column; align-items: center; gap: 10px; }
+        .i-logo { height: clamp(160px, 38vh, 500px); margin-bottom: 28px; filter: brightness(0) invert(1); display: block; margin-left: auto; margin-right: auto; animation: heroFadeUp 1s cubic-bezier(.16,1,.3,1) .1s both; }
+        .i-tag { font-family: var(--font-space-mono), monospace; font-size: 11px; letter-spacing: .22em; text-transform: uppercase; color: var(--muted); animation: heroFadeUp .9s cubic-bezier(.16,1,.3,1) .45s both; }
+        .i-scroll { position: absolute; bottom: 36px; display: flex; flex-direction: column; align-items: center; gap: 10px; animation: heroFadeUp .9s cubic-bezier(.16,1,.3,1) .75s both; }
         .i-scroll-line { width: 1px; height: 44px; background: linear-gradient(to bottom, transparent, var(--red-hi)); animation: sPulse 2.2s ease-in-out infinite; }
         .i-scroll-lbl { font-family: var(--font-space-mono), monospace; font-size: 9px; letter-spacing: .2em; text-transform: uppercase; color: var(--muted); }
 
@@ -410,10 +413,13 @@ export default function RiffMakerPage() {
         #cta { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 100px 8vw; position: relative; overflow: hidden; }
         .cta-atm { position: absolute; inset: 0; background: radial-gradient(ellipse 70% 60% at 50% 100%, rgba(192,39,31,.35) 0%, transparent 68%); }
         .cta-bg-riff { position: absolute; font-family: var(--font-syne), sans-serif; font-size: clamp(120px,20vw,240px); font-weight: 900; color: var(--red); opacity: .06; top: 50%; left: 50%; transform: translate(-50%, -50%); }
-        .cta-h { font-family: var(--font-syne), sans-serif; font-size: clamp(44px,6.5vw,84px); font-weight: 900; line-height: .9; margin-bottom: 24px; position: relative; z-index: 2; }
+        .cta-h { font-family: var(--font-syne), sans-serif; font-size: clamp(44px,6.5vw,84px); font-weight: 900; line-height: .9; margin-bottom: 24px; position: relative; z-index: 2; opacity: 0; transform: translateY(28px); transition: opacity .9s cubic-bezier(.16,1,.3,1), transform .9s cubic-bezier(.16,1,.3,1); }
+        .cta-h.show { opacity: 1; transform: translateY(0); }
         .cta-h em { color: var(--red-hi); font-style: normal; }
-        .cta-sub { font-size: 18px; color: var(--muted); max-width: 480px; line-height: 1.75; font-weight: 300; margin-bottom: 56px; position: relative; z-index: 2; }
-        .dl-wrap { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; position: relative; z-index: 2; }
+        .cta-sub { font-size: 18px; color: var(--muted); max-width: 480px; line-height: 1.75; font-weight: 300; margin-bottom: 56px; position: relative; z-index: 2; opacity: 0; transform: translateY(20px); transition: opacity .8s cubic-bezier(.16,1,.3,1) .18s, transform .8s cubic-bezier(.16,1,.3,1) .18s; }
+        .cta-sub.show { opacity: 1; transform: translateY(0); }
+        .dl-wrap { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; position: relative; z-index: 2; opacity: 0; transform: translateY(16px); transition: opacity .7s cubic-bezier(.16,1,.3,1) .34s, transform .7s cubic-bezier(.16,1,.3,1) .34s; }
+        .dl-wrap.show { opacity: 1; transform: translateY(0); }
         .dl { display: inline-flex; align-items: center; gap: 12px; padding: 14px 28px; border-radius: 14px; text-decoration: none; font-size: 15px; font-weight: 500; border: 1px solid rgba(255,255,255,.12); }
         .dl-p { background: var(--white); color: var(--black); }
         .dl-s { background: rgba(255,255,255,.06); color: var(--white); }
@@ -442,6 +448,7 @@ export default function RiffMakerPage() {
         .f-links { display: flex; gap: 24px; }
         .f-links a { font-size: 12px; color: var(--muted); text-decoration: none; }
         .f-links a:hover { color: var(--white); }
+        @keyframes heroFadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes sPulse { 0%,100% { opacity: 1; transform: scaleY(1); } 50% { opacity: .35; transform: scaleY(.55); } }
         @keyframes wvAnim { 0%,100% { transform: scaleY(.15); } 50% { transform: scaleY(1); } }
         @keyframes fire { 0%,100% { transform: scale(1) rotate(-2deg); } 50% { transform: scale(1.14) rotate(2deg); } }
@@ -599,7 +606,7 @@ export default function RiffMakerPage() {
       <section id="intro">
         <canvas id="wc" />
         <div className="i-content">
-          <img src="/riff-maker/riff.png" className="i-logo" alt="Riff" />
+          <Image src="/riff-maker/riff.png" className="i-logo" alt="Riff" width={1000} height={1000} />
           <div className="i-tag">Para músicos que nunca param de criar</div>
         </div>
         <div className="i-scroll">
@@ -624,7 +631,7 @@ export default function RiffMakerPage() {
             </div>
             <div className="m-phone-wrap">
               <div className="m-glow" id="m-glow" />
-              <img src="/riff-3.jpg" className="m-phone" id="m-ph" alt="Tela de ideias do Riff Maker" />
+              <Image src="/riff-3.jpg" className="m-phone" id="m-ph" alt="Tela de ideias do Riff Maker" width={1170} height={2532} />
             </div>
           </div>
           <div className="scene-rule" />
@@ -659,7 +666,7 @@ export default function RiffMakerPage() {
               </div>
             </div>
             <div className="cap-phone-wrap">
-              <img src="/riff-3.jpg" className="cap-phone" id="c-ph" alt="Tela de captura do Riff Maker" />
+              <Image src="/riff-1.jpg" className="cap-phone" id="c-ph" alt="Tela de captura do Riff Maker" width={1170} height={2532} />
             </div>
           </div>
           <div className="scene-rule" />
@@ -674,8 +681,8 @@ export default function RiffMakerPage() {
               <span className="org-hl"><span className="org-hi d1" id="oh2">Tudo salvo, nomeado e fácil de encontrar.</span></span>
             </div>
             <div className="org-phones">
-              <img src="/riff-2.jpg" className="op1" id="op1" alt="Tela de projetos do Riff Maker" />
-              <img src="/riff-3.jpg" className="op2" id="op2" alt="Tela de ideias do Riff Maker" />
+              <Image src="/riff-2.jpg" className="op1" id="op1" alt="Tela de projetos do Riff Maker" width={1170} height={2532} />
+              <Image src="/riff-3.jpg" className="op2" id="op2" alt="Tela de ideias do Riff Maker" width={1170} height={2532} />
             </div>
             <div className="org-badges" id="obs">
               {[
