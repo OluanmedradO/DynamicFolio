@@ -56,7 +56,7 @@ export const metadata: Metadata = {
       "Desenvolvedor front-end e editor de vídeo baseado no Brasil. Criando interfaces rápidas, acessíveis e bem pensadas — do conceito ao deploy.",
     images: [
       {
-        url: "/og-image.png",
+        url: "/opengraph-image",
         width: 1200,
         height: 630,
         alt: "Luan Medrado — Desenvolvedor & Criativo Digital",
@@ -68,7 +68,7 @@ export const metadata: Metadata = {
     title: "Luan Medrado — Desenvolvedor & Criativo Digital",
     description:
       "Desenvolvedor front-end e editor de vídeo baseado no Brasil. Criando interfaces rápidas, acessíveis e bem pensadas — do conceito ao deploy.",
-    images: ["/og-image.png"],
+    images: ["/opengraph-image"],
   },
   robots: {
     index: true,

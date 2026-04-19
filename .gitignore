@@ -47,3 +47,4 @@ next-env.d.ts
 /home-after-*.png
 /dev-nav-*.png
 /dev-navbar-*.png
+/.claude/settings.local.json
