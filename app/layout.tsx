@@ -1,6 +1,7 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import { Bebas_Neue, DM_Mono, DM_Sans, Syne } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import Cursor from "./components/Cursor";
 import FreelanceBadge from "./components/FreelanceBadge";
 import ModeSwitch from "./components/ModeSwitch";
@@ -59,6 +60,7 @@ export default function RootLayout({
           </ModeProvider>
         </LanguageProvider>
         <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );
