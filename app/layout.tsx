@@ -2,8 +2,10 @@
 import { Bebas_Neue, DM_Mono, DM_Sans, Syne } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import Cursor from "./components/Cursor";
+import ContactIntentBar from "./components/ContactIntentBar";
 import FreelanceBadge from "./components/FreelanceBadge";
 import ModeSwitch from "./components/ModeSwitch";
+import ScrollDepthTracker from "./components/ScrollDepthTracker";
 import { LanguageProvider } from "./context/LanguageContext";
 import { ModeProvider } from "./context/ModeContext";
 import "./globals.css";
@@ -99,6 +101,8 @@ export default function RootLayout({
             <div className="mode-flash" id="modeFlash"></div>
             <ModeSwitch />
             <FreelanceBadge />
+            <ScrollDepthTracker />
+            <ContactIntentBar />
             <div style={{ overflowX: "clip" }}>
               {children}
             </div>

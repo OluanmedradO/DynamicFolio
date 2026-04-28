@@ -47,8 +47,8 @@ function PhoneCarousel() {
         <div className="phone-stage">
             <div className="phone-glow"></div>
             <div className="carousel-nav">
-                <button className="carousel-btn" onClick={prevSlide}>&#8249;</button>
-                <button className="carousel-btn" onClick={nextSlide}>&#8250;</button>
+                <button className="carousel-btn" type="button" aria-label="Slide anterior do Riff Maker" onClick={prevSlide}>&#8249;</button>
+                <button className="carousel-btn" type="button" aria-label="Próximo slide do Riff Maker" onClick={nextSlide}>&#8250;</button>
             </div>
             <div className="phones-wrapper">
                 <div className="phone phone-left">
@@ -66,7 +66,14 @@ function PhoneCarousel() {
             </div>
             <div className="carousel-dots">
                 {carouselImages.map((_, i) => (
-                    <div key={i} className={`dot ${i === activeIdx ? "active" : ""}`} onClick={() => goToSlide(i)}></div>
+                    <button
+                        key={i}
+                        type="button"
+                        className={`dot ${i === activeIdx ? "active" : ""}`}
+                        aria-label={`Mostrar tela ${i + 1} do Riff Maker`}
+                        aria-current={i === activeIdx ? "true" : undefined}
+                        onClick={() => goToSlide(i)}
+                    />
                 ))}
             </div>
         </div>
@@ -77,12 +84,15 @@ interface DevCopy {
     sectionLabel: string;
     sectionTitle: string;
     featuredBadge: string;
+    featuredImpact: string;
     featuredDesc: string;
     featuredCta: string;
     corpExperience: string;
     internalProject: string;
     viewDetails: string;
+    portalImpact: string;
     portalDesc: string;
+    notifyImpact: string;
     notifyDesc: string;
 }
 
@@ -104,6 +114,7 @@ function DevProjects({ copy, lang }: { copy: DevCopy; lang: "pt" | "en" }) {
                         {copy.featuredBadge}
                     </div>
                     <h3 className="featured-title">Riff Maker</h3>
+                    <p className="project-impact">{copy.featuredImpact}</p>
                     <p className="featured-desc">{copy.featuredDesc}</p>
                     <div className="tag-list">
                         <span className="tag">React Native</span>
@@ -149,6 +160,7 @@ function DevProjects({ copy, lang }: { copy: DevCopy; lang: "pt" | "en" }) {
                                 <span className="tag blue">UI/UX</span>
                             </div>
                             <h3 className="multi-card-title">Portal do Revendedor Multilaser</h3>
+                            <p className="project-impact multi-impact">{copy.portalImpact}</p>
                             <p className="multi-card-desc">{copy.portalDesc}</p>
                             <div className="multi-card-footer" style={{ display: "flex", gap: "16px", flexWrap: "wrap" }}>
                                 <Link
@@ -182,6 +194,7 @@ function DevProjects({ copy, lang }: { copy: DevCopy; lang: "pt" | "en" }) {
                                 <span className="tag blue">Tailwind CSS</span>
                             </div>
                             <h3 className="multi-card-title">Multi Notify</h3>
+                            <p className="project-impact multi-impact">{copy.notifyImpact}</p>
                             <p className="multi-card-desc">{copy.notifyDesc}</p>
                             <div className="multi-card-footer">
                                 <Link
@@ -200,9 +213,28 @@ function DevProjects({ copy, lang }: { copy: DevCopy; lang: "pt" | "en" }) {
     );
 }
 
-function EditorProjects() {
+function EditorProjects({ lang }: { lang: "pt" | "en" }) {
+    const proofCopy =
+        lang === "en"
+            ? { views: "total views", likes: "likes", partners: "partner channels" }
+            : { views: "views totais", likes: "likes", partners: "canais parceiros" };
+
     return (
         <div id="editorProjects" className="editor-projects-stack">
+            <div className="editor-proof-band" aria-label="Resultados de edição">
+                <div>
+                    <strong>27.9M+</strong>
+                    <span>{proofCopy.views}</span>
+                </div>
+                <div>
+                    <strong>30k+</strong>
+                    <span>{proofCopy.likes}</span>
+                </div>
+                <div>
+                    <strong>6</strong>
+                    <span>{proofCopy.partners}</span>
+                </div>
+            </div>
             <div className="editor-projects-block">
                 <YouTubeGrid />
             </div>
@@ -224,25 +256,31 @@ export default function Projects() {
             ? {
                 sectionLabel: "Selected Works",
                 sectionTitle: "Featured Projects",
-                featuredBadge: "In production soon",
+                featuredBadge: "Available on Google Play",
+                featuredImpact: "Solo product design and mobile build from concept to offline-first capture flow.",
                 featuredDesc: "RiffMaker is a mobile app for musicians to capture riffs and musical ideas the moment they appear. With quick recording and smart organization, it turns spontaneous inspiration into structured creative material.",
-                featuredCta: "Open Riff Maker",
+                featuredCta: "View landing page",
                 corpExperience: "Corporate Experience",
                 internalProject: "Internal project",
                 viewDetails: "View Details",
+                portalImpact: "B2B access hub redesigned for reseller support and operational self-service.",
                 portalDesc: "Access hub for invoices, returns and order tracking.",
+                notifyImpact: "Legacy frontend refactor into a clearer notification management workflow.",
                 notifyDesc: "Complete B2B frontend refactor focused on notification management and dispatch.",
             }
             : {
                 sectionLabel: "Trabalhos Selecionados",
                 sectionTitle: "Projetos em Destaque",
-                featuredBadge: "Em produção em breve",
+                featuredBadge: "Disponível na Play Store",
+                featuredImpact: "Produto autoral: design e app mobile do conceito ao fluxo offline-first.",
                 featuredDesc: "RiffMaker é um app mobile para músicos capturarem riffs e ideias musicais no momento em que elas surgem. Com gravação rápida e organização inteligente, ele transforma inspirações espontâneas em material criativo estruturado.",
-                featuredCta: "Abrir Riff Maker",
+                featuredCta: "Ver landing page",
                 corpExperience: "Experiência Corporativa",
                 internalProject: "Projeto interno",
                 viewDetails: "Ver Detalhes",
+                portalImpact: "Hub B2B redesenhado para suporte a revendedores e autosserviço operacional.",
                 portalDesc: "Hub de acesso para boletos, devoluções e rastreio de pedidos.",
+                notifyImpact: "Refatoração de frontend legado para um fluxo mais claro de notificações.",
                 notifyDesc: "Refatoração completa do frontend B2B focado em gestão e disparo de notificações.",
             };
 
@@ -258,14 +296,13 @@ export default function Projects() {
                         </div>
                     </div>
                     <DevProjects copy={devCopy} lang={lang} />
-                    <EditorProjects />
+                    <EditorProjects lang={lang} />
                 </div>
             ) : mode === "dev" ? (
                 <DevProjects copy={devCopy} lang={lang} />
             ) : (
-                <EditorProjects />
+                <EditorProjects lang={lang} />
             )}
         </section>
     );
 }
-

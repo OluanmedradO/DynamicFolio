@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { useLanguage } from "../context/LanguageContext";
@@ -35,6 +36,43 @@ const content = {
     },
 };
 
+const devCodeSnippets = [
+    "const ui = accessible && fast",
+    "render(<Experience />)",
+    "await deploy({ zeroFriction: true })",
+    "type Motion = 'clean' | 'useful'",
+    "if (detail) polish()",
+    "state -> interface -> conversion",
+];
+
+function HeroWorkPreview({ mode }: { mode: "dev" | "editor" }) {
+    if (mode === "editor") {
+        return (
+            <div className="hero-work-preview hero-work-preview-editor" aria-hidden="true">
+                <div className="hero-preview-card hero-preview-card-large">
+                    <Image src="/guitarragospel.jpg" alt="" fill sizes="260px" className="hero-preview-image" priority />
+                </div>
+                <div className="hero-preview-card hero-preview-card-small">
+                    <Image src="/Switch Game List.jpg" alt="" fill sizes="150px" className="hero-preview-image" />
+                </div>
+                <div className="hero-preview-card hero-preview-card-tall">
+                    <Image src="/True Sailing Life.jpg" alt="" fill sizes="170px" className="hero-preview-image" />
+                </div>
+            </div>
+        );
+    }
+
+    return (
+        <div className="hero-work-preview hero-work-preview-dev" aria-hidden="true">
+            <div className="hero-code-cloud">
+                {devCodeSnippets.map((snippet, index) => (
+                    <span className={`hero-code-chip hero-code-chip-${index + 1}`} key={snippet}>{snippet}</span>
+                ))}
+            </div>
+        </div>
+    );
+}
+
 interface HeroOverrides {
     ptDesc?: ReactNode;
     enDesc?: ReactNode;
@@ -58,11 +96,13 @@ export default function Hero({ overrides }: HeroProps) {
             <div className="hero-glow"></div>
             <div className="hero-ring"></div>
             <div className="hero-ring hero-ring-2"></div>
+            <HeroWorkPreview mode={mode} />
 
+            <div className="hero-copy">
             <p className="hero-eyebrow">{content[lang].eyebrow}</p>
 
-            <h1 className="hero-name">
-                <span className="glitch" data-text="LUAN">LUAN</span>&nbsp;<span className="glitch" data-text="MEDRADO">MEDRADO</span>
+            <h1 className="hero-name" aria-label="Luan Medrado">
+                <span className="glitch" data-text="LUAN" aria-hidden="true">LUAN</span>&nbsp;<span className="glitch" data-text="MEDRADO" aria-hidden="true">MEDRADO</span>
             </h1>
 
             <div className="hero-role">
@@ -157,6 +197,8 @@ export default function Hero({ overrides }: HeroProps) {
                         </svg>
                     </a>
                 </div>
+            </div>
+
             </div>
 
             <div className="scroll-indicator">

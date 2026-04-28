@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useLanguage } from "../context/LanguageContext";
@@ -69,6 +70,7 @@ export default function Navbar() {
                     </li>
                 </ul>
                 <Link href="/riffmaker" className="nav-cta">
+                    <Image src="/riff-maker/icon.png" alt="" width={24} height={24} className="nav-cta-icon" />
                     {labels.riffmaker}
                 </Link>
             </div>

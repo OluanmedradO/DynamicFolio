@@ -20,7 +20,8 @@ export const projects: Project[] = [
         category: "dev",
         tags: ["React Native", "Expo", "SQLite", "Reanimated"],
         year: "2025",
-        status: "soon",
+        status: "live",
+        externalUrl: "https://play.google.com/store/apps/details?id=com.oluanmedrado.riffmaker",
         description: {
             pt: "App mobile para músicos capturarem riffs e ideias musicais no momento em que elas surgem.",
             en: "Mobile app for musicians to capture riffs and musical ideas the moment they appear.",

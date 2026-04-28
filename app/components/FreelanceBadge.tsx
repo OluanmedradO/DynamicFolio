@@ -13,21 +13,26 @@ export default function FreelanceBadge() {
         return null;
     }
 
+    const isHome = pathname === "/";
+    const targetHref = isHome ? "/dev#contato" : "#contato";
+
     const text =
         lang === "en"
             ? mode === "editor"
-                ? "Available for Projects"
-                : "Available for Projects"
+                ? "Open for projects"
+                : "Open for projects"
             : mode === "editor"
-                ? "Disponível para Projetos"
-                : "Disponível para Projetos";
+                ? "Aberto a projetos"
+                : "Aberto a projetos";
 
     return (
         <a
-            href="#contato"
+            href={targetHref}
             className="freelance-badge"
             id="freelanceBadge"
             onClick={(event) => {
+                if (isHome) return;
+
                 const contato = document.getElementById("contato");
                 if (!contato) return;
 

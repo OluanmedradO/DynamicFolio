@@ -48,3 +48,9 @@ next-env.d.ts
 /dev-nav-*.png
 /dev-navbar-*.png
 /.claude/settings.local.json
+
+# QA / debug screenshots
+/qa-*.png
+/home-*.png
+/home-projects-*.png
+.playwright-mcp/

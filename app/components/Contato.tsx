@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useLanguage } from "../context/LanguageContext";
 import { useMode } from "../context/ModeContext";
 import { trackEvent } from "../lib/analytics";
@@ -8,9 +8,9 @@ import { trackEvent } from "../lib/analytics";
 const modeContent = {
     pt: {
         dev: {
-            titleLine: "Vamos criar algo",
-            titleEm: "incrível juntos?",
-            sub: "Seja para um novo projeto, uma oportunidade profissional ou só para trocar uma ideia sobre tecnologia.",
+            titleLine: "Tem um projeto",
+            titleEm: "em mente?",
+            sub: "Me conta o que você precisa. Sem compromisso. Respondo em até 24h.",
         },
         editor: {
             titleLine: "Vamos contar uma",
@@ -20,9 +20,9 @@ const modeContent = {
     },
     en: {
         dev: {
-            titleLine: "Let's build something",
-            titleEm: "amazing together?",
-            sub: "Whether for a new project, a professional opportunity or just to talk about technology.",
+            titleLine: "Have a project",
+            titleEm: "in mind?",
+            sub: "Tell me what you need. No pressure. I reply within 24h.",
         },
         editor: {
             titleLine: "Let's tell a",
@@ -40,16 +40,18 @@ const formCopy = {
         emailPlaceholder: "seu@email.com",
         projectType: "Tipo de projeto",
         projectTypePlaceholder: "Selecione...",
-        projectTypes: ["Desenvolvimento web", "Edição de vídeo", "Ambos", "Outro"],
+        projectTypes: ["Site / landing page", "Dashboard / app", "Vídeo social", "Ambos", "Outro"],
         message: "Mensagem",
-        messagePlaceholder: "Me conta sobre o seu projeto...",
-        submit: "Enviar mensagem",
+        messagePlaceholder: "Qual é o seu projeto? Me dê um contexto básico (pode ser curto).",
+        submit: "Quero conversar",
         sending: "Enviando...",
-        successTitle: "Mensagem enviada!",
-        successText: "Obrigado pelo contato. Retorno em breve.",
+        successTitle: "Recebido.",
+        successText: "Já estou lendo a sua mensagem — te respondo em breve com atenção ao que você compartilhou.",
         errorFallback: "Erro ao enviar. Tente novamente.",
         orSeparator: "ou prefere o WhatsApp?",
         whatsapp: "WhatsApp",
+        trust: ["Disponível agora", "Resposta em até 24h", "Sem spam"],
+        hint: "Respondo em até 24h · Sem compromisso",
     },
     en: {
         name: "Name",
@@ -58,16 +60,18 @@ const formCopy = {
         emailPlaceholder: "you@email.com",
         projectType: "Project type",
         projectTypePlaceholder: "Select...",
-        projectTypes: ["Web development", "Video editing", "Both", "Other"],
+        projectTypes: ["Site / landing page", "Dashboard / app", "Social video", "Both", "Other"],
         message: "Message",
-        messagePlaceholder: "Tell me about your project...",
-        submit: "Send message",
+        messagePlaceholder: "What is your project? Give me quick context if you want.",
+        submit: "Let's talk",
         sending: "Sending...",
-        successTitle: "Message sent!",
-        successText: "Thanks for reaching out. I'll get back to you soon.",
+        successTitle: "Received.",
+        successText: "I am reading your message and will reply soon with attention to what you shared.",
         errorFallback: "Error sending. Please try again.",
         orSeparator: "or prefer WhatsApp?",
         whatsapp: "WhatsApp",
+        trust: ["Available now", "Reply within 24h", "No spam"],
+        hint: "I reply within 24h · No pressure",
     },
 };
 
@@ -84,14 +88,21 @@ export default function Contato() {
     const [status, setStatus] = useState<FormStatus>("idle");
     const [errorMsg, setErrorMsg] = useState("");
     const [form, setForm] = useState({ name: "", email: "", projectType: "", message: "" });
+    const trackedFocusFields = useRef(new Set<string>());
 
     const whatsappMsg =
         lang === "en"
-            ? encodeURIComponent("Hi Luan! I saw your portfolio and I want to discuss a project.")
-            : encodeURIComponent("Oi Luan! Vi seu portfólio e quero conversar sobre um projeto.");
+            ? encodeURIComponent("Hi Luan! I visited your portfolio and have a project that might make sense for you. Can I tell you more?")
+            : encodeURIComponent("Oi Luan! Visitei seu portfólio e tenho um projeto que pode fazer sentido pra você. Posso te contar mais?");
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    };
+
+    const handleFieldFocus = (field: string) => {
+        if (trackedFocusFields.current.has(field)) return;
+        trackedFocusFields.current.add(field);
+        trackEvent("form_field_focus", { field, lang, mode });
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -133,6 +144,12 @@ export default function Contato() {
                     {c.sub}
                 </p>
 
+                <div className="contact-trust" aria-label={lang === "en" ? "Contact expectations" : "Expectativas de contato"}>
+                    {f.trust.map((item) => (
+                        <span key={item}>{item}</span>
+                    ))}
+                </div>
+
                 {status === "success" ? (
                     <div className="contact-success">
                         <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
@@ -154,6 +171,7 @@ export default function Contato() {
                                     placeholder={f.namePlaceholder}
                                     value={form.name}
                                     onChange={handleChange}
+                                    onFocus={() => handleFieldFocus("name")}
                                     required
                                     autoComplete="name"
                                 />
@@ -167,6 +185,7 @@ export default function Contato() {
                                     placeholder={f.emailPlaceholder}
                                     value={form.email}
                                     onChange={handleChange}
+                                    onFocus={() => handleFieldFocus("email")}
                                     required
                                     autoComplete="email"
                                 />
@@ -180,6 +199,7 @@ export default function Contato() {
                                 name="projectType"
                                 value={form.projectType}
                                 onChange={handleChange}
+                                onFocus={() => handleFieldFocus("projectType")}
                             >
                                 <option value="">{f.projectTypePlaceholder}</option>
                                 {f.projectTypes.map((t) => (
@@ -196,6 +216,7 @@ export default function Contato() {
                                 placeholder={f.messagePlaceholder}
                                 value={form.message}
                                 onChange={handleChange}
+                                onFocus={() => handleFieldFocus("message")}
                                 required
                                 rows={5}
                             />
@@ -222,6 +243,7 @@ export default function Contato() {
                                 </>
                             )}
                         </button>
+                        <p className="contact-submit-hint">{f.hint}</p>
                     </form>
                 )}
 

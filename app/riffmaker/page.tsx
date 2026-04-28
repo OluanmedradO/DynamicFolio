@@ -326,9 +326,44 @@ export default function RiffMakerPage() {
         }
         #intro { position: relative; height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; overflow: hidden; }
         #wc { position: absolute; inset: 0; width: 100%; height: 100%; }
-        .i-content { position: relative; z-index: 2; text-align: center; }
-        .i-logo { height: clamp(160px, 38vh, 500px); margin-bottom: 28px; filter: brightness(0) invert(1); display: block; margin-left: auto; margin-right: auto; animation: heroFadeUp 1s cubic-bezier(.16,1,.3,1) .1s both; }
-        .i-tag { font-family: var(--font-space-mono), monospace; font-size: 11px; letter-spacing: .22em; text-transform: uppercase; color: var(--muted); animation: heroFadeUp .9s cubic-bezier(.16,1,.3,1) .45s both; }
+        .i-content { position: relative; z-index: 2; width: min(92vw, 980px); text-align: center; display: flex; flex-direction: column; align-items: center; transform: translateY(-1.5vh); }
+        .i-content::before {
+          content: "";
+          position: absolute;
+          left: 50%;
+          top: 48%;
+          width: min(76vw, 760px);
+          height: min(32vw, 260px);
+          transform: translate(-50%, -50%);
+          border-radius: 999px;
+          background:
+            radial-gradient(circle at center, rgba(255,255,255,.1), transparent 24%),
+            radial-gradient(circle at center, rgba(229,53,43,.32), transparent 68%);
+          filter: blur(14px);
+          opacity: .78;
+          pointer-events: none;
+        }
+        .i-logo { position: relative; z-index: 1; width: min(76vw, 880px); height: auto; max-height: min(46vh, 420px); object-fit: contain; margin: 0 auto 34px; scale: 1.32; filter: brightness(0) invert(1) drop-shadow(0 24px 54px rgba(0,0,0,.55)) drop-shadow(0 0 54px rgba(229,53,43,.34)); display: block; animation: heroFadeUp 1s cubic-bezier(.16,1,.3,1) .1s both; }
+        .i-tag { order: 2; font-family: var(--font-space-mono), monospace; font-size: 11px; letter-spacing: .22em; text-transform: uppercase; color: var(--muted); animation: heroFadeUp .9s cubic-bezier(.16,1,.3,1) .45s both; }
+        .i-actions { order: 3; margin-top: 28px; animation: heroFadeUp .9s cubic-bezier(.16,1,.3,1) .6s both; }
+        .i-play {
+          display: inline-flex; align-items: center; gap: 10px;
+          min-height: 46px; padding: 0 20px;
+          border-radius: 999px;
+          border: 1px solid rgba(229,53,43,.38);
+          background: rgba(192,39,31,.18);
+          color: var(--white);
+          font-family: var(--font-space-mono), monospace;
+          font-size: 11px;
+          font-weight: 700;
+          letter-spacing: .14em;
+          text-transform: uppercase;
+          text-decoration: none;
+          box-shadow: 0 18px 46px rgba(192,39,31,.16);
+          transition: transform .25s ease, border-color .25s ease, background .25s ease, box-shadow .25s ease;
+        }
+        .i-play svg { width: 16px; height: 16px; flex-shrink: 0; }
+        .i-play:hover { transform: translateY(-2px); border-color: rgba(229,53,43,.72); background: rgba(192,39,31,.28); box-shadow: 0 24px 64px rgba(192,39,31,.24); }
         .i-scroll { position: absolute; bottom: 36px; display: flex; flex-direction: column; align-items: center; gap: 10px; animation: heroFadeUp .9s cubic-bezier(.16,1,.3,1) .75s both; }
         .i-scroll-line { width: 1px; height: 44px; background: linear-gradient(to bottom, transparent, var(--red-hi)); animation: sPulse 2.2s ease-in-out infinite; }
         .i-scroll-lbl { font-family: var(--font-space-mono), monospace; font-size: 9px; letter-spacing: .2em; text-transform: uppercase; color: var(--muted); }
@@ -423,12 +458,10 @@ export default function RiffMakerPage() {
         .dl { display: inline-flex; align-items: center; gap: 12px; padding: 14px 28px; border-radius: 14px; text-decoration: none; font-size: 15px; font-weight: 500; border: 1px solid rgba(255,255,255,.12); }
         .dl-p { background: var(--white); color: var(--black); }
         .dl-s { background: rgba(255,255,255,.06); color: var(--white); }
-        .dl.is-soon {
-          background: rgba(255,255,255,.08);
-          border-color: rgba(255,255,255,.22);
-          cursor: not-allowed;
-          pointer-events: none;
-          opacity: .9;
+        .dl.is-live {
+          background: rgba(229,53,43,.14);
+          border-color: rgba(229,53,43,.4);
+          box-shadow: 0 18px 48px rgba(229,53,43,.18);
         }
         .dl-note {
           margin-left: 2px;
@@ -438,9 +471,9 @@ export default function RiffMakerPage() {
           font-size: 10px;
           letter-spacing: .08em;
           text-transform: uppercase;
-          color: #ffd7d4;
-          border: 1px solid rgba(229,53,43,.55);
-          background: rgba(229,53,43,.16);
+          color: #dff7e9;
+          border: 1px solid rgba(34,197,94,.48);
+          background: rgba(34,197,94,.14);
         }
         .dl svg { width: 20px; height: 20px; }
         footer { padding: 32px 8vw; border-top: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
@@ -457,8 +490,11 @@ export default function RiffMakerPage() {
           #cur, #cur-ring { display: none; }
 
           #intro { min-height: 100svh; height: 100svh; }
-          .i-content { width: 100%; }
-          .i-logo { width: min(78vw, 320px); height: auto; margin: 0 auto 18px; }
+          .i-content { width: 100%; transform: translateY(-2vh); }
+          .i-content::before { width: 88vw; height: 220px; opacity: .56; }
+          .i-logo { width: min(86vw, 390px); height: auto; max-height: 250px; margin: 0 auto 24px; scale: 1.18; }
+          .i-actions { margin-top: 20px; }
+          .i-play { min-height: 42px; padding: 0 16px; font-size: 10px; }
           .i-tag { font-size: 9px; letter-spacing: .16em; padding: 0 6vw; }
           .i-scroll { bottom: 22px; }
 
@@ -606,7 +642,13 @@ export default function RiffMakerPage() {
       <section id="intro">
         <canvas id="wc" />
         <div className="i-content">
-          <Image src="/riff-maker/riff.png" className="i-logo" alt="Riff" width={1000} height={1000} />
+          <Image src="/riff-maker/riff.png" className="i-logo" alt="Riff" width={1400} height={420} />
+          <div className="i-actions">
+            <a href="https://play.google.com/store/apps/details?id=com.oluanmedrado.riffmaker" target="_blank" rel="noopener noreferrer" className="i-play">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3.18 23.76c.36.2.77.2 1.16-.02l12.44-7.17-2.68-2.67-10.92 9.86zM.29 1.04C.11 1.42 0 1.86 0 2.38v19.25c0 .52.1.96.29 1.33l.07.07 10.78-10.78v-.25L.36.97.29 1.04zM20.23 10.27l-2.82-1.63-3 2.99 3 2.99 2.84-1.63c.81-.47.81-1.25-.02-1.72zM4.34.22L16.78 7.4l-2.68 2.67L3.18.23C3.56.01 3.98.04 4.34.22z" /></svg>
+              Baixar na Play Store
+            </a>
+          </div>
           <div className="i-tag">Para músicos que nunca param de criar</div>
         </div>
         <div className="i-scroll">
@@ -757,10 +799,10 @@ export default function RiffMakerPage() {
           Gratuito para começar. Poderoso o suficiente para nunca mais largar.
         </p>
         <div className="dl-wrap">
-          <a href="#" className="dl dl-s is-soon" aria-disabled="true" tabIndex={-1}>
+          <a href="https://play.google.com/store/apps/details?id=com.oluanmedrado.riffmaker" target="_blank" rel="noopener noreferrer" className="dl dl-s is-live">
             <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3.18 23.76c.36.2.77.2 1.16-.02l12.44-7.17-2.68-2.67-10.92 9.86zM.29 1.04C.11 1.42 0 1.86 0 2.38v19.25c0 .52.1.96.29 1.33l.07.07 10.78-10.78v-.25L.36.97.29 1.04zM20.23 10.27l-2.82-1.63-3 2.99 3 2.99 2.84-1.63c.81-.47.81-1.25-.02-1.72zM4.34.22L16.78 7.4l-2.68 2.67L3.18.23C3.56.01 3.98.04 4.34.22z" /></svg>
             <span>Google Play</span>
-            <span className="dl-note">Em breve</span>
+            <span className="dl-note">Disponível</span>
           </a>
         </div>
       </section>
