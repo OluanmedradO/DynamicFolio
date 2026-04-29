@@ -19,11 +19,10 @@ export default function VidaLar() {
                 subtitle: "Complete redesign of the digital identity for a home care company.",
                 before: "Before",
                 after: "After",
-                afterWip: "Live",
                 beforeUrl: "vidalarsaude.com.br",
                 afterUrl: "vida-lar.vercel.app",
                 beforeTitle: "Legacy website",
-                afterTitle: "Published redesign",
+                afterTitle: "New website",
                 beforeNote: "Fragmented navigation, dated visual hierarchy and weak conversion cues.",
                 afterNote: "Editorial homepage, cleaner service journey and stronger contact paths.",
                 tag1Bad: "Outdated design",
@@ -37,7 +36,7 @@ export default function VidaLar() {
                 beforeCta: "Open legacy site ->",
                 afterCta: "View live site ->",
                 altBefore: "Vida Lar - before redesign",
-                altAfter: "Vida Lar - published redesign",
+                altAfter: "Vida Lar - new website",
             }
             : {
                 redesignCase: "Case de Redesign",
@@ -45,11 +44,10 @@ export default function VidaLar() {
                 subtitle: "Redesign completo da identidade digital de uma empresa de cuidados domiciliares.",
                 before: "Antes",
                 after: "Depois",
-                afterWip: "Publicado",
                 beforeUrl: "vidalarsaude.com.br",
                 afterUrl: "vida-lar.vercel.app",
                 beforeTitle: "Site antigo",
-                afterTitle: "Redesign publicado",
+                afterTitle: "Site novo",
                 beforeNote: "Navegação fragmentada, hierarquia visual datada e pouca força de conversão.",
                 afterNote: "Home editorial, jornada de serviços mais clara e caminhos de contato em destaque.",
                 tag1Bad: "Design datado",
@@ -63,7 +61,7 @@ export default function VidaLar() {
                 beforeCta: "Acessar site antigo ->",
                 afterCta: "Ver site atual ->",
                 altBefore: "Vida Lar - antes do redesign",
-                altAfter: "Vida Lar - redesign publicado",
+                altAfter: "Vida Lar - site novo",
             };
 
     if (mode !== "dev") {
@@ -101,13 +99,13 @@ export default function VidaLar() {
                         <Link href={copy.beforeHref} target="_blank" rel="noopener noreferrer" className="vl-card-link vl-card-link-before">
                             {copy.beforeCta}
                         </Link>
-                        <div className="vl-screen">
+                        <Link href={copy.beforeHref} target="_blank" rel="noopener noreferrer" className="vl-screen vl-screen-link" aria-label={copy.beforeCta}>
                             <div className="vl-browser-bar">
                                 <div className="vl-dots"><span></span><span></span><span></span></div>
                                 <div className="vl-url">{copy.beforeUrl}</div>
                             </div>
                             <Image src={vidaLarAntes} alt={copy.altBefore} className="vl-img" sizes="(max-width: 900px) 100vw, 50vw" />
-                         </div>
+                         </Link>
                         <div className="vl-card-footer">
                             <span className="vl-tag-bad">{copy.tag1Bad}</span>
                             <span className="vl-tag-bad">{copy.tag2Bad}</span>
@@ -136,21 +134,13 @@ export default function VidaLar() {
                         <Link href={copy.afterHref} target="_blank" rel="noopener noreferrer" className="vl-card-link vl-card-link-after">
                             {copy.afterCta}
                         </Link>
-                        <div className="vl-screen">
+                        <Link href={copy.afterHref} target="_blank" rel="noopener noreferrer" className="vl-screen vl-screen-link" aria-label={copy.afterCta}>
                             <div className="vl-browser-bar">
                                 <div className="vl-dots"><span></span><span></span><span></span></div>
                                 <div className="vl-url">{copy.afterUrl}</div>
                             </div>
                             <Image src={vidaLarDepois} alt={copy.altAfter} className="vl-img" sizes="(max-width: 900px) 100vw, 50vw" />
-                            <div className="vl-wip-overlay vl-live-overlay">
-                                <div className="vl-wip-content">
-                                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                                        <path d="M20 6 9 17l-5-5" />
-                                    </svg>
-                                    <span>{copy.afterWip}</span>
-                                </div>
-                            </div>
-                        </div>
+                        </Link>
                         <div className="vl-card-footer">
                             <span className="vl-tag-good">{copy.tag1Good}</span>
                             <span className="vl-tag-good">{copy.tag2Good}</span>

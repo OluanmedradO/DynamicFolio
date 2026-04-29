@@ -6,6 +6,7 @@ import type { ReactNode } from "react";
 import { useLanguage } from "../context/LanguageContext";
 import { useMode } from "../context/ModeContext";
 import { trackEvent } from "../lib/analytics";
+import FreelanceBadge from "./FreelanceBadge";
 
 const content = {
     pt: {
@@ -197,6 +198,7 @@ export default function Hero({ overrides }: HeroProps) {
                         </svg>
                     </a>
                 </div>
+                <FreelanceBadge variant="hero" />
             </div>
 
             </div>

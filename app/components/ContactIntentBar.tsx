@@ -51,7 +51,7 @@ export default function ContactIntentBar() {
             if (maxScroll <= 0) return;
 
             const depth = window.scrollY / maxScroll;
-            const threshold = pathname === "/" ? 0.86 : 0.7;
+            const threshold = pathname === "/" ? 0.65 : 0.55;
             if (depth >= threshold) {
                 setVisible((current) => {
                     if (!current) {
@@ -79,7 +79,7 @@ export default function ContactIntentBar() {
 
     return (
         <div className="contact-intent-bar" role="region" aria-label={lang === "en" ? "Contact shortcut" : "Atalho de contato"}>
-            <span>{copy.text}</span>
+            <span className="contact-intent-copy">{copy.text}</span>
             <Link
                 href={target}
                 onClick={() => trackEvent("contact_intent_clicked", { source: "bottom_bar", lang, mode })}
