@@ -2,8 +2,8 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useRef } from "react";
-import type { PointerEvent } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import type { ChangeEvent, FormEvent, PointerEvent } from "react";
 import LanguageSwitch from "./LanguageSwitch";
 import { useLanguage } from "../context/LanguageContext";
 import { trackEvent } from "../lib/analytics";
@@ -11,10 +11,6 @@ import styles from "./HomePage.module.css";
 
 const content = {
     pt: {
-        navWork: "Trabalho",
-        navAbout: "Sobre",
-        navAreas: "Áreas",
-        navContact: "Contato",
         riffmakerCta: "RiffMaker",
         eyebrow: "Desenvolvedor Front-End · Editor de Vídeo",
         subtitle: "Interfaces que funcionam. Vídeos que ficam.",
@@ -44,6 +40,7 @@ const content = {
         cardCta: "Ver projetos →",
         heroDevCta: "Dev",
         heroEditCta: "Edit",
+        heroContactCta: "Falar comigo",
         proof: [
             ["3+", "projetos em produção"],
             ["3 anos", "criando produto digital"],
@@ -71,10 +68,6 @@ const content = {
         footerCopy: "© 2026 Luan Medrado — Todos os direitos reservados",
     },
     en: {
-        navWork: "Work",
-        navAbout: "About",
-        navAreas: "Areas",
-        navContact: "Contact",
         riffmakerCta: "RiffMaker",
         eyebrow: "Front-End Developer · Video Editor",
         subtitle: "Interfaces that work. Videos that stay.",
@@ -92,6 +85,7 @@ const content = {
         cardCta: "View projects →",
         heroDevCta: "Dev",
         heroEditCta: "Edit",
+        heroContactCta: "Contact me",
         proof: [
             ["3+", "production projects"],
             ["3 years", "building digital products"],
@@ -115,10 +109,130 @@ const content = {
     },
 } as const;
 
+const contactCopy = {
+    pt: {
+        eyebrow: "Contato",
+        title: "Me conte sobre o projeto",
+        sub: "Respondo em ate 24h com proximos passos claros.",
+        name: "Nome",
+        namePlaceholder: "Seu nome",
+        email: "Email",
+        emailPlaceholder: "seu@email.com",
+        projectType: "Tipo de projeto",
+        projectTypePlaceholder: "Selecione...",
+        projectTypes: ["Site / landing page", "Dashboard / app", "Video social", "Ambos", "Outro"],
+        message: "Mensagem",
+        messagePlaceholder: "Qual e o contexto? Pode ser curto.",
+        submit: "Enviar mensagem",
+        sending: "Enviando...",
+        successTitle: "Mensagem recebida.",
+        successText: "Vou ler com atencao e te responder em breve.",
+        reset: "Enviar outra",
+        errorFallback: "Erro ao enviar. Tente novamente.",
+        close: "Fechar contato",
+    },
+    en: {
+        eyebrow: "Contact",
+        title: "Tell me about the project",
+        sub: "I reply within 24h with clear next steps.",
+        name: "Name",
+        namePlaceholder: "Your name",
+        email: "Email",
+        emailPlaceholder: "you@email.com",
+        projectType: "Project type",
+        projectTypePlaceholder: "Select...",
+        projectTypes: ["Site / landing page", "Dashboard / app", "Social video", "Both", "Other"],
+        message: "Message",
+        messagePlaceholder: "What is the context? Short is fine.",
+        submit: "Send message",
+        sending: "Sending...",
+        successTitle: "Message received.",
+        successText: "I will read it carefully and reply soon.",
+        reset: "Send another",
+        errorFallback: "Error sending. Please try again.",
+        close: "Close contact",
+    },
+} as const;
+
+type ContactStatus = "idle" | "loading" | "success" | "error";
+
 export default function HomePage() {
     const { lang } = useLanguage();
     const c = content[lang];
+    const contact = contactCopy[lang];
     const homeRef = useRef<HTMLElement | null>(null);
+    const [contactOpen, setContactOpen] = useState(false);
+    const [contactStatus, setContactStatus] = useState<ContactStatus>("idle");
+    const [contactError, setContactError] = useState("");
+    const [contactForm, setContactForm] = useState({ name: "", email: "", projectType: "", message: "" });
+    const trackedContactFocus = useRef(new Set<string>());
+    const closeContact = useCallback(() => setContactOpen(false), []);
+
+    useEffect(() => {
+        if (contactOpen) {
+            document.body.style.overflow = "hidden";
+        } else {
+            document.body.style.overflow = "";
+        }
+        return () => { document.body.style.overflow = ""; };
+    }, [contactOpen]);
+
+    useEffect(() => {
+        const handleKey = (e: KeyboardEvent) => {
+            if (e.key === "Escape") closeContact();
+        };
+        window.addEventListener("keydown", handleKey);
+        return () => window.removeEventListener("keydown", handleKey);
+    }, [closeContact]);
+
+    const openContact = (source = "home_topbar") => {
+        setContactOpen(true);
+        trackEvent("contact_modal_open", { source, lang });
+    };
+
+    const handleContactChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+        setContactForm((prev) => ({ ...prev, [event.target.name]: event.target.value }));
+    };
+
+    const handleContactFocus = (field: string) => {
+        if (trackedContactFocus.current.has(field)) return;
+        trackedContactFocus.current.add(field);
+        trackEvent("form_field_focus", { field, lang, source: "home_contact_modal" });
+    };
+
+    const handleContactSubmit = async (event: FormEvent) => {
+        event.preventDefault();
+        setContactStatus("loading");
+        setContactError("");
+
+        try {
+            const response = await fetch("/api/contact", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(contactForm),
+            });
+            const data = await response.json();
+
+            if (!response.ok) {
+                setContactError(data.error ?? contact.errorFallback);
+                setContactStatus("error");
+                return;
+            }
+
+            setContactStatus("success");
+            trackEvent("contact_form_submit", { lang, source: "home_contact_modal", projectType: contactForm.projectType });
+        } catch {
+            setContactError(contact.errorFallback);
+            setContactStatus("error");
+        }
+    };
+
+    const resetContactForm = () => {
+        setContactStatus("idle");
+        setContactError("");
+        setContactForm({ name: "", email: "", projectType: "", message: "" });
+        trackedContactFocus.current.clear();
+    };
 
     const handlePointerMove = (event: PointerEvent<HTMLElement>) => {
         if (event.pointerType !== "mouse" && event.pointerType !== "pen") {
@@ -218,14 +332,63 @@ export default function HomePage() {
                 </div>
 
                 <div className={styles.navRight}>
-                    <nav className={styles.navLinks} aria-label={lang === "en" ? "Home sections" : "Seções da home"}>
-                        <Link href="#trabalhos">{c.navWork}</Link>
-                        <Link href="#sobre">{c.navAbout}</Link>
-                        <Link href="/dev#contato">{c.navContact}</Link>
-                    </nav>
                     <LanguageSwitch />
                 </div>
             </header>
+
+
+            {contactOpen && (
+                <div className={styles.contactModal} role="dialog" aria-modal="true" aria-labelledby="home-contact-title" onClick={closeContact}>
+                    <div className={styles.contactModalPanel} onClick={(event) => event.stopPropagation()}>
+                        <button type="button" className={styles.contactModalClose} aria-label={contact.close} onClick={closeContact}>
+                            &#215;
+                        </button>
+                        <div className={styles.contactModalHeader}>
+                            <span>{contact.eyebrow}</span>
+                            <h2 id="home-contact-title">{contact.title}</h2>
+                            <p>{contact.sub}</p>
+                        </div>
+
+                        {contactStatus === "success" ? (
+                            <div className={styles.contactModalSuccess}>
+                                <strong>{contact.successTitle}</strong>
+                                <p>{contact.successText}</p>
+                                <button type="button" onClick={resetContactForm}>{contact.reset}</button>
+                            </div>
+                        ) : (
+                            <form className={styles.contactModalForm} onSubmit={handleContactSubmit} noValidate>
+                                <div className={styles.contactModalRow}>
+                                    <label>
+                                        <span>{contact.name}</span>
+                                        <input name="name" type="text" placeholder={contact.namePlaceholder} value={contactForm.name} onChange={handleContactChange} onFocus={() => handleContactFocus("name")} autoComplete="name" />
+                                    </label>
+                                    <label>
+                                        <span>{contact.email}</span>
+                                        <input name="email" type="email" placeholder={contact.emailPlaceholder} value={contactForm.email} onChange={handleContactChange} onFocus={() => handleContactFocus("email")} autoComplete="email" />
+                                    </label>
+                                </div>
+                                <label>
+                                    <span>{contact.projectType}</span>
+                                    <select name="projectType" value={contactForm.projectType} onChange={handleContactChange} onFocus={() => handleContactFocus("projectType")}>
+                                        <option value="">{contact.projectTypePlaceholder}</option>
+                                        {contact.projectTypes.map((type) => (
+                                            <option key={type} value={type}>{type}</option>
+                                        ))}
+                                    </select>
+                                </label>
+                                <label>
+                                    <span>{contact.message}</span>
+                                    <textarea name="message" placeholder={contact.messagePlaceholder} value={contactForm.message} onChange={handleContactChange} onFocus={() => handleContactFocus("message")} rows={4} />
+                                </label>
+                                {contactStatus === "error" && <p className={styles.contactModalError}>{contactError}</p>}
+                                <button type="submit" className={styles.contactModalSubmit} disabled={contactStatus === "loading"}>
+                                    {contactStatus === "loading" ? contact.sending : contact.submit}
+                                </button>
+                            </form>
+                        )}
+                    </div>
+                </div>
+            )}
 
             <section className={styles.hero} id="hero">
                 <div className={styles.heroVisual} aria-hidden="true">
@@ -283,6 +446,20 @@ export default function HomePage() {
                         </span>
                         {c.heroDevCta}
                     </Link>
+                </div>
+                <button type="button" className={styles.heroContactCta} onClick={() => openContact("home_hero")}>
+                    <span className={styles.heroContactIcon} aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none">
+                            <path d="M4 7.5A2.5 2.5 0 0 1 6.5 5h11A2.5 2.5 0 0 1 20 7.5v7A2.5 2.5 0 0 1 17.5 17H9l-4 3v-3.5A2.5 2.5 0 0 1 3 14V7.5Z" />
+                            <path d="m7 8 5 4 5-4" />
+                        </svg>
+                    </span>
+                    {c.heroContactCta}
+                </button>
+
+                <div className={styles.scrollHint} aria-hidden="true">
+                    <span>Scroll</span>
+                    <span className={styles.scrollLine} />
                 </div>
 
             </section>

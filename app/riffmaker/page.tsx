@@ -343,8 +343,8 @@ export default function RiffMakerPage() {
           opacity: .78;
           pointer-events: none;
         }
-        .i-logo { position: relative; z-index: 1; width: min(76vw, 880px); height: auto; max-height: min(46vh, 420px); object-fit: contain; margin: 0 auto 34px; scale: 1.32; filter: brightness(0) invert(1) drop-shadow(0 24px 54px rgba(0,0,0,.55)) drop-shadow(0 0 54px rgba(229,53,43,.34)); display: block; animation: heroFadeUp 1s cubic-bezier(.16,1,.3,1) .1s both; }
-        .i-tag { order: 2; font-family: var(--font-space-mono), monospace; font-size: 11px; letter-spacing: .22em; text-transform: uppercase; color: var(--muted); animation: heroFadeUp .9s cubic-bezier(.16,1,.3,1) .45s both; }
+        .i-logo { position: relative; z-index: 1; width: min(34vw, 390px); height: auto; object-fit: contain; display: block; margin: 0 auto 34px; align-self: center; transform-origin: center center; filter: brightness(0) invert(1) drop-shadow(0 24px 54px rgba(0,0,0,.55)) drop-shadow(0 0 54px rgba(229,53,43,.34)); animation: logoFadeUp 1s cubic-bezier(.16,1,.3,1) .1s both; }
+        .i-tag { order: 2; font-family: var(--font-space-mono), monospace; font-size: 11px; font-weight: 700; letter-spacing: .22em; text-transform: uppercase; color: rgba(255,255,255,.86); text-shadow: 0 0 18px rgba(229,53,43,.72), 0 2px 12px rgba(0,0,0,.9); animation: heroFadeUp .9s cubic-bezier(.16,1,.3,1) .45s both; }
         .i-actions { order: 3; margin-top: 28px; animation: heroFadeUp .9s cubic-bezier(.16,1,.3,1) .6s both; }
         .i-play {
           display: inline-flex; align-items: center; gap: 10px;
@@ -482,6 +482,8 @@ export default function RiffMakerPage() {
         .f-links a { font-size: 12px; color: var(--muted); text-decoration: none; }
         .f-links a:hover { color: var(--white); }
         @keyframes heroFadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes logoFadeUp { from { opacity: 0; translate: 0 24px; scale: 1.32; } to { opacity: 1; translate: 0 0; scale: 1.32; } }
+        @keyframes logoFadeUpMobile { from { opacity: 0; translate: 0 18px; scale: 1.18; } to { opacity: 1; translate: 0 0; scale: 1.18; } }
         @keyframes sPulse { 0%,100% { opacity: 1; transform: scaleY(1); } 50% { opacity: .35; transform: scaleY(.55); } }
         @keyframes wvAnim { 0%,100% { transform: scaleY(.15); } 50% { transform: scaleY(1); } }
         @keyframes fire { 0%,100% { transform: scale(1) rotate(-2deg); } 50% { transform: scale(1.14) rotate(2deg); } }
@@ -492,10 +494,10 @@ export default function RiffMakerPage() {
           #intro { min-height: 100svh; height: 100svh; }
           .i-content { width: 100%; transform: translateY(-2vh); }
           .i-content::before { width: 88vw; height: 220px; opacity: .56; }
-          .i-logo { width: min(86vw, 390px); height: auto; max-height: 250px; margin: 0 auto 24px; scale: 1.18; }
+          .i-logo { width: min(68vw, 250px); height: auto; margin: 0 auto 24px; align-self: center; animation: logoFadeUpMobile 1s cubic-bezier(.16,1,.3,1) .1s both; }
           .i-actions { margin-top: 20px; }
           .i-play { min-height: 42px; padding: 0 16px; font-size: 10px; }
-          .i-tag { font-size: 9px; letter-spacing: .16em; padding: 0 6vw; }
+          .i-tag { font-size: 9px; letter-spacing: .16em; line-height: 1.6; padding: 0 6vw; }
           .i-scroll { bottom: 22px; }
 
           #s1, #s2, #s3, #s4 { height: 180vh; }
@@ -642,7 +644,7 @@ export default function RiffMakerPage() {
       <section id="intro">
         <canvas id="wc" />
         <div className="i-content">
-          <Image src="/riff-maker/riff.png" className="i-logo" alt="Riff" width={1400} height={420} />
+          <Image src="/riff-maker/riff-cropped.png" className="i-logo" alt="Riff" width={682} height={205} />
           <div className="i-actions">
             <a href="https://play.google.com/store/apps/details?id=com.oluanmedrado.riffmaker" target="_blank" rel="noopener noreferrer" className="i-play">
               <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3.18 23.76c.36.2.77.2 1.16-.02l12.44-7.17-2.68-2.67-10.92 9.86zM.29 1.04C.11 1.42 0 1.86 0 2.38v19.25c0 .52.1.96.29 1.33l.07.07 10.78-10.78v-.25L.36.97.29 1.04zM20.23 10.27l-2.82-1.63-3 2.99 3 2.99 2.84-1.63c.81-.47.81-1.25-.02-1.72zM4.34.22L16.78 7.4l-2.68 2.67L3.18.23C3.56.01 3.98.04 4.34.22z" /></svg>

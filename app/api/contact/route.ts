@@ -2,7 +2,7 @@ import { Resend } from "resend";
 import { NextResponse } from "next/server";
 
 const TO_EMAIL = process.env.CONTACT_TO_EMAIL ?? "luanmedradooliveira@gmail.com";
-const FROM_EMAIL = "oluanmedrado@gmail.com";
+const FROM_EMAIL = process.env.CONTACT_FROM_EMAIL ?? "Portfolio <onboarding@resend.dev>";
 
 function escapeHtml(value: string) {
     return value
@@ -47,9 +47,14 @@ export async function POST(req: Request) {
     const safeMessage = escapeHtml(messageValue);
 
     try {
+        if (!process.env.RESEND_API_KEY) {
+            console.error("Missing RESEND_API_KEY for contact form.");
+            return NextResponse.json({ error: "Envio indisponivel no momento." }, { status: 500 });
+        }
+
         const resend = new Resend(process.env.RESEND_API_KEY);
         await resend.emails.send({
-            from: `Portfolio <${FROM_EMAIL}>`,
+            from: FROM_EMAIL,
             to: TO_EMAIL,
             replyTo: emailValue,
             subject: `[Portfolio] ${projectTypeValue ? `${projectTypeValue} — ` : ""}${nameValue}`,
@@ -81,7 +86,8 @@ export async function POST(req: Request) {
         });
 
         return NextResponse.json({ success: true });
-    } catch {
+    } catch (error) {
+        console.error("Contact form email failed:", error);
         return NextResponse.json({ error: "Erro ao enviar mensagem. Tente novamente." }, { status: 500 });
     }
 }

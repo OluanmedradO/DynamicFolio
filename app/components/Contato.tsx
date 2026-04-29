@@ -158,6 +158,17 @@ export default function Contato() {
                         </svg>
                         <strong>{f.successTitle}</strong>
                         <p>{f.successText}</p>
+                        <button
+                            type="button"
+                            className="contact-reset-btn"
+                            onClick={() => {
+                                setStatus("idle");
+                                setForm({ name: "", email: "", projectType: "", message: "" });
+                                trackedFocusFields.current.clear();
+                            }}
+                        >
+                            {lang === "en" ? "Send another message" : "Enviar outra mensagem"}
+                        </button>
                     </div>
                 ) : (
                     <form className="contact-form" onSubmit={handleSubmit} noValidate>

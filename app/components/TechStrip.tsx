@@ -120,7 +120,7 @@ export default function TechStrip() {
         <div className="tech-strip" aria-label={lang === "en" ? "Technologies" : "Tecnologias"}>
             <div className="tech-track">
                 {track.map((tech, index) => (
-                    <span key={`${tech}-${index}`} className="tech-item">
+                    <span key={`${tech}-${index}`} className="tech-item" title={tech}>
                         <span className="tech-icon">
                             <TechIcon name={tech} />
                         </span>
