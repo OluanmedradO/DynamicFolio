@@ -1,6 +1,8 @@
 "use client";
 
+import { usePathname, useRouter } from "next/navigation";
 import { useLanguage } from "../context/LanguageContext";
+import { localizePath } from "../lib/locale";
 import { trackEvent } from "../lib/analytics";
 
 function BrazilFlag() {
@@ -52,7 +54,9 @@ function UsaFlag() {
 }
 
 export default function LanguageSwitch() {
-    const { lang, toggleLang } = useLanguage();
+    const pathname = usePathname();
+    const router = useRouter();
+    const { lang } = useLanguage();
     const isEnglish = lang === "en";
 
     const handleLanguageToggle = () => {
@@ -63,7 +67,8 @@ export default function LanguageSwitch() {
             from: lang,
             to: nextLang,
         });
-        toggleLang();
+        const hash = typeof window === "undefined" ? "" : window.location.hash;
+        router.push(localizePath(`${pathname}${hash}`, nextLang));
     };
 
     return (

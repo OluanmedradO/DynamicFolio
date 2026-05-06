@@ -6,33 +6,36 @@ import type { ReactNode } from "react";
 import { useLanguage } from "../context/LanguageContext";
 import { useMode } from "../context/ModeContext";
 import { trackEvent } from "../lib/analytics";
-import FreelanceBadge from "./FreelanceBadge";
 
 const content = {
     pt: {
         eyebrow: "Oi! Eu sou",
-        cta: "Entre em Contato",
         scroll: "scroll",
+        microProofs: ["+1M de views em vídeos editados", "Foco em retenção", "Resposta rápida", "Sem compromisso"],
         dev: {
             role: "Desenvolvedor Front-End",
-            desc: <>Especializado em <strong>React</strong> e <strong>Next.js</strong>, criando interfaces rápidas, intuitivas e bem pensadas.</>,
+            cta: "Falar sobre meu projeto",
+            desc: <>Crio sites e interfaces focadas em <strong>performance</strong>, clareza e conversão.</>,
         },
         editor: {
             role: "Editor de Vídeo",
-            desc: "Especializado em contar histórias através de muita criatividade, com foco em retenção, impacto, qualidade e ritmo.",
+            cta: "Quero editar meus vídeos",
+            desc: <>Edição focada em retenção, ritmo e vídeos prontos para postar.</>,
         },
     },
     en: {
         eyebrow: "Hey! I'm",
-        cta: "Get in Touch",
         scroll: "scroll",
+        microProofs: ["+1M views on edited videos", "Retention focus", "Fast reply", "No commitment"],
         dev: {
             role: "Front-End Developer",
-            desc: <>Specialized in <strong>React</strong> and <strong>Next.js</strong>, building fast, intuitive and polished interfaces.</>,
+            cta: "Talk about my project",
+            desc: <>I build websites and interfaces focused on <strong>performance</strong>, clarity and conversion.</>,
         },
         editor: {
             role: "Video Editor",
-            desc: "Specialized in visual storytelling with creativity, focused on retention, impact, quality and rhythm.",
+            cta: "Edit my videos",
+            desc: <>Retention-focused editing with stronger pacing and videos ready to publish.</>,
         },
     },
 };
@@ -122,25 +125,40 @@ export default function Hero({ overrides }: HeroProps) {
                     className="btn-primary"
                     onClick={() => trackEvent("contact_cta_click", { source: "hero", lang, mode })}
                 >
-                    {content[lang].cta}
+                    <span
+                        className="btn-primary-dot"
+                        aria-hidden="true"
+                        style={{
+                            position: "relative",
+                            width: 8,
+                            height: 8,
+                            flexShrink: 0,
+                            borderRadius: "50%",
+                            background: "#4ade80",
+                            boxShadow: "0 0 10px rgba(74,222,128,0.68)",
+                        }}
+                    >
+                        <span
+                            style={{
+                                position: "absolute",
+                                inset: -4,
+                                borderRadius: "inherit",
+                                background: "rgba(74,222,128,0.28)",
+                                animation: "freelancePing 2s ease-out infinite",
+                            }}
+                        />
+                    </span>
+                    {c.cta}
                     <span className="arrow">↗</span>
                 </Link>
+                {mode === "editor" && (
+                    <div className="hero-microproofs" aria-label={lang === "en" ? "Video editing proof" : "Provas de edição"}>
+                        {content[lang].microProofs.map((item) => (
+                            <span key={item}>{item}</span>
+                        ))}
+                    </div>
+                )}
                 <div className="social-icons">
-                    {/*
-                    <a
-                        href="/cv-luan-medrado.pdf"
-                        className="social-icon"
-                        title={lang === "en" ? "Download CV" : "Baixar CV"}
-                        download
-                        onClick={() => trackEvent("cv_download_click", { source: "hero", lang, mode })}
-                    >
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-                            <path d="M12 3v11" />
-                            <path d="m7 11 5 5 5-5" />
-                            <path d="M5 21h14" />
-                        </svg>
-                    </a>
-                    */}
                     <Link
                         href="https://github.com/oluanmemo"
                         target="_blank"
@@ -182,7 +200,8 @@ export default function Hero({ overrides }: HeroProps) {
                     <a
                         href="mailto:luanmedradooliveira@gmail.com"
                         className="social-icon"
-                        title="Email"
+                        title="Email: luanmedradooliveira@gmail.com"
+                        aria-label="Email: luanmedradooliveira@gmail.com"
                         onClick={() =>
                             trackEvent("email_click", {
                                 eventCategory: "contact",
@@ -198,7 +217,6 @@ export default function Hero({ overrides }: HeroProps) {
                         </svg>
                     </a>
                 </div>
-                <FreelanceBadge variant="hero" />
             </div>
 
             </div>

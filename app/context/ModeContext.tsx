@@ -2,6 +2,7 @@
 
 import { usePathname, useRouter } from "next/navigation";
 import { createContext, ReactNode, useContext, useEffect } from "react";
+import { getLanguageFromPathname, localizePath, stripLocalePrefix } from "../lib/locale";
 
 export type Mode = "dev" | "editor";
 
@@ -16,7 +17,7 @@ const ModeContext = createContext<ModeContextType>({
 });
 
 function pathnameToMode(pathname: string): Mode {
-    if (pathname.startsWith("/editing")) return "editor";
+    if (stripLocalePrefix(pathname).startsWith("/editing")) return "editor";
     return "dev";
 }
 
@@ -37,14 +38,14 @@ export function ModeProvider({ children }: { children: ReactNode }) {
     const router = useRouter();
 
     const mode = pathnameToMode(pathname);
-    const isDevRoute = pathname.startsWith("/dev");
-    const isTiRoute = pathname.startsWith("/ti");
+    const normalizedPathname = stripLocalePrefix(pathname);
+    const routeLang = getLanguageFromPathname(pathname);
+    const isDevRoute = normalizedPathname.startsWith("/dev");
 
     useEffect(() => {
         document.body.classList.toggle("editor-mode", mode === "editor");
         document.body.classList.toggle("dev-mode", isDevRoute && mode === "dev");
-        document.body.classList.toggle("ti-mode", isTiRoute && mode === "dev");
-    }, [isDevRoute, isTiRoute, mode]);
+    }, [isDevRoute, mode]);
 
     const setMode = (newMode: Mode) => {
         if (newMode === mode) return;
@@ -53,11 +54,11 @@ export function ModeProvider({ children }: { children: ReactNode }) {
         triggerModeFlash(newMode);
 
         if (newMode === "editor") {
-            router.push("/editing");
+            router.push(localizePath("/editing", routeLang));
             return;
         }
 
-        router.push("/dev");
+        router.push(localizePath("/dev", routeLang));
     };
 
     return (

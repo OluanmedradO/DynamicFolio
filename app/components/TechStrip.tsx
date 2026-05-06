@@ -119,8 +119,16 @@ export default function TechStrip() {
     return (
         <div className="tech-strip" aria-label={lang === "en" ? "Technologies" : "Tecnologias"}>
             <div className="tech-track">
-                {track.map((tech, index) => (
+                {techs.map((tech, index) => (
                     <span key={`${tech}-${index}`} className="tech-item" title={tech}>
+                        <span className="tech-icon">
+                            <TechIcon name={tech} />
+                        </span>
+                        {tech}
+                    </span>
+                ))}
+                {techs.map((tech, index) => (
+                    <span key={`dup-${tech}-${index}`} className="tech-item" title={tech} aria-hidden="true">
                         <span className="tech-icon">
                             <TechIcon name={tech} />
                         </span>

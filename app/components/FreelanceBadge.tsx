@@ -4,6 +4,7 @@ import { useLanguage } from "../context/LanguageContext";
 import { useMode } from "../context/ModeContext";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import { localizePath, stripLocalePrefix } from "../lib/locale";
 
 interface FreelanceBadgeProps {
     variant?: "floating" | "hero";
@@ -13,25 +14,81 @@ export default function FreelanceBadge({ variant = "floating" }: FreelanceBadgeP
     const pathname = usePathname();
     const { lang } = useLanguage();
     const { mode } = useMode();
-    const [heroPassed, setHeroPassed] = useState(false);
+    const [isFloatingHidden, setIsFloatingHidden] = useState(true);
 
-    const isHome = pathname === "/";
-    const targetHref = isHome ? "/dev#contato" : "#contato";
+    const normalizedPathname = stripLocalePrefix(pathname ?? "/");
+    const isHome = normalizedPathname === "/";
+    const isDevPortfolioRoute = normalizedPathname === "/dev";
+    const isEditingPortfolioRoute = normalizedPathname === "/editing";
+    const isRiffmakerRoute = normalizedPathname.startsWith("/riffmaker");
+    const targetHref = isHome ? localizePath("/editing", lang) : "#contato";
     const isFloating = variant === "floating";
 
     useEffect(() => {
-        if (!isFloating || pathname?.startsWith("/riffmaker")) return;
+        if (!isFloating || isRiffmakerRoute) return;
 
         const updateVisibility = () => {
             const hero = document.getElementById("hero");
+            const isElementInView = (element: Element | null) => {
+                if (!element) return false;
+
+                const rect = element.getBoundingClientRect();
+                return rect.top < window.innerHeight * 0.92 && rect.bottom > window.innerHeight * 0.08;
+            };
+
+            const contactOrFooterInView =
+                isElementInView(document.getElementById("contato")) ||
+                isElementInView(document.querySelector(".site-footer"));
+            const contactIntent = document.querySelector(".contact-intent-bar");
+            const contactIntentVisible = contactIntent
+                ? getComputedStyle(contactIntent).visibility !== "hidden" &&
+                getComputedStyle(contactIntent).opacity !== "0" &&
+                getComputedStyle(contactIntent).display !== "none"
+                : false;
 
             if (!hero) {
-                setHeroPassed(true);
+                setIsFloatingHidden(contactOrFooterInView || contactIntentVisible);
                 return;
             }
 
             const rect = hero.getBoundingClientRect();
-            setHeroPassed(rect.bottom <= Math.min(120, window.innerHeight * 0.18));
+            const heroPassed = rect.bottom <= Math.min(120, window.innerHeight * 0.18);
+
+            if (!heroPassed) {
+                setIsFloatingHidden(true);
+                return;
+            }
+
+            if (contactOrFooterInView) {
+                setIsFloatingHidden(true);
+                return;
+            }
+
+            if (contactIntentVisible) {
+                setIsFloatingHidden(true);
+                return;
+            }
+
+            if (isEditingPortfolioRoute && window.innerWidth <= 960 && isElementInView(document.getElementById("projetos"))) {
+                setIsFloatingHidden(true);
+                return;
+            }
+
+            if (isDevPortfolioRoute) {
+                const competingSections = ["contato", "projetos", "vidalarsec"];
+                const sectionInView = competingSections.some((id) => {
+                    const section = document.getElementById(id);
+                    if (!section) return false;
+
+                    const sectionRect = section.getBoundingClientRect();
+                    return sectionRect.top < window.innerHeight * 0.88 && sectionRect.bottom > window.innerHeight * 0.12;
+                });
+
+                setIsFloatingHidden(sectionInView);
+                return;
+            }
+
+            setIsFloatingHidden(false);
         };
 
         updateVisibility();
@@ -42,25 +99,29 @@ export default function FreelanceBadge({ variant = "floating" }: FreelanceBadgeP
             window.removeEventListener("scroll", updateVisibility);
             window.removeEventListener("resize", updateVisibility);
         };
-    }, [isFloating, pathname]);
+    }, [isDevPortfolioRoute, isEditingPortfolioRoute, isFloating, isRiffmakerRoute, pathname]);
 
-    if (pathname?.startsWith("/riffmaker")) {
+    if (isRiffmakerRoute) {
         return null;
     }
 
     const text =
         lang === "en"
-            ? mode === "editor"
-                ? "Available for video"
-                : "Open for projects"
-            : mode === "editor"
-                ? "Disponível para vídeos"
-                : "Aberto a projetos";
+            ? isHome
+                ? "I want my videos edited"
+                : mode === "editor"
+                    ? "Talk about my video"
+                    : "Talk about my project"
+            : isHome
+                ? "Quero editar meus vídeos"
+                : mode === "editor"
+                    ? "Falar sobre meu vídeo"
+                    : "Falar sobre meu projeto";
 
     return (
         <a
             href={targetHref}
-            className={`freelance-badge freelance-badge--${variant}${isFloating && !heroPassed ? " is-hidden" : ""}`}
+            className={`freelance-badge freelance-badge--${variant}${isFloating && isFloatingHidden ? " is-hidden" : ""}`}
             id={isFloating ? "freelanceBadge" : "freelanceBadgeHero"}
             onClick={(event) => {
                 if (isHome) return;

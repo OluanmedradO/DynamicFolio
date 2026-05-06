@@ -13,6 +13,9 @@ const channels = [
     name: "Switch Game List",
     views: "4.15M",
     viewsFull: "4,150,000 views",
+    type: "Games / listas",
+    role: "Edição e ritmo narrativo",
+    roleEn: "Editing and narrative pacing",
     avatarSrc: "/Switch Game List.jpg",
     href: "https://www.youtube.com/@SwitchGameList",
   },
@@ -20,6 +23,9 @@ const channels = [
     name: "True Sailing Life",
     views: "3.91M",
     viewsFull: "3,910,000 views",
+    type: "Travel / lifestyle",
+    role: "Edição e organização visual",
+    roleEn: "Editing and visual structure",
     avatarSrc: "/True Sailing Life.jpg",
     href: "https://www.youtube.com/@TrueSailingLife",
   },
@@ -27,6 +33,9 @@ const channels = [
     name: "Money Cultures",
     views: "691K",
     viewsFull: "691,000 views",
+    type: "Dark content",
+    role: "Ritmo e retenção",
+    roleEn: "Retention-focused pacing",
     avatarSrc: "/Money Cultures.jpg",
     href: "https://www.youtube.com/@MoneyCultures",
   },
@@ -34,6 +43,9 @@ const channels = [
     name: "Global Travel List",
     views: "141K",
     viewsFull: "141,000 views",
+    type: "Travel / listas",
+    role: "Edição e acabamento",
+    roleEn: "Editing and final polish",
     avatarSrc: "/Global Travel List.jpg",
     href: "https://www.youtube.com/@GlobalTravelList",
   },
@@ -41,6 +53,9 @@ const channels = [
     name: "Guitarra gospel",
     views: "18.6M",
     viewsFull: "18,643,296 views",
+    type: "Música / YouTube",
+    role: "Edição de conteúdo",
+    roleEn: "YouTube content editing",
     avatarSrc: "/guitarragospel.jpg",
     href: "https://www.youtube.com/@guitarragospeloficial",
   },
@@ -48,6 +63,9 @@ const channels = [
     name: "Novato",
     views: "326K",
     viewsFull: "326,452 views",
+    type: "Social / criador",
+    role: "Cortes e entrega final",
+    roleEn: "Cuts and final delivery",
     avatarSrc: "/novato.jpg",
     href: "https://www.youtube.com/@novato.oficial",
   },  
@@ -60,12 +78,14 @@ export default function YouTubeGrid() {
   const copy =
     lang === "en"
       ? {
-        totalViews: "total views",
-        partners: "partner channels",
+        totalViews: "views on edited videos",
+        likes: "Reels and social",
+        partners: "retention-first edit",
       }
       : {
-        totalViews: "views totais",
-        partners: "canais parceiros",
+        totalViews: "de views em vídeos editados",
+        likes: "Reels e social",
+        partners: "edição focada em retenção",
       };
 
   useEffect(() => {
@@ -135,6 +155,8 @@ export default function YouTubeGrid() {
                 <span className={styles.viewsLabel}>views</span>
               </span>
               <span className={styles.channelName}>{channel.name}</span>
+              <span className={styles.channelMeta}>{channel.type}</span>
+              <span className={styles.channelRole}>{lang === "en" ? channel.roleEn : channel.role}</span>
             </a>
             {index < channels.length - 1 && <div className={styles.dotDivider} aria-hidden="true"></div>}
           </Fragment>
@@ -143,19 +165,19 @@ export default function YouTubeGrid() {
 
       <div className={styles.totals}>
         <div className={styles.totalItem}>
-          <span className={styles.totalNumber}>27.9M+</span>
+          <span className={styles.totalNumber}>+1M</span>
           <span className={styles.totalLabel}>{copy.totalViews}</span>
         </div>
         <div className={styles.totalSep} aria-hidden="true"></div>
 
         <div className={styles.totalItem}>
-          <span className={styles.totalNumber}>30k+</span>
-          <span className={styles.totalLabel}>likes</span>
+          <span className={styles.totalNumber}>YouTube</span>
+          <span className={styles.totalLabel}>{copy.likes}</span>
         </div>
         <div className={styles.totalSep} aria-hidden="true"></div>
 
         <div className={styles.totalItem}>
-          <span className={styles.totalNumber}>6</span>
+          <span className={styles.totalNumber}>{lang === "en" ? "Retention" : "Retenção"}</span>
           <span className={styles.totalLabel}>{copy.partners}</span>
         </div>
       </div>

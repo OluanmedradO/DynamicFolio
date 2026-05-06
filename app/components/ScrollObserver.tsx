@@ -12,7 +12,7 @@ export default function ScrollObserver() {
             ".featured-card",
             ".multilaser-section",
             ".multi-card",
-            ".vl-card",
+            ".vl-slider-frame",
         ];
 
         const io = new IntersectionObserver(entries => {

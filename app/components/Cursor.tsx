@@ -7,6 +7,8 @@ export default function Cursor() {
     const [ringPosition, setRingPosition] = useState({ x: -100, y: -100 });
 
     useEffect(() => {
+        if (!window.matchMedia("(pointer: fine)").matches) return;
+
         let mx = -100;
         let my = -100;
         let rx = -100;

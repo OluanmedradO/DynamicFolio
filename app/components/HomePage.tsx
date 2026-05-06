@@ -6,19 +6,21 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import type { ChangeEvent, FormEvent, PointerEvent } from "react";
 import LanguageSwitch from "./LanguageSwitch";
 import { useLanguage } from "../context/LanguageContext";
+import { localizePath } from "../lib/locale";
 import { trackEvent } from "../lib/analytics";
 import styles from "./HomePage.module.css";
 
 const content = {
     pt: {
-        riffmakerCta: "RiffMaker",
-        eyebrow: "Desenvolvedor Front-End · Editor de Vídeo",
-        subtitle: "Interfaces que funcionam. Vídeos que ficam.",
-        bio: (
-            <>
-                Especializado em <strong>React / Next.js</strong> e edição de vídeo. Trabalho com marcas que levam resultado a sério.
-            </>
-        ),
+        navWork: "Projetos",
+        navAbout: "Sobre",
+        navContact: "Contato",
+        brandName: "Luan Medrado",
+        brandDescriptor: "Sites • Interfaces • Vídeos",
+        eyebrow: "Sites, interfaces e edição de vídeo",
+        heroTitleLines: ["Sites que convertem.", "Vídeos que prendem atenção."],
+        subtitle: "Edição e páginas pensadas para transformar atenção em cliente.",
+        heroScrollCue: "Descubra mais",
         cardDevTag: "Desenvolvimento",
         cardDevTitle: "Dev",
         cardDevDescription: (
@@ -38,44 +40,84 @@ const content = {
             </>
         ),
         cardCta: "Ver projetos →",
-        heroDevCta: "Dev",
-        heroEditCta: "Edit",
-        heroContactCta: "Falar comigo",
+        heroVideoCta: "Editar meus vídeos",
+        heroWebCta: "Criar meu site ou landing page",
         proof: [
-            ["3+", "projetos em produção"],
-            ["3 anos", "criando produto digital"],
-            ["Multilaser", "experiência corporativa"],
+            ["+1M", "de views em vídeos editados"],
+            ["Produtos", "digitais e interfaces reais"],
         ],
+        servicesLabel: "Escolha seu caminho",
+        servicesTitle: "Dois caminhos claros para começar",
+        services: [
+            {
+                title: "Edição de vídeo",
+                text: "Mais retenção, ritmo e vídeos prontos para postar.",
+                tags: ["YouTube", "Reels", "TikTok"],
+                cta: "Ver projetos de vídeo",
+                href: "/editing",
+                source: "home_path_card_video",
+                variant: "video",
+            },
+            {
+                title: "Sites e landing pages",
+                text: "Páginas, interfaces e experiências digitais com foco em clareza, performance e conversão.",
+                tags: ["Landing pages", "Interfaces", "Apps"],
+                cta: "Ver sites e interfaces",
+                href: "/dev",
+                source: "home_path_card_web",
+                variant: "web",
+            },
+        ],
+        pathsLabel: "Escolha seu caminho",
+        pathsTitle: "Encontre o que faz sentido para você",
+        clientPathTitle: "Para empresas e clientes",
+        clientPathText: "Precisa de um site, landing page, interface ou vídeo com acabamento profissional?",
+        clientPrimaryCta: "Pedir orçamento",
+        clientSecondaryCta: "Falar comigo",
+        recruiterPathTitle: "Para recrutadores",
+        recruiterPathText: "Quer avaliar minha experiência técnica, projetos reais e stack?",
+        recruiterDevCta: "Ver projetos dev",
+        recruiterGithubCta: "Ver GitHub",
+        recruiterLinkedinCta: "Ver LinkedIn",
+        productLabel: "Produto autoral",
+        productTitle: "Riff Maker",
+        productText: "Um app mobile para músicos capturarem riffs, ideias e versões sem perder o fluxo criativo. Ele prova minha capacidade de transformar uma necessidade real em produto publicado.",
+        productBullets: ["Android-first", "React Native + Expo", "SQLite offline-first", "Google Drive backup", "RevenueCat/PRO", "Publicado na Google Play"],
+        productLandingCta: "Ver landing do Riff Maker",
+        productCaseCta: "Ver case técnico",
         workLabel: "Projetos em produção",
         workTitle: "Interfaces reais, produtos publicados",
         workCta: "Ver case →",
         visualDev: "Interfaces",
         visualEdit: "Edições",
-        visualMetric: "27.9M+ views",
+        visualMetric: "+1M views",
         aboutLabel: "Sobre mim",
-        aboutText: (
-            <>
-                Sou <strong>Luan Medrado</strong>, desenvolvedor front-end e editor de vídeo baseado no Brasil.
-                <br />
-                Gosto de criar experiências digitais com o mesmo cuidado técnico e estético — seja uma interface em <strong>React</strong> ou uma narrativa construída na edição.
-                <br />
-                <br />
-                Este portfólio reúne esses dois mundos.
-                <br />
-                Explore por onde fizer mais sentido.
-            </>
-        ),
-        footerCopy: "© 2026 Luan Medrado — Todos os direitos reservados",
+        personaTitle: "Quem está por trás",
+        personaName: "Luan Medrado",
+        personaRole: "Frontend, UI e edição de vídeo",
+        personaBody: "Eu combino design, frontend e edição para criar sites, interfaces e vídeos com boa aparência, carregamento rápido e foco em resultado, de páginas que convertem a conteúdos que prendem atenção.",
+        personaProofs: ["+1M de views somadas em vídeos editados", "Criador do Riff Maker, app publicado na Google Play", "Sites, landing pages e interfaces reais"],
+        personaCta: "Falar comigo",
+        finalCtaLabel: "Contato",
+        finalCtaTitle: "Quer começar por onde?",
+        finalCtaText: "Me diga se você precisa de edição, site, landing page ou interface. Eu te respondo com o melhor próximo passo.",
+        finalCtaPrimary: "Falar sobre projeto",
+        finalCtaWhatsapp: "Chamar no WhatsApp",
+        finalCtaEmail: "Enviar e-mail",
+        finalCtaHint: "Resposta objetiva, sem compromisso.",
+        authorityLine: "Escolha o caminho mais direto para o que você precisa agora.",
+        footerCopy: "© 2026 Luan Medrado · Todos os direitos reservados",
     },
     en: {
-        riffmakerCta: "RiffMaker",
-        eyebrow: "Front-End Developer · Video Editor",
-        subtitle: "Interfaces that work. Videos that stay.",
-        bio: (
-            <>
-                Specialized in <strong>React / Next.js</strong> and video editing. I work with brands that take results seriously.
-            </>
-        ),
+        navWork: "Projects",
+        navAbout: "About",
+        navContact: "Contact",
+        brandName: "Luan Medrado",
+        brandDescriptor: "Websites • UI • Video Editing",
+        eyebrow: "Websites, interfaces and video editing",
+        heroTitleLines: ["Websites that convert.", "Videos that hold attention."],
+        subtitle: "Editing and pages built to turn attention into clients.",
+        heroScrollCue: "Discover more",
         cardDevTag: "Development",
         cardDevTitle: "Dev",
         cardDevDescription: "Fast, accessible and polished interfaces. From layout to deployment, with attention to every detail.",
@@ -83,46 +125,90 @@ const content = {
         cardEditTitle: "Editing",
         cardEditDescription: "Videos with rhythm, color and intention. Every cut tells a story - from raw footage to final delivery.",
         cardCta: "View projects →",
-        heroDevCta: "Dev",
-        heroEditCta: "Edit",
-        heroContactCta: "Contact me",
+        heroVideoCta: "Edit my videos",
+        heroWebCta: "Build my website or landing page",
         proof: [
-            ["3+", "production projects"],
-            ["3 years", "building digital products"],
-            ["Multilaser", "corporate experience"],
+            ["+1M", "views on edited videos"],
+            ["Products", "digital products and real interfaces"],
         ],
-        workLabel: "Production projects",
-        workTitle: "Real interfaces, published products",
+        servicesLabel: "Choose your path",
+        servicesTitle: "Two clear ways to start",
+        services: [
+            {
+                title: "Video editing",
+                text: "Stronger retention, better pacing and videos ready to publish.",
+                tags: ["YouTube", "Reels", "TikTok"],
+                cta: "View video work",
+                href: "/editing",
+                source: "home_path_card_video",
+                variant: "video",
+            },
+            {
+                title: "Websites and landing pages",
+                text: "Pages, interfaces and digital experiences focused on clarity, performance and conversion.",
+                tags: ["Landing pages", "Interfaces", "Apps"],
+                cta: "View web work",
+                href: "/dev",
+                source: "home_path_card_web",
+                variant: "web",
+            },
+        ],
+        pathsLabel: "Remote hiring paths",
+        pathsTitle: "Start from the proof that matters to you",
+        clientPathTitle: "International clients",
+        clientPathText: "Need a product page, interface, app flow or YouTube edit delivered with clear scope and premium finish?",
+        clientPrimaryCta: "Start a project",
+        clientSecondaryCta: "Request availability",
+        recruiterPathTitle: "Recruiters & startups",
+        recruiterPathText: "Evaluate shipped products, production systems, technical stack and remote collaboration style.",
+        recruiterDevCta: "View dev projects",
+        recruiterGithubCta: "View GitHub",
+        recruiterLinkedinCta: "View LinkedIn",
+        productLabel: "Shipped product",
+        productTitle: "Riff Maker",
+        productText: "A Google Play published mobile app for musicians to capture riffs, ideas and versions without losing creative flow. It demonstrates product thinking, mobile execution and ownership beyond portfolio mockups.",
+        productBullets: ["Android-first", "React Native + Expo", "SQLite offline-first", "Google Drive backup", "RevenueCat/PRO", "Published on Google Play"],
+        productLandingCta: "Open Google Play listing",
+        productCaseCta: "View product case",
+        workLabel: "Shipped proof",
+        workTitle: "Published products and production systems",
         workCta: "View case →",
         visualDev: "Interfaces",
         visualEdit: "Edits",
-        visualMetric: "27.9M+ views",
+        visualMetric: "+1M views",
         aboutLabel: "About me",
-        aboutText: (
-            <>
-                I am <strong>Luan Medrado</strong>, a front-end developer and video editor based in Brazil.
-                I like building work with both technical and visual care - whether that means a <strong>React</strong> interface
-                or a full <strong>Premiere</strong> edit sequence. This portfolio brings both worlds together.
-            </>
-        ),
-        footerCopy: "© 2026 Luan Medrado — All rights reserved",
+        personaTitle: "Who’s behind the work",
+        personaName: "Luan Medrado",
+        personaRole: "Frontend, UI and video editing",
+        personaBody: "I combine design, frontend and editing to create sharp websites, interfaces and videos with fast performance and a clear focus on results, from pages that convert to content that holds attention.",
+        personaProofs: ["1M+ total views on edited videos", "Creator of Riff Maker, an app published on Google Play", "Real websites, landing pages and interfaces"],
+        personaCta: "Work with me",
+        finalCtaLabel: "Contact",
+        finalCtaTitle: "Where do you want to start?",
+        finalCtaText: "Tell me if you need editing, a website, a landing page or an interface. I reply with the clearest next step.",
+        finalCtaPrimary: "Talk about a project",
+        finalCtaWhatsapp: "Open WhatsApp",
+        finalCtaEmail: "Send email",
+        finalCtaHint: "Clear reply, no commitment.",
+        authorityLine: "Choose the most direct path for what you need now.",
+        footerCopy: "© 2026 Luan Medrado · All rights reserved",
     },
 } as const;
 
 const contactCopy = {
     pt: {
         eyebrow: "Contato",
-        title: "Me conte sobre o projeto",
-        sub: "Respondo em ate 24h com proximos passos claros.",
+        title: "Me conte o que você precisa",
+        sub: "Pode ser edição, site, landing page ou interface. Respondo com o melhor próximo passo.",
         name: "Nome",
         namePlaceholder: "Seu nome",
         email: "Email",
         emailPlaceholder: "seu@email.com",
         projectType: "Tipo de projeto",
         projectTypePlaceholder: "Selecione...",
-        projectTypes: ["Site / landing page", "Dashboard / app", "Video social", "Ambos", "Outro"],
+        projectTypes: ["Edição de vídeo", "Site / landing page", "Interface web", "App / produto", "Outro"],
         message: "Mensagem",
-        messagePlaceholder: "Qual e o contexto? Pode ser curto.",
+        messagePlaceholder: "Me diga o objetivo, prazo e qualquer referência.",
         submit: "Enviar mensagem",
         sending: "Enviando...",
         successTitle: "Mensagem recebida.",
@@ -133,17 +219,17 @@ const contactCopy = {
     },
     en: {
         eyebrow: "Contact",
-        title: "Tell me about the project",
-        sub: "I reply within 24h with clear next steps.",
+        title: "Tell me what you need",
+        sub: "It can be editing, a website, a landing page or an interface. I reply with the clearest next step.",
         name: "Name",
         namePlaceholder: "Your name",
         email: "Email",
         emailPlaceholder: "you@email.com",
         projectType: "Project type",
         projectTypePlaceholder: "Select...",
-        projectTypes: ["Site / landing page", "Dashboard / app", "Social video", "Both", "Other"],
+        projectTypes: ["Video editing", "Website / landing page", "Web interface", "App / product", "Other"],
         message: "Message",
-        messagePlaceholder: "What is the context? Short is fine.",
+        messagePlaceholder: "Tell me the goal, deadline and any reference.",
         submit: "Send message",
         sending: "Sending...",
         successTitle: "Message received.",
@@ -156,10 +242,17 @@ const contactCopy = {
 
 type ContactStatus = "idle" | "loading" | "success" | "error";
 
+const WHATSAPP_NUMBER = "5511945764672";
+
 export default function HomePage() {
     const { lang } = useLanguage();
     const c = content[lang];
     const contact = contactCopy[lang];
+    const devHref = localizePath("/dev", lang);
+    const editingHref = localizePath("/editing", lang);
+    const riffCaseHref = localizePath("/projects/riffmaker", lang);
+    const revendedorHref = localizePath("/projects/revendedor-multilaser", lang);
+    const vidalarHref = localizePath("/projects/vidalar-saude", lang);
     const homeRef = useRef<HTMLElement | null>(null);
     const [contactOpen, setContactOpen] = useState(false);
     const [contactStatus, setContactStatus] = useState<ContactStatus>("idle");
@@ -253,14 +346,8 @@ export default function HomePage() {
         event.currentTarget.style.setProperty("--atmosphere-y", `${(-8 * normalizedY).toFixed(2)}px`);
         event.currentTarget.style.setProperty("--revendedor-x", `${(-18 * normalizedX).toFixed(2)}px`);
         event.currentTarget.style.setProperty("--revendedor-y", `${(-12 * normalizedY).toFixed(2)}px`);
-        event.currentTarget.style.setProperty("--notify-x", `${(-8 * normalizedX).toFixed(2)}px`);
-        event.currentTarget.style.setProperty("--notify-y", `${(8 * normalizedY).toFixed(2)}px`);
-        event.currentTarget.style.setProperty("--riff-x", `${(14 * normalizedX).toFixed(2)}px`);
-        event.currentTarget.style.setProperty("--riff-y", `${(-14 * normalizedY).toFixed(2)}px`);
         event.currentTarget.style.setProperty("--gospel-x", `${(20 * normalizedX).toFixed(2)}px`);
         event.currentTarget.style.setProperty("--gospel-y", `${(12 * normalizedY).toFixed(2)}px`);
-        event.currentTarget.style.setProperty("--youtube-x", `${(10 * normalizedX).toFixed(2)}px`);
-        event.currentTarget.style.setProperty("--youtube-y", `${(18 * normalizedY).toFixed(2)}px`);
         event.currentTarget.style.setProperty("--metric-x", `${(12 * normalizedX).toFixed(2)}px`);
         event.currentTarget.style.setProperty("--metric-y", `${(-10 * normalizedY).toFixed(2)}px`);
     };
@@ -278,14 +365,8 @@ export default function HomePage() {
             "--atmosphere-y",
             "--revendedor-x",
             "--revendedor-y",
-            "--notify-x",
-            "--notify-y",
-            "--riff-x",
-            "--riff-y",
             "--gospel-x",
             "--gospel-y",
-            "--youtube-x",
-            "--youtube-y",
             "--metric-x",
             "--metric-y",
         ].forEach((property) => home.style.setProperty(property, "0px"));
@@ -293,7 +374,6 @@ export default function HomePage() {
 
     useEffect(() => {
         document.body.classList.add("home-landing-active");
-
         const observer = new IntersectionObserver(
             (entries) => {
                 entries.forEach((entry) => {
@@ -323,15 +403,20 @@ export default function HomePage() {
         >
             <header className={styles.topbar}>
                 <div className={styles.navLeft}>
-                    <Link href="/riffmaker" className={styles.riffmakerCta} aria-label={c.riffmakerCta}>
-                        <span className={styles.riffmakerLogoMark} aria-hidden="true">
-                            <Image src="/riff-maker/icon.png" alt="" fill sizes="26px" className={styles.riffmakerLogoImage} />
-                        </span>
-                        <span className={styles.riffmakerLogoText}>{c.riffmakerCta}</span>
+                    <Link href={localizePath("/", lang)} className={styles.brandLockup} aria-label={c.brandName}>
+                        <span className={styles.brandName}>{c.brandName}</span>
+                        <span className={styles.brandDescriptor}>{c.brandDescriptor}</span>
                     </Link>
                 </div>
 
                 <div className={styles.navRight}>
+                    <nav className={styles.navLinks} aria-label={lang === "en" ? "Home sections" : "Seções da home"}>
+                        <Link href="#trabalhos">{c.navWork}</Link>
+                        <Link href="#sobre">{c.navAbout}</Link>
+                        <button type="button" className={styles.navContactButton} onClick={() => openContact("home_topbar")}>
+                            {c.navContact}
+                        </button>
+                    </nav>
                     <LanguageSwitch />
                 </div>
             </header>
@@ -397,69 +482,53 @@ export default function HomePage() {
                         <Image src="/revendedor-prints/revendedor.png" alt="" fill sizes="(min-width: 900px) 360px, 48vw" className={styles.visualImage} priority />
                         <span>{c.visualDev}</span>
                     </div>
-                    <div className={`${styles.visualPanel} ${styles.visualNotify}`}>
-                        <Image src="/notify-prints/dashboard.png" alt="" fill sizes="(min-width: 900px) 320px, 46vw" className={styles.visualImage} />
-                    </div>
-                    <div className={`${styles.visualPanel} ${styles.visualRiff}`}>
-                        <Image src="/riff-1.jpg" alt="" fill sizes="(min-width: 900px) 170px, 28vw" className={styles.visualImage} />
-                    </div>
                     <div className={`${styles.visualPanel} ${styles.visualGospel}`}>
                         <Image src="/guitarragospel.jpg" alt="" fill sizes="(min-width: 900px) 280px, 34vw" className={styles.visualImage} priority />
                         <span>{c.visualEdit}</span>
-                    </div>
-                    <div className={`${styles.visualPanel} ${styles.visualYoutube}`}>
-                        <Image src="/Switch Game List.jpg" alt="" fill sizes="(min-width: 900px) 150px, 28vw" className={styles.visualImage} />
                     </div>
                     <div className={styles.visualMetric}>{c.visualMetric}</div>
                 </div>
 
                 <p className={styles.heroEyebrow}>{c.eyebrow}</p>
-                <h1 className={styles.heroName} data-text="Luan Medrado">Luan Medrado</h1>
+                <h1 className={styles.heroName} data-text={c.heroTitleLines.join(" ")}>
+                    {c.heroTitleLines.map((line) => (
+                        <span className={styles.heroTitleLine} key={line}>{line}</span>
+                    ))}
+                </h1>
                 <p className={styles.heroSubtitle}>{c.subtitle}</p>
-                <p className={styles.heroBio}>{c.bio}</p>
 
-                <div className={styles.heroActions}>
+                <div className={styles.heroPathActions}>
                     <Link
-                        href="/editing"
-                        className={styles.heroSecondaryCta}
-                        onClick={() => trackEvent("navigation_click", { destination: "/editing", source: "home_hero_edit", lang })}
+                        href={editingHref}
+                        className={`${styles.heroPathCta} ${styles.heroPathCtaVideo}`}
+                        onClick={() => trackEvent("navigation_click", { destination: "/editing", source: "home_hero_video", lang })}
                     >
-                        <span className={styles.ctaIcon} aria-hidden="true">
+                        <span className={styles.heroPathIcon} aria-hidden="true">
                             <svg viewBox="0 0 24 24" fill="none">
-                                <rect x="4" y="6" width="16" height="12" rx="2" />
-                                <path d="m10 9 5 3-5 3V9Z" />
+                                <rect x="4.5" y="6.5" width="15" height="11" rx="2.5" />
+                                <path d="M10.2 9.4 14.8 12l-4.6 2.6V9.4Z" />
                             </svg>
                         </span>
-                        {c.heroEditCta}
+                        {c.heroVideoCta}
                     </Link>
                     <Link
-                        href="/dev"
-                        className={styles.heroPrimaryCta}
-                        onClick={() => trackEvent("navigation_click", { destination: "/dev", source: "home_hero_dev", lang })}
+                        href={devHref}
+                        className={`${styles.heroPathCta} ${styles.heroPathCtaWeb}`}
+                        onClick={() => trackEvent("navigation_click", { destination: "/dev", source: "home_hero_web", lang })}
                     >
-                        <span className={styles.ctaIcon} aria-hidden="true">
+                        <span className={styles.heroPathIcon} aria-hidden="true">
                             <svg viewBox="0 0 24 24" fill="none">
-                                <path d="m8 9-4 3 4 3" />
-                                <path d="m16 9 4 3-4 3" />
-                                <path d="m14 5-4 14" />
+                                <path d="M8.3 9.2 5 12l3.3 2.8" />
+                                <path d="M15.7 9.2 19 12l-3.3 2.8" />
+                                <path d="m13.4 6.2-2.8 11.6" />
                             </svg>
                         </span>
-                        {c.heroDevCta}
+                        {c.heroWebCta}
                     </Link>
                 </div>
-                <button type="button" className={styles.heroContactCta} onClick={() => openContact("home_hero")}>
-                    <span className={styles.heroContactIcon} aria-hidden="true">
-                        <svg viewBox="0 0 24 24" fill="none">
-                            <path d="M4 7.5A2.5 2.5 0 0 1 6.5 5h11A2.5 2.5 0 0 1 20 7.5v7A2.5 2.5 0 0 1 17.5 17H9l-4 3v-3.5A2.5 2.5 0 0 1 3 14V7.5Z" />
-                            <path d="m7 8 5 4 5-4" />
-                        </svg>
-                    </span>
-                    {c.heroContactCta}
-                </button>
-
-                <div className={styles.scrollHint} aria-hidden="true">
-                    <span>Scroll</span>
-                    <span className={styles.scrollLine} />
+                <div className={styles.heroScrollCue} aria-hidden="true">
+                    <span>{c.heroScrollCue}</span>
+                    <i />
                 </div>
 
             </section>
@@ -473,6 +542,95 @@ export default function HomePage() {
                 ))}
             </section>
 
+            <section className={`${styles.servicesSection} ${styles.reveal}`} data-reveal id="servicos">
+                <div className={styles.sectionHeading}>
+                    <p>{c.servicesLabel}</p>
+                    <h2>{c.servicesTitle}</h2>
+                </div>
+                <div className={styles.servicesGrid}>
+                    {c.services.map((service) => (
+                        <Link
+                            href={localizePath(service.href, lang)}
+                            className={`${styles.serviceCard} ${service.variant === "video" ? styles.serviceCardVideo : styles.serviceCardWeb}`}
+                            key={service.title}
+                            onClick={() => trackEvent("navigation_click", { destination: service.href, source: service.source, lang })}
+                        >
+                            <span className={styles.serviceIcon} aria-hidden="true">
+                                {service.variant === "video" ? (
+                                    <svg viewBox="0 0 24 24" fill="none">
+                                        <rect x="4" y="5.5" width="16" height="13" rx="3" />
+                                        <path d="M10.4 9.2 15.2 12l-4.8 2.8V9.2Z" />
+                                        <path d="M7 19.5h10" />
+                                    </svg>
+                                ) : (
+                                    <svg viewBox="0 0 24 24" fill="none">
+                                        <rect x="4" y="5" width="16" height="14" rx="3" />
+                                        <path d="M4 9h16" />
+                                        <path d="M8 13h3.4" />
+                                        <path d="M8 16h8" />
+                                        <path d="M14 13h2" />
+                                    </svg>
+                                )}
+                            </span>
+                            <h3>{service.title}</h3>
+                            <p>{service.text}</p>
+                            <div className={styles.serviceTags}>
+                                {service.tags.map((tag) => (
+                                    <span key={tag}>{tag}</span>
+                                ))}
+                            </div>
+                            <span className={styles.serviceCta}>
+                                {service.cta} <span>→</span>
+                            </span>
+                        </Link>
+                    ))}
+                </div>
+            </section>
+
+            <section className={`${styles.productFeature} ${styles.reveal}`} data-reveal>
+                <Link
+                    href="/riffmaker"
+                    className={`${styles.productVisual} ${styles.productVisualLink}`}
+                    aria-label={lang === "en" ? "Open Riff Maker landing page" : "Abrir landing page do Riff Maker"}
+                    onClick={() => trackEvent("project_click", { project: "Riff Maker", source: "home_product_visual", lang })}
+                >
+                    <div className={styles.productDevice} aria-hidden="true">
+                        <span className={styles.productDeviceNotch} />
+                        <span className={styles.productDeviceButton} />
+                        <div className={styles.productCarousel}>
+                            {["/riff-1.jpg", "/riff-2.jpg", "/riff-3.jpg"].map((src, index) => (
+                                <Image
+                                    key={src}
+                                    src={src}
+                                    alt=""
+                                    fill
+                                    sizes="(min-width: 900px) 220px, 190px"
+                                    className={`${styles.productSlide} ${styles[`productSlide${index + 1}` as keyof typeof styles]}`}
+                                />
+                            ))}
+                        </div>
+                    </div>
+                </Link>
+                <div className={styles.productCopy}>
+                    <p>{c.productLabel}</p>
+                    <h2>{c.productTitle}</h2>
+                    <span>{c.productText}</span>
+                    <div className={styles.productBullets}>
+                        {c.productBullets.map((item) => (
+                            <strong key={item}>{item}</strong>
+                        ))}
+                    </div>
+                    <div className={styles.productActions}>
+                        {lang === "en" ? (
+                            <a href="https://play.google.com/store/apps/details?id=com.oluanmedrado.riffmaker" target="_blank" rel="noreferrer" onClick={() => trackEvent("project_click", { project: "Riff Maker", source: "home_product_play_store", lang })}>{c.productLandingCta}</a>
+                        ) : (
+                            <Link href="/riffmaker" onClick={() => trackEvent("project_click", { project: "Riff Maker", source: "home_product_landing", lang })}>{c.productLandingCta}</Link>
+                        )}
+                        <Link href={riffCaseHref} className={styles.productSecondaryLink} onClick={() => trackEvent("project_click", { project: "Riff Maker", source: "home_product_case", lang })}>{c.productCaseCta}</Link>
+                    </div>
+                </div>
+            </section>
+
             <section className={`${styles.workPreview} ${styles.reveal}`} data-reveal id="trabalhos">
                 <div className={styles.sectionHeading}>
                     <p>{c.workLabel}</p>
@@ -480,7 +638,7 @@ export default function HomePage() {
                 </div>
 
                 <div className={styles.workShowcase}>
-                    <Link href="/riffmaker" className={`${styles.workCard} ${styles.workCardFeatured}`} onClick={() => trackEvent("project_click", { project: "RiffMaker", source: "home_preview", lang })}>
+                    <Link href={lang === "en" ? riffCaseHref : "/riffmaker"} className={`${styles.workCard} ${styles.workCardFeatured}`} onClick={() => trackEvent("project_click", { project: "RiffMaker", source: "home_preview", lang })}>
                         <div className={styles.workRiffSplash} aria-hidden="true">
                             <Image src="/riff-maker/riff.png" alt="" width={1024} height={1024} className={styles.workRiffLogo} />
                         </div>
@@ -497,7 +655,7 @@ export default function HomePage() {
                     </Link>
 
                     <div className={styles.workStack}>
-                        <Link href="/projects/revendedor-multilaser" className={`${styles.workCard} ${styles.workCardCompact}`} onClick={() => trackEvent("project_click", { project: "Portal Multilaser", source: "home_preview", lang })}>
+                        <Link href={revendedorHref} className={`${styles.workCard} ${styles.workCardCompact}`} onClick={() => trackEvent("project_click", { project: "Portal Multilaser", source: "home_preview", lang })}>
                             <Image src="/revendedor-prints/revendedor.png" alt="" fill sizes="(min-width: 900px) 30vw, 92vw" className={styles.workImage} />
                             <div className={styles.workCardBody}>
                                 <span>Grupo Multilaser</span>
@@ -505,7 +663,7 @@ export default function HomePage() {
                                 <em>{c.workCta}</em>
                             </div>
                         </Link>
-                        <Link href="/dev#vidalarsec" className={`${styles.workCard} ${styles.workCardCompact}`} onClick={() => trackEvent("project_click", { project: "Vida Lar", source: "home_preview", lang })}>
+                        <Link href={vidalarHref} className={`${styles.workCard} ${styles.workCardCompact}`} onClick={() => trackEvent("project_click", { project: "Vida Lar", source: "home_preview", lang })}>
                             <Image src="/vidalar-prints/depois.png" alt="" fill sizes="(min-width: 900px) 30vw, 92vw" className={styles.workImage} />
                             <div className={styles.workCardBody}>
                                 <span>Vida Lar</span>
@@ -518,8 +676,54 @@ export default function HomePage() {
             </section>
 
             <section className={`${styles.aboutStrip} ${styles.reveal}`} data-reveal id="sobre">
-                <p className={styles.aboutLabel}>{c.aboutLabel}</p>
-                <p className={styles.aboutText}>{c.aboutText}</p>
+                <article className={styles.personaCard}>
+                    <div className={styles.personaPhotoWrap} aria-hidden="true">
+                        <Image
+                            src="/profile-pic.png"
+                            alt=""
+                            fill
+                            sizes="(max-width: 768px) 112px, 148px"
+                            className={styles.personaPhoto}
+                        />
+                    </div>
+                    <div className={styles.personaCopy}>
+                        <p className={styles.personaSectionLabel}>{c.aboutLabel}</p>
+                        <p className={styles.personaEyebrow}>{c.personaTitle}</p>
+                        <h2>{c.personaName}</h2>
+                        <strong>{c.personaRole}</strong>
+                        <span>{c.personaBody}</span>
+                        <div className={styles.personaProofs}>
+                            {c.personaProofs.map((proof) => (
+                                <em key={proof}>{proof}</em>
+                            ))}
+                        </div>
+                        <button type="button" onClick={() => openContact("home_about_persona")}>
+                            {c.personaCta}
+                        </button>
+                    </div>
+                </article>
+            </section>
+
+            <section className={`${styles.finalContact} ${styles.reveal}`} data-reveal id="contato">
+                <p>{c.finalCtaLabel}</p>
+                <h2>{c.finalCtaTitle}</h2>
+                <span>{c.finalCtaText}</span>
+                <div className={styles.finalContactActions}>
+                    <button type="button" onClick={() => openContact("home_final_cta")}>{c.finalCtaPrimary}</button>
+                    <a
+                        href={`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(lang === "en" ? "Hi Luan! I saw your portfolio and want to talk about a project." : "Oi Luan! Vi seu portfólio e quero falar sobre um projeto.")}`}
+                        target="_blank"
+                        rel="noreferrer"
+                        onClick={() => trackEvent("whatsapp_click", { source: "home_final_cta", lang })}
+                    >
+                        {c.finalCtaWhatsapp}
+                    </a>
+                    <a href="mailto:luanmedradooliveira@gmail.com" onClick={() => trackEvent("email_click", { source: "home_final_cta", lang })}>
+                        {c.finalCtaEmail}
+                    </a>
+                </div>
+                <em>{c.finalCtaHint}</em>
+                <small>{c.authorityLine}</small>
             </section>
 
             <footer className={`${styles.footer} ${styles.reveal}`} data-reveal>

@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { useLanguage } from "../context/LanguageContext";
 import { useMode } from "../context/ModeContext";
+import { stripLocalePrefix } from "../lib/locale";
 import { trackEvent } from "../lib/analytics";
 
 const STORAGE_KEY = "luan-contact-intent-dismissed";
@@ -18,11 +19,13 @@ export default function ContactIntentBar() {
         typeof window === "undefined" ? null : window.localStorage.getItem(STORAGE_KEY) === "true",
     );
 
-    const isRiffmaker = pathname?.startsWith("/riffmaker");
-    const target = pathname === "/" ? "/dev#contato" : "#contato";
+    const normalizedPathname = stripLocalePrefix(pathname ?? "/");
+    const isRiffmaker = normalizedPathname.startsWith("/riffmaker");
+    const isPortfolioRoute = normalizedPathname === "/dev" || normalizedPathname === "/editing";
+    const target = normalizedPathname === "/" ? "#servicos" : "#contato";
 
     useEffect(() => {
-        if (isRiffmaker || dismissed !== false) return;
+        if (isRiffmaker || isPortfolioRoute || dismissed !== false) return;
 
         const handleScroll = () => {
             const contact = document.getElementById("contato");
@@ -35,7 +38,7 @@ export default function ContactIntentBar() {
                 }
             }
 
-            if (pathname === "/") {
+            if (normalizedPathname === "/") {
                 const work = document.getElementById("trabalhos");
                 if (work) {
                     const rect = work.getBoundingClientRect();
@@ -51,7 +54,7 @@ export default function ContactIntentBar() {
             if (maxScroll <= 0) return;
 
             const depth = window.scrollY / maxScroll;
-            const threshold = pathname === "/" ? 0.65 : 0.55;
+            const threshold = normalizedPathname === "/" ? 0.65 : 0.55;
             if (depth >= threshold) {
                 setVisible((current) => {
                     if (!current) {
@@ -66,16 +69,16 @@ export default function ContactIntentBar() {
         window.addEventListener("scroll", handleScroll, { passive: true });
 
         return () => window.removeEventListener("scroll", handleScroll);
-    }, [dismissed, isRiffmaker, lang, mode, pathname]);
+    }, [dismissed, isPortfolioRoute, isRiffmaker, lang, mode, normalizedPathname]);
 
-    if (isRiffmaker || dismissed !== false || !visible) {
+    if (isRiffmaker || isPortfolioRoute || dismissed !== false || !visible) {
         return null;
     }
 
     const copy =
         lang === "en"
-            ? { text: "Like what you saw?", cta: "Talk to me" }
-            : { text: "Gostou do que viu?", cta: "Fala comigo" };
+            ? { text: "Where do you want to start?", cta: "Choose a path" }
+            : { text: "Por onde você quer começar?", cta: "Escolher caminho" };
 
     return (
         <div className="contact-intent-bar" role="region" aria-label={lang === "en" ? "Contact shortcut" : "Atalho de contato"}>

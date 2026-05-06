@@ -34,17 +34,24 @@ const dmSans = DM_Sans({
   weight: ["300", "400"],
 });
 
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? "https://luanmedrado.dev";
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? "https://oluanmedrado.com";
 
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),
   title: {
-    default: "Luan Medrado — Desenvolvedor & Criativo Digital",
+    default: "Luan Medrado | Sites, Interfaces e Edição de Vídeo",
     template: "%s | Luan Medrado",
   },
   description:
-    "Desenvolvedor front-end e editor de vídeo baseado no Brasil. Criando interfaces rápidas, acessíveis e bem pensadas — do conceito ao deploy.",
-  keywords: ["desenvolvedor front-end", "editor de vídeo", "React", "Next.js", "TypeScript", "portfólio", "UI/UX", "front-end developer"],
+    "Sites que convertem. Vídeos que prendem atenção. Edição e páginas pensadas para transformar atenção em cliente.",
+  keywords: ["sites que convertem", "edição de vídeo", "landing page", "React", "Next.js", "TypeScript", "portfólio", "UI/UX", "front-end developer"],
+  alternates: {
+    canonical: BASE_URL,
+    languages: {
+      "pt-BR": BASE_URL,
+      "en-US": `${BASE_URL}/en`,
+    },
+  },
   authors: [{ name: "Luan Medrado", url: BASE_URL }],
   creator: "Luan Medrado",
   openGraph: {
@@ -53,23 +60,23 @@ export const metadata: Metadata = {
     alternateLocale: "en_US",
     url: BASE_URL,
     siteName: "Luan Medrado",
-    title: "Luan Medrado — Desenvolvedor & Criativo Digital",
+    title: "Luan Medrado | Sites, Interfaces e Edição de Vídeo",
     description:
-      "Desenvolvedor front-end e editor de vídeo baseado no Brasil. Criando interfaces rápidas, acessíveis e bem pensadas — do conceito ao deploy.",
+      "Sites que convertem. Vídeos que prendem atenção. Edição e páginas pensadas para transformar atenção em cliente.",
     images: [
       {
         url: "/opengraph-image",
         width: 1200,
         height: 630,
-        alt: "Luan Medrado — Desenvolvedor & Criativo Digital",
+        alt: "Luan Medrado | Sites, Interfaces e Edição de Vídeo",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Luan Medrado — Desenvolvedor & Criativo Digital",
+    title: "Luan Medrado | Sites, Interfaces e Edição de Vídeo",
     description:
-      "Desenvolvedor front-end e editor de vídeo baseado no Brasil. Criando interfaces rápidas, acessíveis e bem pensadas — do conceito ao deploy.",
+      "Sites que convertem. Vídeos que prendem atenção. Edição e páginas pensadas para transformar atenção em cliente.",
     images: ["/opengraph-image"],
   },
   robots: {
@@ -91,7 +98,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="pt-BR">
+    <html lang="pt-BR" suppressHydrationWarning>
       <body
         className={`${bebas.variable} ${syne.variable} ${dmMono.variable} ${dmSans.variable}`}
       >

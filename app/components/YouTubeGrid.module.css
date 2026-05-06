@@ -6,11 +6,11 @@
 }
 
 .title {
-  font-family: var(--font-bebas), sans-serif;
-  font-size: clamp(36px, 5vw, 64px);
-  font-weight: 400;
-  letter-spacing: 0.01em;
-  line-height: 1;
+  font-family: var(--font-syne), sans-serif;
+  font-size: clamp(28px, 4vw, 48px);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.08;
   margin-bottom: 40px;
   color: #f5f4f0;
 }
@@ -20,11 +20,13 @@
 }
 
 .channels {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 12px;
-  flex-wrap: wrap;
+}
+
+.dotDivider {
+  display: none;
 }
 
 .channel {
@@ -32,9 +34,15 @@
   flex-direction: column;
   align-items: center;
   gap: 0;
-  width: 108px;
+  min-height: 236px;
+  width: 100%;
+  padding: 18px;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 8px;
+  background: rgba(255,255,255,0.028);
   cursor: pointer;
   text-decoration: none;
+  text-align: center;
   opacity: 0;
   transform: translateY(14px);
   transition: opacity 0.4s ease, transform 0.4s ease;
@@ -77,6 +85,7 @@
 
 .viewsBadge {
   margin-top: -10px;
+  align-self: center;
   background: #ff4444;
   color: #fff;
   font-family: var(--font-syne), sans-serif;
@@ -107,17 +116,36 @@
 }
 
 .channelName {
-  margin-top: 8px;
-  font-size: 11px;
-  color: rgba(255, 255, 255, 0.45);
-  font-weight: 500;
+  margin-top: 14px;
+  font-size: 15px;
+  color: rgba(255, 255, 255, 0.82);
+  font-weight: 700;
   letter-spacing: 0.02em;
   width: 100%;
-  min-height: 28px;
   line-height: 1.25;
   white-space: normal;
   overflow-wrap: anywhere;
   transition: color 0.25s ease;
+}
+
+.channelMeta,
+.channelRole {
+  display: block;
+  width: 100%;
+  margin-top: 8px;
+  font-size: 11px;
+  line-height: 1.35;
+}
+
+.channelMeta {
+  color: #ff7777;
+  font-family: var(--font-dm-mono), monospace;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.channelRole {
+  color: rgba(255, 255, 255, 0.48);
 }
 
 .avatarArrow {
@@ -159,15 +187,6 @@
   background: #cc2222;
 }
 
-.dotDivider {
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.12);
-  flex-shrink: 0;
-  margin-bottom: 22px;
-}
-
 .totals {
   display: flex;
   justify-content: center;
@@ -205,9 +224,23 @@
   align-self: center;
 }
 
-@media (max-width: 640px) {
+@media (max-width: 960px) and (min-width: 641px) {
+  .channels {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
   .channel {
-    width: 100px;
+    min-height: auto;
+  }
+}
+
+@media (max-width: 640px) {
+  .channels {
+    grid-template-columns: 1fr;
+  }
+
+  .channel {
+    min-height: auto;
   }
 
   .totals {

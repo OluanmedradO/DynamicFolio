@@ -5,7 +5,6 @@ import Navbar from "../components/Navbar";
 import Projects from "../components/Projects";
 import ScrollObserver from "../components/ScrollObserver";
 import Sobre from "../components/Sobre";
-import TechStrip from "../components/TechStrip";
 import VidaLar from "../components/VidaLar";
 import styles from "./PortfolioPage.module.css";
 
@@ -16,7 +15,6 @@ export default function PortfolioPage() {
             <Navbar />
             <div className={styles.content}>
                 <Hero />
-                <TechStrip />
                 <Sobre />
                 <Projects />
                 <VidaLar />

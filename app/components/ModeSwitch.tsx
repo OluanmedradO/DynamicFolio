@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 import { useMode } from "../context/ModeContext";
 import { trackEvent } from "../lib/analytics";
 import { usePathname } from "next/navigation";
+import { stripLocalePrefix } from "../lib/locale";
 
 function DevIcon() {
     return (
@@ -28,7 +29,9 @@ export default function ModeSwitch() {
     const pathname = usePathname();
     const { mode, setMode } = useMode();
     const switchRef = useRef<HTMLDivElement | null>(null);
-    const isRiffmakerRoute = pathname?.startsWith("/riffmaker") ?? false;
+    const normalizedPathname = stripLocalePrefix(pathname ?? "/");
+    const isRiffmakerRoute = normalizedPathname.startsWith("/riffmaker");
+    const isDevPortfolioRoute = normalizedPathname === "/dev";
 
     const handleModeChange = (nextMode: "dev" | "editor") => {
         if (mode === nextMode) {
@@ -52,6 +55,7 @@ export default function ModeSwitch() {
         const updateSwitchState = () => {
             const switchElement = switchRef.current;
             const aboutSection = document.getElementById("sobre");
+            const projectsSection = document.getElementById("projetos");
 
             if (!switchElement || !aboutSection) {
                 return;
@@ -63,9 +67,12 @@ export default function ModeSwitch() {
             const sectionCenter = rect.top + rect.height / 2;
             const viewportCenter = viewportHeight / 2;
             const isAboutActive = Math.abs(sectionCenter - viewportCenter) <= Math.min(120, viewportHeight * 0.16);
+            const projectsRect = projectsSection?.getBoundingClientRect();
+            const isPastProjectsStart = Boolean(isDevPortfolioRoute && projectsRect && projectsRect.top < viewportHeight * 0.72);
 
             switchElement.classList.toggle("collapsed", isAroundAboutSection);
             switchElement.classList.toggle("minimal", isAboutActive);
+            switchElement.classList.toggle("is-past-projects", isPastProjectsStart);
         };
 
         updateSwitchState();
@@ -76,7 +83,7 @@ export default function ModeSwitch() {
             window.removeEventListener("scroll", updateSwitchState);
             window.removeEventListener("resize", updateSwitchState);
         };
-    }, [isRiffmakerRoute]);
+    }, [isDevPortfolioRoute, isRiffmakerRoute]);
 
     if (isRiffmakerRoute) {
         return null;

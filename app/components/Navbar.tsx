@@ -5,6 +5,7 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useEffect, useState, useCallback } from "react";
 import { useLanguage } from "../context/LanguageContext";
+import { localizePath, stripLocalePrefix } from "../lib/locale";
 import LanguageSwitch from "./LanguageSwitch";
 
 export default function Navbar() {
@@ -13,16 +14,28 @@ export default function Navbar() {
     const { lang } = useLanguage();
     const pathname = usePathname();
 
-    const normalizedPath = pathname.replace(/\/+$/, "") || "/";
+    const normalizedPath = stripLocalePrefix(pathname).replace(/\/+$/, "") || "/";
     const isHomeRoute = normalizedPath === "/";
+    const isDevRoute = normalizedPath === "/dev";
+    const isEditingRoute = normalizedPath === "/editing" || normalizedPath === "/edit";
     const showHomeButton = normalizedPath === "/dev" || normalizedPath === "/editing" || normalizedPath === "/edit";
-    const logoSuffix =
-        normalizedPath === "/dev"
-            ? ".dev"
-            : normalizedPath === "/edit" || normalizedPath === "/editing"
-              ? ".edit"
-              : null;
-
+    const logoSuffix = isDevRoute ? "/dev" : isEditingRoute ? "/editing" : ".com";
+    const editingReturnStyle = isEditingRoute
+        ? {
+            top: 22,
+            left: "clamp(18px, 3vw, 48px)",
+            right: "clamp(18px, 3vw, 48px)",
+            width: "auto",
+            minHeight: 56,
+            padding: "0 18px",
+            border: "1px solid rgba(255, 255, 255, 0.075)",
+            borderRadius: 999,
+            background: "rgba(8, 5, 14, 0.64)",
+            boxShadow: "0 18px 60px rgba(0, 0, 0, 0.22)",
+            backdropFilter: "blur(20px)",
+            WebkitBackdropFilter: "blur(20px)",
+        }
+        : undefined;
     const labels =
         lang === "en"
             ? { home: "Home", about: "About", projects: "Projects", riffmaker: "RiffMaker", backHome: "Home" }
@@ -71,12 +84,12 @@ export default function Navbar() {
 
     return (
         <>
-            <nav id="topnav" className={scrolled ? "scrolled" : ""}>
+            <nav id="topnav" className={`${scrolled ? "scrolled" : ""}${showHomeButton ? " nav-return-route" : ""}`} style={editingReturnStyle}>
                 <div className="nav-left">
                     <ul className="nav-links">
                         {showHomeButton ? (
                             <li>
-                                <Link href="/" className="nav-home-link" aria-label={labels.backHome}>
+                                <Link href={localizePath("/", lang)} className="nav-home-link" aria-label={labels.backHome}>
                                     <span aria-hidden>{"←"}</span>
                                     <span>{labels.backHome}</span>
                                 </Link>
@@ -96,7 +109,7 @@ export default function Navbar() {
                 </div>
 
                 {showHomeButton ? (
-                    <Link href="/" className="nav-home-btn-mobile" aria-label={labels.backHome}>
+                    <Link href={localizePath("/", lang)} className="nav-home-btn-mobile" aria-label={labels.backHome}>
                         <span aria-hidden>{"←"}</span>
                     </Link>
                 ) : (
@@ -114,7 +127,7 @@ export default function Navbar() {
 
                 <Link href="#hero" className="nav-logo" onClick={handleSectionClick("hero")}>
                     oluanmedrado
-                    <span>{logoSuffix ?? "."}</span>
+                    <span>{logoSuffix}</span>
                 </Link>
 
                 <div className="nav-right">

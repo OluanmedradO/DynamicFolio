@@ -58,7 +58,7 @@ const AfterEffectsLogo = () => (
 );
 
 const DaVinciLogo = () => (
-    /* 3 teardrops em triângulo + anel arco-íris — logo real do DaVinci Resolve */
+    /* 3 teardrops em triângulo + anel arco-íris, logo real do DaVinci Resolve */
     <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true">
         <defs>
             <linearGradient id="dvRing" x1="0" y1="1" x2="1" y2="0">
@@ -75,11 +75,11 @@ const DaVinciLogo = () => (
         <circle cx="9" cy="9" r="9" fill="#252E3A"/>
         {/* Anel arco-íris */}
         <circle cx="9" cy="9" r="7.8" fill="none" stroke="url(#dvRing)" strokeWidth="2"/>
-        {/* Teardrop topo — cyan (tip aponta para centro) */}
+        {/* Teardrop topo, cyan (tip aponta para centro) */}
         <path d="M9,8 C10.5,7.5 11.5,6 11.5,4 A2.5,2.5 0 0,0 6.5,4 C6.5,6 7.5,7.5 9,8 Z" fill="#4DC8E8"/>
-        {/* Teardrop inferior-direito — rosa (120° CW) */}
+        {/* Teardrop inferior-direito, rosa (120° CW) */}
         <path d="M9,8 C10.5,7.5 11.5,6 11.5,4 A2.5,2.5 0 0,0 6.5,4 C6.5,6 7.5,7.5 9,8 Z" fill="#E86070" transform="rotate(120,9,9)"/>
-        {/* Teardrop inferior-esquerdo — verde-limão (240° CW) */}
+        {/* Teardrop inferior-esquerdo, verde-limão (240° CW) */}
         <path d="M9,8 C10.5,7.5 11.5,6 11.5,4 A2.5,2.5 0 0,0 6.5,4 C6.5,6 7.5,7.5 9,8 Z" fill="#A8CC20" transform="rotate(240,9,9)"/>
     </svg>
 );
@@ -130,53 +130,82 @@ const editorSkills = [
     { icon: <MotionIcon />, name: "Motion Design" },
 ];
 
+const devProof = {
+    pt: ["Remoto desde o início", "Entregas em etapas claras", "Fuso UTC-3 (Brasil)", "Clientes no Brasil e exterior"],
+    en: ["Remote-first workflow", "Staged delivery", "UTC-3 (Brazil)", "Clients in Brazil and abroad"],
+};
+
 const modeContent = {
     pt: {
         aboutLabel: "Sobre mim",
         dev: {
-            title: (<>Código com <em>intenção</em> e design com <em>propósito</em></>),
+            title: (<>Front-end com visão de produto e acabamento de marca</>),
             text: (
                 <>
-                    Gosto de transformar ideias em interfaces claras, rápidas e agradáveis de usar.
+                    Construo interfaces para negócios digitais que precisam parecer sólidos desde o primeiro contato.
                     <br />
-                    Trabalho principalmente com React e Next.js, sempre buscando equilíbrio entre design, performance e experiência do usuário.
+                    Trabalho com React, Next.js, TypeScript, React Native e UI/UX, conectando visual, código e decisões de produto.
                 </>
             ),
             skills: devSkills,
+            stackGroups: [
+                ["Front-end", "React, Next.js, TypeScript, CSS/Tailwind"],
+                ["Mobile", "React Native, Expo, SQLite, publicação Android"],
+                ["Produto/UI", "Figma, UI/UX, design system, responsividade"],
+                ["Integrações", "APIs, Node.js, analytics, deploy"],
+            ],
         },
         editor: {
-            title: (<>Narrativa com <em>ritmo</em> e imagem com <em>emoção</em></>),
+            title: (<>Edição com <em>ritmo</em>, retenção e acabamento</>),
             text: (
                 <>
-                    Cada corte é uma decisão. Cada transição, uma intenção. <br />
-                    Sempre buscando dar vida à visão de cada cliente com um toque único e envolvente.
+                    Edito vídeos para YouTube e social com foco em narrativa visual, retenção e entrega pronta para publicar. <br />
+                    O objetivo é fazer o conteúdo parecer profissional sem perder o estilo do canal.
                 </>
             ),
             skills: editorSkills,
+            stackGroups: [
+                ["Edição", "Premiere Pro, DaVinci Resolve, ritmo narrativo"],
+                ["Motion", "After Effects, grafismos, identidade visual"],
+                ["Som", "Sound design, trilha, efeitos e mix básica"],
+                ["Entrega", "YouTube, social, formatos e revisão final"],
+            ],
         },
     },
     en: {
         aboutLabel: "About me",
         dev: {
-            title: (<>Code with <em>intention</em> and design with <em>purpose</em></>),
+            title: (<>Frontend with product sense and polished delivery</>),
             text: (
                 <>
-                    I like turning ideas into clear, fast and enjoyable interfaces.
+                    I build for remote teams that need evidence, not buzzwords: shipped products, production systems and clear product decisions.
                     <br />
-                    I work mainly with React and Next.js, always balancing design, performance and user experience.
+                    My stack is React, Next.js, TypeScript and React Native, with enough design and product ownership to move from scope to shipped work.
                 </>
             ),
             skills: devSkills,
+            stackGroups: [
+                ["Front-end", "React, Next.js, TypeScript, CSS/Tailwind"],
+                ["Mobile", "React Native, Expo, SQLite, Android publishing"],
+                ["Product/UI", "Figma, UI/UX, design system, responsive layout"],
+                ["Integrations", "APIs, Node.js, analytics, deploy"],
+            ],
         },
         editor: {
-            title: (<>Narrative with <em>rhythm</em> and image with <em>emotion</em></>),
+            title: (<>Editing with <em>retention</em>, rhythm and finish</>),
             text: (
                 <>
-                    Every cut is a decision. Every transition is intentional. <br />
-                    Always focused on bringing each client vision to life with a unique and engaging touch.
+                    I edit YouTube and social videos with structure, retention, visual rhythm and ready-to-publish delivery. <br />
+                    The goal is to keep the channel style intact while improving pacing, clarity and perceived production value.
                 </>
             ),
             skills: editorSkills,
+            stackGroups: [
+                ["Editing", "Premiere Pro, DaVinci Resolve, narrative rhythm"],
+                ["Motion", "After Effects, graphics, visual identity"],
+                ["Sound", "Sound design, music, effects and basic mix"],
+                ["Delivery", "YouTube, social, formats and final review"],
+            ],
         },
     },
 };
@@ -192,6 +221,13 @@ export default function Sobre() {
                 <p className="about-label">{modeContent[lang].aboutLabel}</p>
                 <h2 key={`title-${mode}`} className="about-title mode-fade">{c.title}</h2>
                 <p key={`text-${mode}`} className="about-text mode-fade">{c.text}</p>
+                {mode === "dev" && (
+                    <div className="about-proof-strip" aria-label={lang === "en" ? "Remote collaboration proof" : "Provas de colaboração remota"}>
+                        {devProof[lang].map((item) => (
+                            <span key={item}>{item}</span>
+                        ))}
+                    </div>
+                )}
 
             </div>
             <div className="about-right" id="skills">
@@ -200,6 +236,14 @@ export default function Sobre() {
                         <div key={i} className="skill-pill">
                             <span className="skill-pill-icon">{skill.icon}</span>
                             <span className="skill-pill-name">{skill.name}</span>
+                        </div>
+                    ))}
+                </div>
+                <div className="stack-groups" aria-label={lang === "en" ? "Organized stack" : "Stack organizada"}>
+                    {c.stackGroups.map(([label, value]) => (
+                        <div className="stack-group" key={label}>
+                            <strong>{label}</strong>
+                            <span>{value}</span>
                         </div>
                     ))}
                 </div>

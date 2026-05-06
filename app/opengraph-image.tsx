@@ -1,7 +1,7 @@
 import { ImageResponse } from "next/og";
 
 export const runtime = "edge";
-export const alt = "Luan Medrado — Desenvolvedor & Criativo Digital";
+export const alt = "Luan Medrado - Frontend Developer, Product Builder and Video Editor";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -58,7 +58,7 @@ export default function OGImage() {
                         fontWeight: 400,
                     }}
                 >
-                    desenvolvedor & criativo digital
+                    frontend · product builder · video editor
                 </p>
 
                 {/* Name */}
@@ -88,7 +88,7 @@ export default function OGImage() {
                         lineHeight: 1.6,
                     }}
                 >
-                    React · Next.js · TypeScript · Video Editing
+                    Shipped products, production interfaces and high-retention video work.
                 </p>
 
                 {/* Domain */}
@@ -101,7 +101,7 @@ export default function OGImage() {
                         fontFamily: "monospace",
                     }}
                 >
-                    luanmedrado.dev
+                    oluanmedrado.com
                 </p>
             </div>
         ),

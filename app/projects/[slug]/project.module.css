@@ -172,12 +172,20 @@
 .contentGrid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 64px;
+  gap: 28px;
   margin-bottom: 64px;
 }
 @media (max-width: 700px) { .contentGrid { grid-template-columns: 1fr; gap: 40px; } }
 
-.section { display: flex; flex-direction: column; gap: 16px; }
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 24px;
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 8px;
+  background: rgba(255,255,255,0.025);
+}
 
 .sectionLabel {
   font-family: var(--font-dm-mono), monospace;
@@ -215,9 +223,63 @@
 }
 
 .highlights li::before {
-  content: "—";
+  content: "-";
   color: #e03030;
   flex-shrink: 0;
+}
+
+.caseNarrative {
+  display: grid;
+  gap: 18px;
+  margin-bottom: 34px;
+}
+
+.stackList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.stackList span {
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 999px;
+  padding: 7px 12px;
+  color: #aaa;
+  background: rgba(255,255,255,0.035);
+  font-family: var(--font-dm-mono), monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.caseLinks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 42px;
+}
+
+.caseLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 42px;
+  padding: 0 16px;
+  border: 1px solid rgba(224,48,48,0.38);
+  border-radius: 999px;
+  color: #fff;
+  background: rgba(224,48,48,0.1);
+  font-family: var(--font-syne), sans-serif;
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.caseLink:hover {
+  border-color: rgba(224,48,48,0.74);
+  background: rgba(224,48,48,0.18);
 }
 
 /* Gallery */
@@ -240,6 +302,35 @@
   transition: transform 0.4s;
 }
 .galleryItem:hover .galleryImg { transform: scale(1.03); }
+
+/* Video section (VidaLar case) */
+.videoSection {
+  margin-top: 48px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.videoSectionTitle {
+  font-family: var(--font-syne), sans-serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--white, #f0f0f0);
+  line-height: 1.4;
+  max-width: 600px;
+}
+
+.videoFrame {
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.08);
+  background: #000;
+}
+.videoFrame video {
+  display: block;
+  width: 100%;
+  height: auto;
+}
 
 /* Footer */
 .footer {

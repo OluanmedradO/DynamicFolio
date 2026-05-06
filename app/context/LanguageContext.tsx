@@ -1,6 +1,8 @@
 "use client";
 
 import { createContext, ReactNode, useContext, useEffect, useMemo, useState } from "react";
+import { usePathname } from "next/navigation";
+import { getLanguageFromPathname } from "../lib/locale";
 
 export type Language = "pt" | "en";
 
@@ -19,19 +21,13 @@ const LanguageContext = createContext<LanguageContextType>({
 const STORAGE_KEY = "portfolio-lang";
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
-    const [lang, setLangState] = useState<Language>("pt");
+    const pathname = usePathname();
+    const routeLang = getLanguageFromPathname(pathname);
+    const [lang, setLangState] = useState<Language>(() => routeLang);
 
     useEffect(() => {
-        const savedLang = window.localStorage.getItem(STORAGE_KEY);
-        if (savedLang !== "en") return;
-
-        // Defer state sync to avoid synchronous setState inside effect body.
-        const timeoutId = window.setTimeout(() => {
-            setLangState("en");
-        }, 0);
-
-        return () => window.clearTimeout(timeoutId);
-    }, []);
+        setLangState(routeLang);
+    }, [routeLang]);
 
     useEffect(() => {
         document.documentElement.lang = lang === "pt" ? "pt-BR" : "en";
