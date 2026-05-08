@@ -7,6 +7,7 @@ import ContactIntentBar from "./components/ContactIntentBar";
 import FreelanceBadge from "./components/FreelanceBadge";
 import { HtmlLangUpdater } from "./components/HtmlLangUpdater";
 import ModeSwitch from "./components/ModeSwitch";
+import { PostHogProvider } from "./components/PostHogProvider";
 import { RefTracker } from "./components/RefTracker";
 import ScrollDepthTracker from "./components/ScrollDepthTracker";
 import { LanguageProvider } from "./context/LanguageContext";
@@ -108,21 +109,23 @@ export default function RootLayout({
         <a href="#main-content" className="skip-link">
           Ir para o conteúdo principal
         </a>
-        <LanguageProvider>
-          <HtmlLangUpdater />
-          <ModeProvider>
-            <RefTracker />
-            <Cursor />
-            <div className="mode-flash" id="modeFlash"></div>
-            <ModeSwitch />
-            <FreelanceBadge />
-            <ScrollDepthTracker />
-            <ContactIntentBar />
-            <div id="main-content" style={{ overflowX: "clip" }}>
-              {children}
-            </div>
-          </ModeProvider>
-        </LanguageProvider>
+        <PostHogProvider>
+          <LanguageProvider>
+            <HtmlLangUpdater />
+            <ModeProvider>
+              <RefTracker />
+              <Cursor />
+              <div className="mode-flash" id="modeFlash"></div>
+              <ModeSwitch />
+              <FreelanceBadge />
+              <ScrollDepthTracker />
+              <ContactIntentBar />
+              <div id="main-content" style={{ overflowX: "clip" }}>
+                {children}
+              </div>
+            </ModeProvider>
+          </LanguageProvider>
+        </PostHogProvider>
         <Analytics />
         <SpeedInsights />
       </body>

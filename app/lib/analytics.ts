@@ -1,6 +1,7 @@
 "use client";
 
 import { track } from "@vercel/analytics";
+import posthog from "posthog-js";
 
 type EventValue = string | number | boolean | null | undefined;
 type EventPayload = Record<string, EventValue>;
@@ -24,14 +25,20 @@ export function trackEvent(name: string, payload?: EventPayload) {
       ? context.source
       : "unknown";
 
-  track(name, {
+  const eventProps = {
     event_category: String(eventCategory),
     event_action: name,
     event_label: String(eventLabel ?? fallbackLabel),
     value: typeof value === "number" ? value : undefined,
     page_path: typeof window !== "undefined" ? window.location.pathname : undefined,
     ...context,
-  });
+  };
+
+  track(name, eventProps);
+
+  try {
+    if (posthog.__loaded) posthog.capture(name, eventProps);
+  } catch { /* no-op */ }
 }
 
 export function getPortfolioRef(): string | undefined {
