@@ -718,7 +718,7 @@ export default function HomePage() {
                     >
                         {c.finalCtaWhatsapp}
                     </a>
-                    <a href="mailto:luanmedradooliveira@gmail.com" onClick={() => trackEvent("email_click", { source: "home_final_cta", lang })}>
+                    <a href="mailto:oluanmedrado@gmail.com" onClick={() => trackEvent("email_click", { source: "home_final_cta", lang })}>
                         {c.finalCtaEmail}
                     </a>
                 </div>
@@ -756,7 +756,7 @@ export default function HomePage() {
                     </a>
 
                     <a
-                        href="mailto:luanmedradooliveira@gmail.com"
+                        href="mailto:oluanmedrado@gmail.com"
                         aria-label="Email"
                         onClick={() => trackEvent("email_click", { source: "home_footer", lang })}
                     >

@@ -33,3 +33,8 @@ export function trackEvent(name: string, payload?: EventPayload) {
     ...context,
   });
 }
+
+export function getPortfolioRef(): string | undefined {
+  try { return sessionStorage.getItem("portfolio_ref") ?? undefined; }
+  catch { return undefined; }
+}

@@ -1,10 +1,13 @@
 ﻿import type { Metadata } from "next";
 import { Bebas_Neue, DM_Mono, DM_Sans, Syne } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import Cursor from "./components/Cursor";
 import ContactIntentBar from "./components/ContactIntentBar";
 import FreelanceBadge from "./components/FreelanceBadge";
+import { HtmlLangUpdater } from "./components/HtmlLangUpdater";
 import ModeSwitch from "./components/ModeSwitch";
+import { RefTracker } from "./components/RefTracker";
 import ScrollDepthTracker from "./components/ScrollDepthTracker";
 import { LanguageProvider } from "./context/LanguageContext";
 import { ModeProvider } from "./context/ModeContext";
@@ -102,20 +105,26 @@ export default function RootLayout({
       <body
         className={`${bebas.variable} ${syne.variable} ${dmMono.variable} ${dmSans.variable}`}
       >
+        <a href="#main-content" className="skip-link">
+          Ir para o conteúdo principal
+        </a>
         <LanguageProvider>
+          <HtmlLangUpdater />
           <ModeProvider>
+            <RefTracker />
             <Cursor />
             <div className="mode-flash" id="modeFlash"></div>
             <ModeSwitch />
             <FreelanceBadge />
             <ScrollDepthTracker />
             <ContactIntentBar />
-            <div style={{ overflowX: "clip" }}>
+            <div id="main-content" style={{ overflowX: "clip" }}>
               {children}
             </div>
           </ModeProvider>
         </LanguageProvider>
         <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );

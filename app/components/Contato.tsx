@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useLanguage } from "../context/LanguageContext";
 import { useMode } from "../context/ModeContext";
-import { trackEvent } from "../lib/analytics";
+import { trackEvent, getPortfolioRef } from "../lib/analytics";
 
 const CONTACT_EMAIL = "oluanmedrado@gmail.com";
 const COPIED_RESET_DELAY = 2200;
@@ -248,13 +248,15 @@ export default function Contato() {
 
             if (!res.ok) {
                 setStatus("error");
+                trackEvent("contact_form_error", { reason: "send_failed", lang, mode, ref: getPortfolioRef() });
                 return;
             }
 
             setStatus("success");
-            trackEvent("contact_form_submit", { lang, mode, projectType: form.projectType });
+            trackEvent("contact_form_submit", { lang, mode, projectType: form.projectType, ref: getPortfolioRef() });
         } catch {
             setStatus("error");
+            trackEvent("contact_form_error", { reason: "network", lang, mode, ref: getPortfolioRef() });
         }
     };
 
@@ -434,10 +436,10 @@ export default function Contato() {
                                 <div className="contact-fallback-panel" role="alert" aria-live="assertive">
                                     <p className="contact-fallback-msg">{f.errorFallbackMsg}</p>
                                     <div className="contact-fallback-actions">
-                                        <button type="button" className="contact-fallback-btn" onClick={handleCopyMessage}>
+                                        <button type="button" className="contact-fallback-btn" onClick={() => { handleCopyMessage(); trackEvent("contact_fallback_action", { action: "copy_message", lang, mode, ref: getPortfolioRef() }); }}>
                                             {copiedMessage ? f.copiedMessage : f.copyMessage}
                                         </button>
-                                        <button type="button" className="contact-fallback-btn" onClick={handleCopyEmail}>
+                                        <button type="button" className="contact-fallback-btn" onClick={() => { handleCopyEmail(); trackEvent("contact_fallback_action", { action: "copy_email", lang, mode, ref: getPortfolioRef() }); }}>
                                             {copied ? f.copiedEmail : f.copyEmail}
                                         </button>
                                         <a
@@ -445,6 +447,7 @@ export default function Contato() {
                                             className="contact-fallback-btn contact-fallback-btn--link"
                                             target="_blank"
                                             rel="noopener noreferrer"
+                                            onClick={() => trackEvent("contact_fallback_action", { action: "open_email", lang, mode, ref: getPortfolioRef() })}
                                         >
                                             {f.openEmail}
                                         </a>

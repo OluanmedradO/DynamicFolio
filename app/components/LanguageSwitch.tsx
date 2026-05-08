@@ -77,7 +77,7 @@ export default function LanguageSwitch() {
             id="langBtn"
             onClick={handleLanguageToggle}
             type="button"
-            aria-label={isEnglish ? "Trocar idioma" : "Switch language"}
+            aria-label={isEnglish ? "Mudar para Português" : "Switch to English"}
         >
             <span className="lang-flag-wrap" id="langFlag">
                 {isEnglish ? <UsaFlag /> : <BrazilFlag />}

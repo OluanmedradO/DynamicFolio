@@ -164,6 +164,7 @@ export default function Hero({ overrides }: HeroProps) {
                         target="_blank"
                         className="social-icon"
                         title="GitHub"
+                        aria-label={lang === "en" ? "GitHub profile" : "Perfil no GitHub"}
                         onClick={() =>
                             trackEvent("github_click", {
                                 eventCategory: "social",
@@ -183,6 +184,7 @@ export default function Hero({ overrides }: HeroProps) {
                         target="_blank"
                         className="social-icon"
                         title="LinkedIn"
+                        aria-label={lang === "en" ? "LinkedIn profile" : "Perfil no LinkedIn"}
                         onClick={() =>
                             trackEvent("social_click", {
                                 eventCategory: "social",
@@ -198,10 +200,10 @@ export default function Hero({ overrides }: HeroProps) {
                         </svg>
                     </Link>
                     <a
-                        href="mailto:luanmedradooliveira@gmail.com"
+                        href="mailto:oluanmedrado@gmail.com"
                         className="social-icon"
-                        title="Email: luanmedradooliveira@gmail.com"
-                        aria-label="Email: luanmedradooliveira@gmail.com"
+                        title="Email: oluanmedrado@gmail.com"
+                        aria-label="Email: oluanmedrado@gmail.com"
                         onClick={() =>
                             trackEvent("email_click", {
                                 eventCategory: "contact",

@@ -1998,6 +1998,34 @@ nav.scrolled {
   margin-top: 4px;
 }
 
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.skip-link:focus {
+  position: fixed;
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: auto;
+  height: auto;
+  padding: 8px 20px;
+  background: var(--accent);
+  color: #fff;
+  z-index: 9999;
+  border-radius: 100px;
+  text-decoration: none;
+  font-family: var(--font-dm-mono), monospace;
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  outline: none;
+}
+
 .contact-submit-btn {
   display: inline-flex;
   align-items: center;

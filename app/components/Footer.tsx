@@ -63,9 +63,9 @@ export default function Footer() {
                         </svg>
                     </Link>
                     <a
-                        href="mailto:luanmedradooliveira@gmail.com"
-                        aria-label="Email: luanmedradooliveira@gmail.com"
-                        title="Email: luanmedradooliveira@gmail.com"
+                        href="mailto:oluanmedrado@gmail.com"
+                        aria-label="Email: oluanmedrado@gmail.com"
+                        title="Email: oluanmedrado@gmail.com"
                         onClick={() =>
                             trackEvent("social_click", {
                                 eventCategory: "social",
