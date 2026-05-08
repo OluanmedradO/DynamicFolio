@@ -1,8 +1,23 @@
 import { Resend } from "resend";
 import { NextResponse } from "next/server";
 
-const TO_EMAIL = process.env.CONTACT_TO_EMAIL ?? "luanmedradooliveira@gmail.com";
+// Internal error codes — logged server-side only, never sent to the client
+const ERR = {
+    MISSING_API_KEY: "MISSING_RESEND_API_KEY",
+    SEND_FAILED:     "RESEND_SEND_FAILED",
+    VALIDATION:      "VALIDATION_FAILED",
+    UNKNOWN:         "UNKNOWN_ERROR",
+} as const;
+
+// Production: set CONTACT_FROM_EMAIL=Luan Portfolio <contato@oluanmedrado.com>
+// oluanmedrado.com is already verified in Resend with SPF + DKIM.
+// onboarding@resend.dev is used ONLY as a local/dev fallback —
+// it cannot deliver to arbitrary inboxes and must never be used in production.
 const FROM_EMAIL = process.env.CONTACT_FROM_EMAIL ?? "Portfolio <onboarding@resend.dev>";
+const TO_EMAIL = process.env.CONTACT_TO_EMAIL ?? "oluanmedrado@gmail.com";
+
+const MAX_MESSAGE_LENGTH = 3000;
+const MAX_URL_COUNT = 4;
 
 function escapeHtml(value: string) {
     return value
@@ -20,12 +35,25 @@ export async function POST(req: Request) {
         return NextResponse.json({ error: "Invalid body" }, { status: 400 });
     }
 
-    const { name, email, projectType, message } = body as {
+    const { name, email, projectType, message, website, _filledAt } = body as {
         name: string;
         email: string;
         projectType: string;
         message: string;
+        website?: string;
+        _filledAt?: number;
     };
+
+    // Honeypot — bots fill hidden fields; humans leave them empty
+    if (website) {
+        return NextResponse.json({ success: true });
+    }
+
+    // Minimum fill time: reject submissions completed in under 2 seconds
+    const fillTime = typeof _filledAt === "number" ? Date.now() - _filledAt : Infinity;
+    if (fillTime < 2000) {
+        return NextResponse.json({ success: true });
+    }
 
     const nameValue = name?.trim() ?? "";
     const emailValue = email?.trim() ?? "";
@@ -33,12 +61,25 @@ export async function POST(req: Request) {
     const messageValue = message?.trim() ?? "";
 
     if (!nameValue || !emailValue || !messageValue) {
+        console.warn(`[contact] ${ERR.VALIDATION}: missing required fields`);
         return NextResponse.json({ error: "Preencha todos os campos obrigatórios." }, { status: 400 });
     }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(emailValue)) {
+        console.warn(`[contact] ${ERR.VALIDATION}: invalid email format`);
         return NextResponse.json({ error: "Email inválido." }, { status: 400 });
+    }
+
+    if (messageValue.length > MAX_MESSAGE_LENGTH) {
+        console.warn(`[contact] ${ERR.VALIDATION}: message too long (${messageValue.length} chars)`);
+        return NextResponse.json({ error: "Mensagem muito longa." }, { status: 400 });
+    }
+
+    const urlCount = (messageValue.match(/https?:\/\//gi) ?? []).length;
+    if (urlCount > MAX_URL_COUNT) {
+        console.warn(`[contact] ${ERR.VALIDATION}: too many URLs (${urlCount})`);
+        return NextResponse.json({ success: true });
     }
 
     const safeName = escapeHtml(nameValue);
@@ -48,12 +89,15 @@ export async function POST(req: Request) {
 
     try {
         if (!process.env.RESEND_API_KEY) {
-            console.error("Missing RESEND_API_KEY for contact form.");
+            console.error(
+                `[contact] ${ERR.MISSING_API_KEY}:`,
+                "Add RESEND_API_KEY in Vercel → Project Settings → Environment Variables.",
+            );
             return NextResponse.json({ error: "Envio indisponivel no momento." }, { status: 500 });
         }
 
         const resend = new Resend(process.env.RESEND_API_KEY);
-        await resend.emails.send({
+        const { error: resendError } = await resend.emails.send({
             from: FROM_EMAIL,
             to: TO_EMAIL,
             replyTo: emailValue,
@@ -85,9 +129,23 @@ export async function POST(req: Request) {
             `,
         });
 
+        if (resendError) {
+            console.error(`[contact] ${ERR.SEND_FAILED}:`, {
+                name: resendError.name,
+                message: resendError.message,
+                from: FROM_EMAIL,
+                to: TO_EMAIL,
+                senderEmail: emailValue,
+                hint: FROM_EMAIL.includes("onboarding@resend.dev")
+                    ? "Using test sender — set CONTACT_FROM_EMAIL to a verified domain address for production."
+                    : "Check that the sender domain is verified in Resend (SPF + DKIM).",
+            });
+            return NextResponse.json({ error: "Erro ao enviar mensagem. Tente novamente." }, { status: 500 });
+        }
+
         return NextResponse.json({ success: true });
-    } catch (error) {
-        console.error("Contact form email failed:", error);
+    } catch (err) {
+        console.error(`[contact] ${ERR.UNKNOWN}:`, err instanceof Error ? err.message : err);
         return NextResponse.json({ error: "Erro ao enviar mensagem. Tente novamente." }, { status: 500 });
     }
 }

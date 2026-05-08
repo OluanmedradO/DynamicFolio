@@ -5,7 +5,7 @@ import { useLanguage } from "../context/LanguageContext";
 import { useMode } from "../context/ModeContext";
 import { trackEvent } from "../lib/analytics";
 
-const CONTACT_EMAIL = "luanmedradooliveira@gmail.com";
+const CONTACT_EMAIL = "oluanmedrado@gmail.com";
 const COPIED_RESET_DELAY = 2200;
 const CLIPBOARD_WRITE_TIMEOUT = 600;
 
@@ -49,12 +49,16 @@ const formCopy = {
         messagePlaceholder: "Link do canal, tipo de vídeo, prazo e qualquer referência.",
         submit: "Enviar briefing",
         sending: "Enviando...",
-        successTitle: "Recebido.",
-        successText: "Já estou lendo a sua mensagem; te respondo em breve com atenção ao que você compartilhou.",
+        successTitle: "Mensagem enviada.",
+        successText: "Obrigado — vou te responder o quanto antes.",
+        errorFallbackMsg: "Não consegui enviar automaticamente agora, mas sua mensagem está salva aqui. Você pode copiar ou abrir no seu e-mail em um clique.",
+        copyMessage: "Copiar mensagem",
+        copiedMessage: "Mensagem copiada",
+        copyEmail: "Copiar e-mail",
+        copiedEmail: "E-mail copiado",
+        openEmail: "Abrir e-mail",
         errorFallback: "Erro ao enviar. Tente novamente.",
         hint: "Resposta rápida · Foco em retenção · Sem compromisso",
-        copy: "Copiar e-mail",
-        copied: "E-mail copiado",
         copyAria: "Copiar endereço de e-mail",
         fallbackPrefix: "Se o botão não abrir, copie:",
         gmailCta: "Abrir no Gmail →",
@@ -72,12 +76,16 @@ const formCopy = {
         messagePlaceholder: "Channel link, video type, deadline and any reference.",
         submit: "Send brief",
         sending: "Sending...",
-        successTitle: "Received.",
-        successText: "I am reading your message and will reply soon with attention to what you shared.",
+        successTitle: "Message sent.",
+        successText: "Thank you — I'll get back to you as soon as possible.",
+        errorFallbackMsg: "Automatic send failed, but your message is saved here. Copy it or open your email client in one click.",
+        copyMessage: "Copy message",
+        copiedMessage: "Message copied",
+        copyEmail: "Copy email",
+        copiedEmail: "Email copied",
+        openEmail: "Open email",
         errorFallback: "Error sending. Please try again.",
         hint: "Fast reply · Retention focus · No commitment",
-        copy: "Copy email",
-        copied: "Email copied",
         copyAria: "Copy email address",
         fallbackPrefix: "If the button does not open, copy:",
         gmailCta: "Open in Gmail →",
@@ -98,12 +106,16 @@ const devFormCopy = {
         messagePlaceholder: "Objetivo do projeto, prazo, referências e o que precisa converter melhor.",
         submit: "Enviar projeto",
         sending: "Enviando...",
-        successTitle: "Recebido.",
-        successText: "Já estou lendo a sua mensagem; te respondo em breve com atenção ao que você compartilhou.",
+        successTitle: "Mensagem enviada.",
+        successText: "Obrigado — vou te responder o quanto antes.",
+        errorFallbackMsg: "Não consegui enviar automaticamente agora, mas sua mensagem está salva aqui. Você pode copiar ou abrir no seu e-mail em um clique.",
+        copyMessage: "Copiar mensagem",
+        copiedMessage: "Mensagem copiada",
+        copyEmail: "Copiar e-mail",
+        copiedEmail: "E-mail copiado",
+        openEmail: "Abrir e-mail",
         errorFallback: "Erro ao enviar. Tente novamente.",
         hint: "Resposta objetiva · Próximos passos claros",
-        copy: "Copiar e-mail",
-        copied: "E-mail copiado",
         copyAria: "Copiar endereço de e-mail",
         fallbackPrefix: "Se o botão não abrir, copie:",
         gmailCta: "Abrir no Gmail →",
@@ -121,12 +133,16 @@ const devFormCopy = {
         messagePlaceholder: "Project goal, deadline, references and what needs to convert better.",
         submit: "Send project",
         sending: "Sending...",
-        successTitle: "Received.",
-        successText: "I am reading your message and will reply soon with attention to what you shared.",
+        successTitle: "Message sent.",
+        successText: "Thank you — I'll get back to you as soon as possible.",
+        errorFallbackMsg: "Automatic send failed, but your message is saved here. Copy it or open your email client in one click.",
+        copyMessage: "Copy message",
+        copiedMessage: "Message copied",
+        copyEmail: "Copy email",
+        copiedEmail: "Email copied",
+        openEmail: "Open email",
         errorFallback: "Error sending. Please try again.",
         hint: "Clear reply · Clear next steps",
-        copy: "Copy email",
-        copied: "Email copied",
         copyAria: "Copy email address",
         fallbackPrefix: "If the button does not open, copy:",
         gmailCta: "Open in Gmail →",
@@ -136,11 +152,11 @@ const devFormCopy = {
 
 type FormStatus = "idle" | "loading" | "success" | "error";
 
-async function writeEmailToClipboard() {
+async function writeToClipboard(text: string) {
     if (navigator.clipboard?.writeText) {
         try {
             const didCopy = await Promise.race([
-                navigator.clipboard.writeText(CONTACT_EMAIL).then(() => true),
+                navigator.clipboard.writeText(text).then(() => true),
                 new Promise<boolean>((resolve) => {
                     window.setTimeout(() => resolve(false), CLIPBOARD_WRITE_TIMEOUT);
                 }),
@@ -154,7 +170,7 @@ async function writeEmailToClipboard() {
     }
 
     const textarea = document.createElement("textarea");
-    textarea.value = CONTACT_EMAIL;
+    textarea.value = text;
     textarea.setAttribute("readonly", "");
     textarea.style.position = "fixed";
     textarea.style.opacity = "0";
@@ -173,17 +189,24 @@ export default function Contato() {
     const f = mode === "dev" ? devFormCopy[lang] : formCopy[lang];
 
     const [status, setStatus] = useState<FormStatus>("idle");
-    const [errorMsg, setErrorMsg] = useState("");
     const [form, setForm] = useState({ name: "", email: "", projectType: "", message: "" });
     const [fieldErrors, setFieldErrors] = useState({ name: "", email: "" });
     const [copied, setCopied] = useState(false);
+    const [copiedMessage, setCopiedMessage] = useState(false);
+    const [honeypot, setHoneypot] = useState("");
     const trackedFocusFields = useRef(new Set<string>());
     const copiedResetTimer = useRef<number | null>(null);
+    const copiedMessageTimer = useRef<number | null>(null);
+    const formOpenedAt = useRef<number>(0);
 
     useEffect(() => {
+        formOpenedAt.current = Date.now();
         return () => {
             if (copiedResetTimer.current) {
                 window.clearTimeout(copiedResetTimer.current);
+            }
+            if (copiedMessageTimer.current) {
+                window.clearTimeout(copiedMessageTimer.current);
             }
         };
     }, []);
@@ -204,7 +227,6 @@ export default function Contato() {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        setErrorMsg("");
 
         const nameError = form.name.trim() === "" ? (lang === "en" ? "Name is required." : "Nome é obrigatório.") : "";
         const emailError = !form.email.includes("@") || form.email.trim() === "" ? (lang === "en" ? "Enter a valid email." : "Insira um email válido.") : "";
@@ -220,12 +242,11 @@ export default function Contato() {
             const res = await fetch("/api/contact", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(form),
+                body: JSON.stringify({ ...form, website: honeypot, _filledAt: formOpenedAt.current }),
             });
-            const data = await res.json();
+            await res.json().catch(() => null);
 
             if (!res.ok) {
-                setErrorMsg(data.error ?? f.errorFallback);
                 setStatus("error");
                 return;
             }
@@ -233,13 +254,12 @@ export default function Contato() {
             setStatus("success");
             trackEvent("contact_form_submit", { lang, mode, projectType: form.projectType });
         } catch {
-            setErrorMsg(f.errorFallback);
             setStatus("error");
         }
     };
 
     const handleCopyEmail = () => {
-        void writeEmailToClipboard();
+        void writeToClipboard(CONTACT_EMAIL);
         setCopied(true);
         trackEvent("email_copy_click", { source: "contact_section", lang, mode });
 
@@ -251,6 +271,39 @@ export default function Contato() {
             setCopied(false);
         }, COPIED_RESET_DELAY);
     };
+
+    const handleCopyMessage = () => {
+        const lines = [
+            `Nome: ${form.name}`,
+            `Email: ${form.email}`,
+            form.projectType ? `Tipo: ${form.projectType}` : null,
+            "",
+            form.message,
+        ].filter((l): l is string => l !== null).join("\n");
+
+        void writeToClipboard(lines);
+        setCopiedMessage(true);
+
+        if (copiedMessageTimer.current) {
+            window.clearTimeout(copiedMessageTimer.current);
+        }
+
+        copiedMessageTimer.current = window.setTimeout(() => {
+            setCopiedMessage(false);
+        }, COPIED_RESET_DELAY);
+    };
+
+    const mailtoLink = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(
+        `[Portfolio] ${form.projectType ? `${form.projectType} — ` : ""}${form.name}`,
+    )}&body=${encodeURIComponent(
+        [
+            `Nome: ${form.name}`,
+            `Email: ${form.email}`,
+            form.projectType ? `Tipo: ${form.projectType}` : null,
+            "",
+            form.message,
+        ].filter((l): l is string => l !== null).join("\n"),
+    )}`;
 
     return (
         <section className="contact" id="contato">
@@ -288,6 +341,8 @@ export default function Contato() {
                                     setStatus("idle");
                                     setForm({ name: "", email: "", projectType: "", message: "" });
                                     setFieldErrors({ name: "", email: "" });
+                                    setHoneypot("");
+                                    formOpenedAt.current = Date.now();
                                     trackedFocusFields.current.clear();
                                 }}
                             >
@@ -296,6 +351,18 @@ export default function Contato() {
                         </div>
                     ) : (
                         <form className="contact-form" onSubmit={handleSubmit} noValidate>
+                            {/* Honeypot — do not remove */}
+                            <input
+                                name="website"
+                                type="text"
+                                tabIndex={-1}
+                                autoComplete="off"
+                                aria-hidden="true"
+                                style={{ position: "absolute", opacity: 0, height: 0, width: 0, pointerEvents: "none" }}
+                                value={honeypot}
+                                onChange={(e) => setHoneypot(e.target.value)}
+                            />
+
                             <div className="contact-form-row">
                                 <div className="contact-form-field">
                                     <label htmlFor="cf-name">{f.name}</label>
@@ -364,7 +431,25 @@ export default function Contato() {
                             </div>
 
                             {status === "error" && (
-                                <p className="contact-form-error">{errorMsg}</p>
+                                <div className="contact-fallback-panel" role="alert" aria-live="assertive">
+                                    <p className="contact-fallback-msg">{f.errorFallbackMsg}</p>
+                                    <div className="contact-fallback-actions">
+                                        <button type="button" className="contact-fallback-btn" onClick={handleCopyMessage}>
+                                            {copiedMessage ? f.copiedMessage : f.copyMessage}
+                                        </button>
+                                        <button type="button" className="contact-fallback-btn" onClick={handleCopyEmail}>
+                                            {copied ? f.copiedEmail : f.copyEmail}
+                                        </button>
+                                        <a
+                                            href={mailtoLink}
+                                            className="contact-fallback-btn contact-fallback-btn--link"
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                        >
+                                            {f.openEmail}
+                                        </a>
+                                    </div>
+                                </div>
                             )}
 
                             <button
@@ -395,7 +480,7 @@ export default function Contato() {
                             aria-label={f.copyAria}
                             onClick={handleCopyEmail}
                         >
-                            {copied ? f.copied : f.copy}
+                            {copied ? f.copiedEmail : f.copyEmail}
                         </button>
                         <a
                             href={`https://mail.google.com/mail/?view=cm&to=${encodeURIComponent(CONTACT_EMAIL)}&su=${encodeURIComponent("Portfolio Contact")}`}

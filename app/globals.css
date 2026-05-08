@@ -1940,6 +1940,55 @@ nav.scrolled {
   margin: 0;
 }
 
+.contact-fallback-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 16px;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+.contact-fallback-msg {
+  font-size: 13px;
+  color: rgba(255,255,255,0.58);
+  font-family: var(--font-dm-mono), monospace;
+  letter-spacing: 0.03em;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.contact-fallback-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.contact-fallback-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--white);
+  font-family: var(--font-dm-mono), monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.05em;
+  padding: 7px 14px;
+  border-radius: 999px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: border-color 0.2s, color 0.2s;
+}
+
+.contact-fallback-btn:hover,
+.contact-fallback-btn:focus-visible {
+  border-color: rgba(255,255,255,0.32);
+  color: #fff;
+  outline: none;
+}
+
 .contact-field-error {
   display: block;
   font-size: 11px;
